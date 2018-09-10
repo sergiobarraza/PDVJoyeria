@@ -1,0 +1,110 @@
+body{
+	color: #000;
+	background-color: #f1f1f1;
+}
+
+.bg-black{
+  background: #000;
+  color: #fff;
+}
+
+
+#mySidenav {
+	position: fixed;
+	top: 0;
+	right: 0;
+}
+
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    background-color: #000; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #0086BF;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+.collapsed-menu {
+	font-size: 28px;
+    cursor: pointer;
+    top: 0px;
+    right: 8%;
+    position: fixed;
+}
+
+.button-prenda {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    color: white;
+    text-decoration: none;
+    cursor:pointer;
+    height: 50px;
+    display: inline-block;
+    font-size: 21px;
+}
+/*purple*/
+.prenda-1{
+    background: purple;
+}
+/*light blue*/
+.prenda-2{
+    background: #3875d8;
+}
+
+.prodrow{
+    cursor: pointer;
+}
+
+.prodrow:hover{
+    background: rgba(0,0,0,.3);
+}
+.table td {
+    padding-bottom: .25rem !important;
+    padding-top: .25rem;
+}
+
+.table th{
+    padding-bottom: .25 !important;
+        padding-top: .25rem;
+
+}
+.clickable{
+    cursor: pointer;
+}
