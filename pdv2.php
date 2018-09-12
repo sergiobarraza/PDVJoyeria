@@ -7,7 +7,7 @@
 	    	<div class="col-sm-12 col-md-9 bg-white pt-3" >
 	    		<div class="row mb-2" >
 		        	<div class="col-sm-12" id="prendamenu">
-		        		<div class="text-center" style="height: 240px; overflow-y: scroll; max-height: 240px;">
+		        		<div class="text-center" style="height: 540px; overflow-y: scroll; max-height: 440px;">
 		          			<table class="table" cellspacing="0" >
 							  	<thead >
 								    <tr>
@@ -33,7 +33,7 @@
 	            	<div class="col-sm-12">
 		            	<div class="form-group row">
 				    		<label for="productid" class="col-sm-1 col-md-1 col-form-label text-right">#</label>
-				    		<div class="col-sm-10 col-md-3">
+				    		<div class="col-sm-10 col-md-4">
 				    			<div class="row">
 				      				<input type="text" class="form-control col-sm-10" id="productid"  autofocus="autofocus" onkeydown="searchfield(event);">
 				      				<div class="col-sm-1 col-md-1">
@@ -41,60 +41,36 @@
 						    		</div>
 				      			</div>
 				    		</div>
-				    		
-				    		<div class="col-sm-12 col-md-8">
+				    		<div class="form-check col-sm-1">
+				 		 		<input class="form-check-input" type="checkbox" value="" id="CheckEfectivo"  checked="true">
+				  				<label class="form-check-label" for="defaultCheck1" >
+									Efectivo
+								</label>
+							</div>
+							<div class="form-check col-sm-2">
+				 		 		<input class="form-check-input" type="checkbox" value="" id="CheckEfectivo" >
+				  				<label class="form-check-label" for="defaultCheck1" >
+									Tarjeta de Credito
+								</label>
+							</div>
+				    	</div>
+				    	<div class="row">
+				    		<div class="col-sm-12 ">
 
 					    		<table class="table">
 					    			<tr>
 						    			<td class="pt-2">Subtotal</td><td><input type="text" name="dcto" value="30.00"  readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
 						    			<td class="pt-2">Dct</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
 						    			<td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
-						    			<td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+						    			<td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly=""></td>
 						    			<td><button class="btn btn-success">Checkout</button></td>
 					    			</tr>
 					    		</table>
 					    	</div>
+					    </div>
 			
 
-				  		</div>
-			  			<div class="scroll" style="overflow-y: scroll; max-height: 220px; height: auto;">
-			            	<table class="table">
-							  	<thead>
-								    <tr>
-								      	<th scope="col">#</th>
-								      	<th scope="col">Descripción</th>
-								      	<th scope="col">Cantidad</th>
-								      	<th scope="col">Precio</th>							      	
-								    </tr>
-								</thead>
-							  	<tbody>
-								    <tr class="prodrow" data-id="123" data-desc="Collar de animal" data-price="70">
-								      	<th scope="row">123</th>
-								      	<td>Collar de animal</td>
-								      	<td>2</td>
-								      	<td>70.00</td>
-								    </tr>
-								    <tr class="prodrow" data-id="2" data-desc="Collar de perro" data-price="80">
-								      	<th scope="row">2</th>
-								      	<td>Collar de perro</td>
-								      	<td>1</td>
-								      	<td>80.00</td>
-								    </tr>
-								    <tr class="prodrow" data-id="3" data-desc="Collar de tacos" data-price="90">
-								      	<th scope="row">3</th>
-								      	<td>Collar de tacos</td>
-								      	<td>3</td>
-								      	<td>90.00</td>
-								    </tr>
-								    <tr class="prodrow" data-id="4" data-desc="Collar de mujer" data-price="100">
-								      	<th scope="row">4</th>
-								      	<td>Collar de mujer</td>
-								      	<td>4</td>
-								      	<td>100.00</td>
-								    </tr>
-						  		</tbody>
-							</table>
-						</div><!--scroll-->
+			  			
 					</div><!--col-->
 	            </div><!--row -->
 	        </div><!--col -->
@@ -103,35 +79,29 @@
 					<div class="col-sm-12 col-md-12" >
 			    		<table class="table">
 						  	<thead>
-							    <tr>
-							      	<th scope="col"><a href="../SistemaJoyeria" style="color:black;"> <i class="fa fa-plus-square" ></i></a></th>
+							    <tr>							      	
 							      	<th scope="col">Folio</th>
 							      	<th scope="col">Nombre</th>							      	
 							    </tr>
 							</thead>
 						  	<tbody>
 							    <tr>
-							      	<th scope="row">1</th>
 							      	<td>12345</td>
 							      	<td>Otto</td>
 							    </tr>
 							    <tr>
-							      	<th scope="row">2</th>
 							      	<td>123678</td>
 							      	<td>Thornton</td>
 							    </tr>
 							    <tr>
-							      	<th scope="row">3</th>
 							      	<td>12908</td>
 							      	<td>the Bird</td>
 							    </tr>
 							    <tr >
-							      	<th scope="row" >4</th>
 							      	<td >12678</td>
 							      	<td>the Bird</td>
 							    </tr>
 							    <tr>
-							      	<th scope="row">5</th>
 							      	<td>12678</td>
 							      	<td>the Bird</td>
 							    </tr>
