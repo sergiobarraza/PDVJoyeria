@@ -1,7 +1,33 @@
 <?php
-	include("header-pdv.php");
-	?>
+  include("header-pdv.php");
+  if(isset($_POST['submit'])) {
+    require "config/database.php";
+    require "config/common.php";
+    try {
+      $connection = new PDO($dsn, $username, $password, $options );
 
+      $new_user = array(
+        "nombre" => $_POST['nombre'],
+        "apellido" => $_POST['apellido'],
+        "tel" => $_POST['tel'],
+        "tipo" => "cliente",
+        "rfc" => $_POST['rfc']
+      );
+
+      $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "Persona",
+        implode(", ", array_keys($new_user)),
+        ":" . implode(", :", array_keys($new_user))
+      );
+
+      $statement = $connection->prepare($sql);
+      $statement->execute($new_user);
+    } catch(PDOException $error) {
+      echo $sql . "<br>" . $error->getMessage();
+    }
+  }
+?>
 	    <div class="row " id="panelprincipal">		  		
 	   		<!-- Articulos -->
 	    	<div class="col-sm-12 col-md-9 bg-white pt-3" >
@@ -68,9 +94,6 @@
 					    		</table>
 					    	</div>
 					    </div>
-			
-
-			  			
 					</div><!--col-->
 	            </div><!--row -->
 	        </div><!--col -->
@@ -81,7 +104,7 @@
 						  	<thead>
 							    <tr>							      	
 							      	<th scope="col">Folio</th>
-							      	<th scope="col">Nombre</th>							      	
+							      	<th scope="col">Nombre</th>
 							    </tr>
 							</thead>
 						  	<tbody>
@@ -111,7 +134,7 @@
 				</div><!-- row-->
 				<div class="row">
 	        		<div class="col-sm-12">
-						<form>
+						<form method="post">
 							<div class="row mb-2">
 								<div class="col-sm-1"></div>
 								<div class="form-check col-sm-5">
@@ -137,46 +160,44 @@
 						  	<div class="form-group row">
 						    	<label for="Name" class="col-sm-3 col-form-label">Nombre</label>
 						    	<div class="col-sm-9 row">
-						      		<input type="text" class="form-control col-sm-10" id="Name" placeholder="Mostrador" readonly>
+						      		<input type="text" class="form-control col-sm-10" id="nombre" name="nombre" placeholder="Mostrador">
 						      		<div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
-
 						    	</div>
 						  	</div>
 						  	<div class="form-group row">
 						    	<label for="LastName" class="col-sm-3 col-form-label">Apellido</label>
 						    	<div class="col-sm-9 row">
-						      		<input type="text" class="form-control col-sm-10" id="LastName" placeholder="Mostrador" readonly>
+						      		<input type="text" class="form-control col-sm-10" id="apellido" name="apellido" placeholder="Mostrador">
 						      		<div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
-
 						    	</div>
 						  	</div>
 						  	<div class="form-group row">
 						    	<label for="RFC" class="col-sm-3 col-form-label">RFC</label>
 						    	<div class="col-sm-9 row">
-						      		<input type="text" class="form-control col-sm-10" id="RFC" placeholder="" readonly>
+						      		<input type="text" class="form-control col-sm-10" id="rfc" name="rfc" placeholder="" >
 						    	</div>
 						  	</div>
 						  	<div class="form-group row">
 						    	<label for="Tel" class="col-sm-3 col-form-label">Tel</label>
 						    	<div class="col-sm-9 row">
-						      		<input type="text" class="form-control col-sm-10" id="Tel" placeholder="" readonly>
+						      		<input type="text" class="form-control col-sm-10" id="tel" name="tel" placeholder="" >
 						      		<div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
 						    	</div>
 						  	</div>
-						  	<div class="form-group row">
-						  		<div class="col-sm-3"></div>
-						    	<div class="col-sm-6">
-						      		<button type="button" class="btn-warning" id="btnagregar" onclick="agregarcliente();">Agregar Nuevo</button>
-						      		<button type="button" class="btn-success" id="btnagregar" onclick="aceptarcliente();" style="display: none;">Aceptar</button>
-						    	</div>
+                <div class="form-group row">
+                <div class="col-sm-3">
+                </div>
+					    	<div class="col-sm-6">
+                  <input type="submit" name="submit" class="btn-warning" value="Agregar Nuevo" id="btnagregar">
+				         <!--  <button type="button" class="btn-warning" id="btnagregar" onclick="agregarcliente();">Agregar Nuevo</button> -->
+				          <button type="button" class="btn-success" id="btnagregar" onclick="aceptarcliente();" style="display: none;">Aceptar</button>
+						      </div>
 						  	</div>
 						</form>
 					</div><!-- col-->
 				</div><!-- row-->
-	        </div><!--col -->
-	    </div><!--row -->
-	        		    
-	    
+      </div><!--col -->
+   </div><!--row -->
 	<?php
 	include "footer-pdv.php";
 ?>
