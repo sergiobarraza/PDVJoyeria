@@ -1,29 +1,33 @@
 <?php
 	include("header.php");
+	$status="nada";
+	if (isset($_GET['status'])) {
+		$status = $_GET['status'];
+	}
 ?>
 <!--Nuevo Articulo-->
-    <div class="card mb-3">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Nuevo Articulo</div>
+    <div class="card mb-3" id="nuevoArticulo">
+        <div class="card-header"><i class="fa fa-area-chart"></i> Nuevo Articulo <span style="color:green; display: <?php if ($status== 'successarticulo') { echo "inline-block";} else {echo "none";}?>"> - Articulo nuevo agregado</span></div>
         <div class="card-body">
         	<div class="row">
         		<div class="col-sm-8">
-		        	<form>
+		        	<form method="Post" action="articulos_nuevo.php">
 		        		<div class="form-group row">
-					    	<label for="alm4" class="col-sm-2 col-form-label">SKU:</label>
+					    	<label for="sku" class="col-sm-2 col-form-label">SKU:</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" class="form-control" id="alm4" placeholder=""  >			      						      		
+					      		<input type="text" class="form-control" id="sku" name="sku"  >			      						      		
 					    	</div>
 					  	</div>
 		        		<div class="form-group row">
 					    	<label for="desc" class="col-sm-2 col-form-label">Descripcion:</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" class="form-control" id="desc" placeholder=""  >			      						      		
+					      		<input type="text" class="form-control" id="desc" name="Descripcion" required >			      						      		
 					    	</div>
 					  	</div>
 					  	<div class="form-group row">
 					    	<label for="depto" class="col-sm-2 col-form-label">Linea:</label>
 					    	<div class="col-sm-10">
-					      		<select type="text" class="form-control" id="direccion" placeholder=""  >		
+					      		<select type="text" class="form-control" id="direccion" name="linea" required >		
 					      			<option>Collar</option>
 					      			<option>Anillo</option>
 					      			<option>Arete</option>
@@ -34,7 +38,7 @@
 					  	<div class="form-group row">
 					    	<label for="depto" class="col-sm-2 col-form-label">Depto:</label>
 					    	<div class="col-sm-10">
-					      		<select type="text" class="form-control" id="direccion" placeholder=""  >		
+					      		<select type="text" class="form-control" id="depto" name="depto" required >		
 					      			<option>Hombre</option>
 					      			<option>Mujer</option>
 					      			<option>Unisex</option>
@@ -45,18 +49,19 @@
 					  	<div class="form-group row">
 					    	<label for="price" class="col-sm-2 col-form-label">Price:</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" class="form-control input-number" id="price" min="1" max="99999" step=".01" >			      						      		
+					      		<input type="text" class="form-control input-number" id="price" min="1" max="99999" step=".01" name="price" required>			      						      		
 					    	</div>
 					  	</div>
 					  	<div class="form-group row">
-					    	<label for="peso" class="col-sm-2 col-form-label">Peso (gr):</label>
+					    	<label for="cantidad" class="col-sm-2 col-form-label">Cantidad:</label>
 					    	<div class="col-sm-10">
-					      		<input type="text" class="form-control input-number" id="peso" min="1" max="99999"  >			      						      		
+					      		<input type="text" class="form-control input-number" id="cantidad" min="1" max="99999" step=".01" name="cantidad" required value="1">			      						      		
 					    	</div>
-					  	</div>
+					  	</div>					  	
+			
 					  	<div class="form-group row">
 						  	<div class="col-sm-2"></div>
-							<a class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</a>
+							<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</button>
 						</div>
 		        	</form>
 		        </div>
@@ -77,7 +82,7 @@
             	<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               		<thead>
 		                <tr>
-		                  	<th>ID</th>
+		                  	<th>SKU</th>
 		                  	<th>Descripcion</th>
 		                  	<th>Depto</th>
 		                  	<th>Linea</th>
@@ -91,7 +96,7 @@
               		</thead>
               		<tfoot>
 		                <tr>
-		                  	<th>ID</th>
+		                  	<th>SKU</th>
 		                  	<th>Descripcion</th>
 		                  	<th>Depto</th>
 		                  	<th>Linea</th>
@@ -171,25 +176,25 @@
         </div>
     </div>
     	<div class="row">
-    		<div class="col-sm-6">    	
+    		<div class="col-sm-12 col-md-6">    	
 			    <!--Nuevo Linea-->
-			    <div class="card mb-3">
-			        <div class="card-header"><i class="fa fa-area-chart"></i> Nueva Linea</div>
+			    <div class="card mb-3" id="nuevaLinea">
+			        <div class="card-header"><i class="fa fa-area-chart"></i> Nueva Linea <span style="color:green; display: <?php if ($status== 'successlinea') { echo "inline-block";} else {echo "none";}?>"> - Linea nueva agregada</span></div>
 			        <div class="card-body">
 			        	<div class="row">
 			        		<div class="col-sm-12">
-					        	<form>
+					        	<form method="Post" action="articulos_linea.php">
 					        		
 					        		<div class="form-group row">
-								    	<label for="desc" class="col-sm-3 col-form-label">Nombre:</label>
+								    	<label for="lineanew" class="col-sm-3 col-form-label">Nombre:</label>
 								    	<div class="col-sm-9">
-								      		<input type="text" class="form-control" id="desc" placeholder=""  >			      						      		
+								      		<input type="text" class="form-control" id="lineanew" name="linea"  required>			      						      		
 								    	</div>
 								  	</div>
 								  	
 								  	<div class="form-group row">
 									  	<div class="col-sm-3"></div>
-										<a class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</a>
+										<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</button>
 									</div>
 					        	</form>
 					        </div>		        		       
@@ -199,23 +204,23 @@
 		  	</div>
 		  	<div class="col-sm-12 col-md-6">
 			  	<!--Nuevo Depto-->
-			    <div class="card mb-3">
-			        <div class="card-header"><i class="fa fa-area-chart"></i> Nuevo Depto</div>
+			    <div class="card mb-3" id="nuevoDepto">
+			        <div class="card-header"><i class="fa fa-area-chart"></i> Nuevo Depto <span style="color:green; display: <?php if ($status== 'successdepto') { echo "inline-block";} else {echo "none";}?>"> - Departamento nuevo agregado</span></div>
 			        <div class="card-body">
 			        	<div class="row">
 			        		<div class="col-sm-12">
-					        	<form>
+					        	<form method="Post" action="articulos_depto.php">
 					        		
 					        		<div class="form-group row">
-								    	<label for="desc" class="col-sm-3 col-form-label">Nombre:</label>
+								    	<label for="deptonew" class="col-sm-3 col-form-label">Nombre:</label>
 								    	<div class="col-sm-9">
-								      		<input type="text" class="form-control" id="desc" placeholder=""  >			      						      		
+								      		<input type="text" class="form-control" id="deptonew" name="depto" required >			      						      		
 								    	</div>
 								  	</div>
 								  	
 								  	<div class="form-group row">
 									  	<div class="col-sm-3"></div>
-										<a class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</a>
+										<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</button>
 									</div>
 					        	</form>
 					        </div>		        		       
