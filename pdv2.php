@@ -103,13 +103,13 @@
                   </div>
                   </div>
               </div>
-              <div class="form-check col-sm-1">
+              <div class="form-check col-sm-3">
               <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo"  checked="true">
                 <label class="form-check-label" for="defaultCheck1" >
                 Efectivo
               </label>
             </div>
-            <div class="form-check col-sm-2">
+            <div class="form-check col-sm-3">
               <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo" >
                 <label class="form-check-label" for="defaultCheck1" >
                 Tarjeta de Credito
@@ -125,7 +125,7 @@
                     <td class="pt-2">Dct</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
                     <td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
                     <td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly=""></td>
-                    <td><button class="btn btn-success">Checkout</button></td>
+                    <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button></td>
                   </tr>
                 </table>
               </div>
@@ -133,12 +133,12 @@
         </div><!--col-->
             </div><!--row -->
         </div><!--col -->
-        <div class="col-sm-12 col-md-3 bg-white pt-3">	        	
+        <div class="col-sm-12 col-md-3 bg-white pt-3">
       <div class="row mb-3" style="height: 300px; overflow-y: scroll; max-height: 240px;">
         <div class="col-sm-12 col-md-12" >
             <table class="table">
               <thead>
-                <tr>							      	
+                <tr>
                     <th scope="col">Folio</th>
                     <th scope="col">Nombre</th>
                 </tr>
@@ -174,13 +174,13 @@
             <div class="row mb-2">
               <div class="col-sm-1"></div>
               <div class="form-check col-sm-5">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" onchange="apartadoclick();">
+                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck1" onchange="apartadoclick();">
                   <label class="form-check-label" for="defaultCheck1" >
                   Apartado
                 </label>
               </div>
               <div class="form-check col-sm-5">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" onchange="apartadoclick();">
+                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck2" onchange="apartadoclick();">
                   <label class="form-check-label" for="defaultCheck2">
                   Factura
                 </label>
@@ -196,27 +196,27 @@
               <div class="form-group row">
                 <label for="Name" class="col-sm-3 col-form-label">Nombre</label>
                 <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="nombre" name="nombre" placeholder="Mostrador">
+                    <input type="text" class="form-control col-sm-10" id="Name" name="nombre" placeholder="Mostrador" readonly>
                     <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="LastName" class="col-sm-3 col-form-label">Apellido</label>
                 <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="apellido" name="apellido" placeholder="Mostrador">
+                    <input type="text" class="form-control col-sm-10" id="LastName" name="apellido" placeholder="Mostrador" readonly>
                     <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="RFC" class="col-sm-3 col-form-label">RFC</label>
                 <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="rfc" name="rfc" placeholder="" >
+                    <input type="text" class="form-control col-sm-10" id="RFC" name="rfc" placeholder="(opcional)" readonly>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="Tel" class="col-sm-3 col-form-label">Tel</label>
                 <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="tel" name="tel" placeholder="" >
+                    <input type="text" class="form-control col-sm-10" id="Tel" name="tel" placeholder="" readonly>
                     <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
