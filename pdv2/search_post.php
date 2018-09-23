@@ -29,9 +29,9 @@
           echo "<th></th>";
           echo "<th><input class='form-control' value='".$row['descuento']."' ></th>";
           echo "<th id='quantity-prod-".$row['idProducto']."'>1</th>";
-          echo "<th>".$row['precio']."</th>";
+          echo "<th id='price-prod-".$row['idProducto']."'>".$row['precio']."</th>";
           echo "<th></th>";
-          echo "<th></th>";
+          echo "<th id='total-price-prod-".$row['idProducto']."'>".$row['precio']."</th>";
           echo "<th><button class='btn btn-default' onclick="."'deleteProduct(".'"prod-'.$row['idProducto'].'"'.")'>X</button></th>";
           echo "</tr>";
         }

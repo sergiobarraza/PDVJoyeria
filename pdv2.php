@@ -259,8 +259,17 @@
 
     function doAddProductQuantity(id) {
       var th = $("#quantity-"+id);
-      var Qty = parseInt($("#quantity-prod-5").text());
-      return th.text( Qty + 1);
+      var Qty = parseInt(th.text());
+      th.text( Qty + 1);
+      changeTotalPrice(id);
+      return true;
+    }
+
+    function changeTotalPrice(id) {
+      var qty = parseInt($("#quantity-"+id).text());
+      var price = parseInt($("#price-"+id).text());
+      var prodTotal = $("#total-price-"+id);
+      return prodTotal.text(qty * price);
     }
   });
 
