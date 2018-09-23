@@ -27,7 +27,7 @@
           echo "<th>".$row['idProducto']."</th>";
           echo "<th>".$row['nombre']."</th>";
           echo "<th></th>";
-          echo "<th><input class='form-control' value='".$row['descuento']."' ></th>";
+          echo "<th><input id='discount-prod-".$row['idProducto']."' class='form-control' value='".$row['descuento']."' ></th>";
           echo "<th id='quantity-prod-".$row['idProducto']."'>1</th>";
           echo "<th id='price-prod-".$row['idProducto']."'>".$row['precio']."</th>";
           echo "<th></th>";

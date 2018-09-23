@@ -104,7 +104,10 @@
                   <table class="table">
                     <tr>
                       <td class="pt-2">Subtotal</td><td><input type="text" name="dcto" value="30.00"  readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
-                      <td class="pt-2">Dct</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+                      <td class="pt-2">Dct</td>
+                      <td>
+                        <input type="number" name="dcto" id="total-dcto" placeholder="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                      </td>
                       <td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
                       <td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly=""></td>
                       <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button></td>
@@ -271,6 +274,14 @@
       var prodTotal = $("#total-price-"+id);
       return prodTotal.text(qty * price);
     }
+
+    $("#total-dcto").on('change', function(){
+      var newVal = $(this).val();
+
+      $("#salestable").children().map(function(){
+        return $("#discount-"+this.id).val(newVal);
+      });
+    });
   });
 
 </script>
