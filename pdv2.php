@@ -103,13 +103,19 @@
                 <div class="col-sm-12 ">
                   <table class="table">
                     <tr>
-                      <td class="pt-2">Subtotal</td><td><input type="text" name="dcto" value="30.00"  readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+                      <td class="pt-2">Subtotal</td>
+                      <td>
+                        <input type="text" name="dcto" value="0.00" id="prod-subtotal" readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                      </td>
                       <td class="pt-2">Dct</td>
                       <td>
-                        <input type="number" name="dcto" id="total-dcto" placeholder="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                        <input type="number" min="0" max="100" name="dcto" id="total-dcto" placeholder="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
                       </td>
                       <td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
-                      <td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly=""></td>
+                      <td class="pt-2">Total</td>
+                      <td>
+                        <input type="text" name="dcto" id="prod-total" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly="">
+                      </td>
                       <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button></td>
                     </tr>
                   </table>
@@ -226,6 +232,18 @@
       $('#'+id).remove();
     }
 
+    function changeGeneralTotalPrice(){
+      var total = 0;
+
+      $("#salestable").children().map(function(){
+        var totprice = parseInt($("#total-price-"+this.id).text());
+        var disc = parseInt($("#discount-"+this.id).val());
+        return total += (totprice - totprice * disc / 100);
+      });
+      $("#prod-total").val(total);
+    }
+
+
   $(document).ready(function(){
 
     $("#search_form").on('submit', function (e){
@@ -238,6 +256,8 @@
         cache: false,
         success: function(result) {
           appendNewProduct(result);
+          changeGeneralSubotalPrice();
+          changeGeneralTotalPrice();
         }
       })
       return false;
@@ -264,15 +284,23 @@
       var th = $("#quantity-"+id);
       var Qty = parseInt(th.text());
       th.text( Qty + 1);
-      changeTotalPrice(id);
+      changeProdTotalPrice(id);
       return true;
     }
 
-    function changeTotalPrice(id) {
+    function changeProdTotalPrice(id) {
       var qty = parseInt($("#quantity-"+id).text());
       var price = parseInt($("#price-"+id).text());
       var prodTotal = $("#total-price-"+id);
       return prodTotal.text(qty * price);
+    }
+
+    function changeGeneralSubotalPrice(){
+      var total = 0;
+      $("#salestable").children().map(function(){
+        return total += parseInt($("#total-price-"+this.id).text());
+      });
+      $("#prod-subtotal").val(parseFloat(total));
     }
 
     $("#total-dcto").on('change', function(){
@@ -281,6 +309,8 @@
       $("#salestable").children().map(function(){
         return $("#discount-"+this.id).val(newVal);
       });
+      changeGeneralTotalPrice()
+      return true;
     });
   });
 
