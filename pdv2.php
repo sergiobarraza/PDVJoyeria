@@ -2,10 +2,10 @@
   require "config/database.php";
   require "config/common.php";
 
+  $connection = new PDO($dsn, $username, $password, $options);
+
   if(isset($_POST['submit'])) {
     try {
-      $connection = new PDO($dsn, $username, $password, $options );
-
       $new_user = array(
         "nombre" => $_POST['nombre'],
         "apellido" => $_POST['apellido'],
@@ -31,7 +31,6 @@
   $person_count = 0;
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
 
     $sql = "SELECT count(*) FROM Persona";
 
@@ -43,26 +42,6 @@
     echo $sql . "<br>" . $error->getMessage();
   }
 
-  $prod_list = [];
-
-  if(isset($_POST['search'])) {
-    try{
-      $connection = new PDO($dsn, $username, $password, $options);
-
-      $searchq = $_POST['search'];
-      $searchq = preg_replace("#[^0-9a-z]#i", "", $searchq);
-
-      $query = "SELECT * FROM Producto WHERE nombre LIKE '%$searchq%'";
-
-      $statement = $connection->prepare($query);
-      $statement->execute($searchq);
-      $prod_list = $statement->fetchAll();
-
-    } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-    }
-  }
-
 ?>
 
 <?php include("header-pdv.php"); ?>
@@ -70,66 +49,69 @@
       <!-- Articulos -->
       <div class="col-sm-12 col-md-9 bg-white pt-3" >
         <div class="row mb-2" >
-            <div class="col-sm-12" id="prendamenu">
-              <div class="text-center" style="height: 540px; overflow-y: scroll; max-height: 440px;">
-                  <table class="table" cellspacing="0" >
-                <thead >
+          <div class="col-sm-12" id="prendamenu">
+            <div class="text-center" style="height: 540px; overflow-y: scroll; max-height: 440px;">
+              <table class="table" cellspacing="0" >
+                <thead>
                   <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Articulo</th>
-                      <th scope="col">Descripción</th>
-                      <th scope="col">Dcto</th>
-                      <th scope="col">Cantidad</th>
-                      <th scope="col">Precio Unit</th>
-                      <th scope="col">$/dcto</th>
-                      <th scope="col">Importe</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Articulo</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Dcto</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio Unit</th>
+                    <th scope="col">$/dcto</th>
+                    <th scope="col">Importe</th>
                   </tr>
-              </thead>
+                </thead>
                 <tbody id="salestable">
                 </tbody>
-            </table>
-                </div><!--text center-->
-              </div><!--#PrendaMenu -->
-            </div><!--row -->
-            <div class="row">
+              </table>
+            </div><!--text center-->
+          </div><!--#PrendaMenu -->
+          </div><!--row -->
+          <div class="row">
               <div class="col-sm-12">
-                <div class="form-group row">
-              <label for="productid" class="col-sm-1 col-md-1 col-form-label text-right">#</label>
-              <div class="col-sm-10 col-md-4">
-                <div class="row">
-                    <input type="text" class="form-control col-sm-10" id="productid"  autofocus="autofocus" onkeydown="searchfield(event);">
-                    <div class="col-sm-1 col-md-1">
-                    <i class="fa fa-search pt-2"></i>
+                  <div class="form-group row">
+                    <label for="productid" class="col-sm-1 col-md-1 col-form-label text-right">#</label>
+                    <div class="col-sm-10 col-md-4">
+                      <div class="row">
+                        <form method="post" id="search_form">
+                          <input type="text" name="search" class="form-control col-sm-10" id="productid" autofocus="autofocus" onkeydown="searchfield(event);">
+                          <div class="col-sm-1 col-md-1">
+                            <button id="submit" type="submit">
+                              <i class="fa fa-search pt-2"></i>
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="form-check col-sm-3">
+                      <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo"  checked="true">
+                      <label class="form-check-label" for="defaultCheck1" >
+                        Efectivo
+                      </label>
+                    </div>
+                    <div class="form-check col-sm-3">
+                      <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo" >
+                      <label class="form-check-label" for="defaultCheck1" >
+                        Tarjeta de Credito
+                      </label>
+                    </div>
                   </div>
-                  </div>
+              <div class="row">
+                <div class="col-sm-12 ">
+                  <table class="table">
+                    <tr>
+                      <td class="pt-2">Subtotal</td><td><input type="text" name="dcto" value="30.00"  readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+                      <td class="pt-2">Dct</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+                      <td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+                      <td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly=""></td>
+                      <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
-              <div class="form-check col-sm-3">
-              <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo"  checked="true">
-                <label class="form-check-label" for="defaultCheck1" >
-                Efectivo
-              </label>
-            </div>
-            <div class="form-check col-sm-3">
-              <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo" >
-                <label class="form-check-label" for="defaultCheck1" >
-                Tarjeta de Credito
-              </label>
-            </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12 ">
-
-                <table class="table">
-                  <tr>
-                    <td class="pt-2">Subtotal</td><td><input type="text" name="dcto" value="30.00"  readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
-                    <td class="pt-2">Dct</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
-                    <td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
-                    <td class="pt-2">Total</td><td><input type="text" name="dcto" value="30.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly=""></td>
-                    <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
         </div><!--col-->
             </div><!--row -->
         </div><!--col -->
@@ -189,7 +171,7 @@
               <div class="form-group row">
                 <label for="clientNumber" class="col-sm-3 col-form-label">#</label>
                 <div class="col-sm-9 row">
-                    <input type="text"  class="form-control col-sm-10" id="clientNumber" value="1" readonly onchange="buscarcliente();">
+                <input type="text"  class="form-control col-sm-10" id="clientNumber" value="<?php echo $person_count + 1;?>" readonly onchange="buscarcliente();">
                     <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
@@ -236,3 +218,50 @@
  </div><!--row -->
 <?php include "resumen_compra.php"; ?>
 <?php include "footer-pdv.php"; ?>
+<script>
+    function deleteProduct(id) {
+      $('#'+id).remove();
+    }
+
+  $(document).ready(function(){
+
+    $("#search_form").on('submit', function (e){
+      e.preventDefault();
+      var searchstr = $("#productid").val();
+      $.ajax({
+        type: "POST",
+        url: "pdv2/search_post.php",
+        data: $("#search_form").serialize(),
+        cache: false,
+        success: function(result) {
+          appendNewProduct(result);
+        }
+      })
+      return false;
+    });
+    function appendNewProduct(result) {
+      var ids = $("#salestable").children().map(function(){
+        return this.id;
+      });
+      var candidateId = $(result).find('tr').prevObject.attr('id');
+
+      if (ids.toArray().indexOf(candidateId) != -1){
+        doAddProductQuantity(candidateId);
+        // notify addition
+      } else {
+        doNewAddProduct(result);
+      }
+    }
+
+    function doNewAddProduct(html) {
+      $("#salestable").append(html);
+    }
+
+    function doAddProductQuantity(id) {
+      var th = $("#quantity-"+id);
+      var Qty = parseInt($("#quantity-prod-5").text());
+      return th.text( Qty + 1);
+    }
+  });
+
+</script>

@@ -1,6 +1,5 @@
 <?php
   if(isset($_POST['checkout'])) {
-    
   }
 ?>
 <div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel" aria-hidden="true">
