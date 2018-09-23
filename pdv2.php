@@ -111,7 +111,10 @@
                       <td>
                         <input type="number" min="0" max="100" name="dcto" id="total-dcto" placeholder="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
                       </td>
-                      <td class="pt-2">IVA</td><td><input type="text" name="dcto" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;"></td>
+                      <td class="pt-2">IVA</td>
+                      <td>
+                        <input type="number" id="iva-total" min="0" max="100" name="iva" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                      </td>
                       <td class="pt-2">Total</td>
                       <td>
                         <input type="text" name="dcto" id="prod-total" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly="">
@@ -228,21 +231,29 @@
 <?php include "resumen_compra.php"; ?>
 <?php include "footer-pdv.php"; ?>
 <script>
-    function deleteProduct(id) {
-      $('#'+id).remove();
-    }
+  function deleteProduct(id) {
+    $('#'+id).remove();
+  }
 
-    function changeGeneralTotalPrice(){
-      var total = 0;
+  function changeGeneralTotalPrice(){
+    var total = 0;
 
-      $("#salestable").children().map(function(){
-        var totprice = parseInt($("#total-price-"+this.id).text());
-        var disc = parseInt($("#discount-"+this.id).val());
-        return total += (totprice - totprice * disc / 100);
-      });
-      $("#prod-total").val(total);
-    }
+    $("#salestable").children().map(function(){
+      var totprice = parseInt($("#total-price-"+this.id).text());
+      var disc = parseInt($("#discount-"+this.id).val());
+      var iva = parseInt($("#iva-total").val());
+      return total += (totprice - (totprice * disc / 100) - (totprice * iva / 100));
+    });
+    $("#prod-total").val(total);
+  }
 
+  function changeProdDiscountPrice(id){
+    var qty = parseInt($("#quantity-"+id).text());
+    var price = parseInt($("#price-"+id).text());
+    var dcto = parseInt($("#discount-"+id).val());
+    $("#price-discount-"+id).text(qty * (price - price * dcto / 100));
+    changeGeneralTotalPrice();
+  }
 
   $(document).ready(function(){
 
@@ -270,6 +281,7 @@
 
       if (ids.toArray().indexOf(candidateId) != -1){
         doAddProductQuantity(candidateId);
+        changeProdDiscountPrice(candidateId);
         // notify addition
       } else {
         doNewAddProduct(result);
@@ -312,6 +324,10 @@
       changeGeneralTotalPrice()
       return true;
     });
+
+    $("#iva-total").on('change', function(){
+      changeGeneralTotalPrice();
+    })
   });
 
 </script>
