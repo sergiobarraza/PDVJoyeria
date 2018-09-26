@@ -356,35 +356,11 @@
 
     <script type="text/javascript">
 
-      function apartadoclick(){
-        document.getElementById("clientNumber").removeAttribute("readonly");
-        document.getElementById("clientNumber").focus();
-        document.getElementById("Name").removeAttribute("readonly");
-        document.getElementById("LastName").removeAttribute("readonly");
-        document.getElementById("RFC").removeAttribute("readonly");
-        document.getElementById("Tel").removeAttribute("readonly");
-
-
-        $("#productid").focus();
-      }
 
       function searchfield(event){
         e=event.which;
         if(e== 13)
         alert(e);
-      // Allow: backspace, delete, tab, escape, enter and .
-      /*if ($.inArray(e, [46, 8, 9, 27, 13]) !== -1 ||
-       // Allow: Ctrl+A
-      (e == 65 && event.ctrlKey === true) || 
-        // Allow: home, end, left, right
-      (e >= 35 && e <= 39)) {
-          // let it happen, don't do anything
-          return;
-      }
-
-      if (( e < 48 || e > 57 )) {
-          event.preventDefault();
-      }*/
       }
     </script>
   </div>

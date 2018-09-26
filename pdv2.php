@@ -166,16 +166,21 @@
             <div class="col-sm-12">
           <form method="post">
             <div class="row mb-2">
-              <div class="col-sm-1"></div>
               <div class="form-check col-sm-5">
-                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck1" onchange="apartadoclick();">
+                <input class="form-check-input" checked type="radio" name="payment_type" value="" id="defaultCheck1" onchange="apartadoClick(true);">
                   <label class="form-check-label" for="defaultCheck1" >
+                  Mostrador
+                </label>
+              </div>
+              <div class="form-check col-sm-5">
+                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck2" onchange="apartadoClick(false);">
+                  <label class="form-check-label" for="defaultCheck2" >
                   Apartado
                 </label>
               </div>
               <div class="form-check col-sm-5">
-                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck2" onchange="apartadoclick();">
-                  <label class="form-check-label" for="defaultCheck2">
+                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck3" onchange="apartadoClick(false);">
+                  <label class="form-check-label" for="defaultCheck3">
                   Factura
                 </label>
               </div>
@@ -191,20 +196,19 @@
                 <label for="Name" class="col-sm-3 col-form-label">Nombre</label>
                 <div class="col-sm-9 row">
                     <input type="text" class="form-control col-sm-10" id="Name" name="nombre" placeholder="Mostrador" readonly>
-                    <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="LastName" class="col-sm-3 col-form-label">Apellido</label>
                 <div class="col-sm-9 row">
                     <input type="text" class="form-control col-sm-10" id="LastName" name="apellido" placeholder="Mostrador" readonly>
-                    <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="RFC" class="col-sm-3 col-form-label">RFC</label>
                 <div class="col-sm-9 row">
                     <input type="text" class="form-control col-sm-10" id="RFC" name="rfc" placeholder="(opcional)" readonly>
+                    <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
                 </div>
               </div>
               <div class="form-group row">
@@ -329,5 +333,23 @@
       changeGeneralTotalPrice();
     })
   });
+
+  function apartadoClick(isDefault){
+    if(isDefault) {
+      $("#clientNumber").focus();
+      $("#Name").attr("readonly", true);
+      $("#LastName").attr("readonly", true);
+      $("#RFC").attr("readonly", true);
+      $("#Tel").attr("readonly", true);
+    } else {
+      $("#clientNumber").focus();
+      $("#Name").attr("readonly", false);
+      $("#LastName").attr("readonly", false);
+      $("#RFC").attr("readonly", false);
+      $("#Tel").attr("readonly", false);
+    }
+  }
+
+
 
 </script>
