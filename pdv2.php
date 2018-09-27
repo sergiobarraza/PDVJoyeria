@@ -74,19 +74,25 @@
               <div class="col-sm-12">
                   <div class="form-group row">
                     <label for="productid" class="col-sm-1 col-md-1 col-form-label text-right">#</label>
-                    <div class="col-sm-10 col-md-4">
+                    <div class="col-sm-10 col-md-6">
                       <div class="row">
                         <form method="post" id="search_form">
-                          <input type="text" name="search" class="form-control col-sm-10" id="productid" autofocus="autofocus" onkeydown="searchfield(event);">
-                          <div class="col-sm-1 col-md-1">
-                            <button id="submit" type="submit">
-                              <i class="fa fa-search pt-2"></i>
-                            </button>
-                          </div>
+                          <input type="text" name="search" class="form-control col-sm-10" style="margin: 0px;width:50%;display: inline-block;" id="productid" autofocus="autofocus" onkeydown="searchfield(event);">
+                          <select class="form-control form-control-sm" style="width: 100px;display:inline-block;height:38px;padding:6px 12px;">
+                            <option>
+                              Nombre
+                            </option>
+                            <option>
+                              Numero
+                            </option>
+                          </select>
+                          <button id="submit" class="btn btn-dark" type="submit" style="height: 38px;">
+                            <i class="fa fa-search pt-2" style="padding-bottom: 15px;"></i>
+                          </button>
                         </form>
                       </div>
                     </div>
-                    <div class="form-check col-sm-3">
+                    <div class="form-check col-sm-2">
                       <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo"  checked="true">
                       <label class="form-check-label" for="defaultCheck1" >
                         Efectivo
