@@ -334,14 +334,18 @@
     })
   });
 
+  var clientNum = $("#clientNumber").val();
+  $("#clientNumber").val(1);
   function apartadoClick(isDefault){
     if(isDefault) {
+      $("#clientNumber").val(1);
       $("#clientNumber").focus();
       $("#Name").attr("readonly", true);
       $("#LastName").attr("readonly", true);
       $("#RFC").attr("readonly", true);
       $("#Tel").attr("readonly", true);
     } else {
+      $("#clientNumber").val(clientNum);
       $("#clientNumber").focus();
       $("#Name").attr("readonly", false);
       $("#LastName").attr("readonly", false);
