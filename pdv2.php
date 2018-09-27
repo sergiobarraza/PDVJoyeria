@@ -165,75 +165,12 @@
                     <td>the Bird</td>
                 </tr>
               </tbody>
-          </table>
+            </table>
           </div><!-- col-->
-      </div><!-- row-->
-      <div class="row">
-            <div class="col-sm-12">
-          <form method="post">
-            <div class="row mb-2">
-              <div class="form-check col-sm-5">
-                <input class="form-check-input" checked type="radio" name="payment_type" value="" id="defaultCheck1" onchange="apartadoClick(true);">
-                  <label class="form-check-label" for="defaultCheck1" >
-                  Mostrador
-                </label>
-              </div>
-              <div class="form-check col-sm-5">
-                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck2" onchange="apartadoClick(false);">
-                  <label class="form-check-label" for="defaultCheck2" >
-                  Apartado
-                </label>
-              </div>
-              <div class="form-check col-sm-5">
-                <input class="form-check-input" type="radio" name="payment_type" value="" id="defaultCheck3" onchange="apartadoClick(false);">
-                  <label class="form-check-label" for="defaultCheck3">
-                  Factura
-                </label>
-              </div>
-            </div>
-              <div class="form-group row">
-                <label for="clientNumber" class="col-sm-3 col-form-label">#</label>
-                <div class="col-sm-9 row">
-                <input type="text"  class="form-control col-sm-10" id="clientNumber" value="<?php echo $person_count + 1;?>" readonly onchange="buscarcliente();">
-                    <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="Name" class="col-sm-3 col-form-label">Nombre</label>
-                <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="Name" name="nombre" placeholder="Mostrador" readonly>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="LastName" class="col-sm-3 col-form-label">Apellido</label>
-                <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="LastName" name="apellido" placeholder="Mostrador" readonly>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="RFC" class="col-sm-3 col-form-label">RFC</label>
-                <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="RFC" name="rfc" placeholder="(opcional)" readonly>
-                    <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="Tel" class="col-sm-3 col-form-label">Tel</label>
-                <div class="col-sm-9 row">
-                    <input type="text" class="form-control col-sm-10" id="Tel" name="tel" placeholder="" readonly>
-                    <div class="col-sm-2"><i class="fa fa-search clickable"></i></div>
-                </div>
-              </div>
-              <div class="form-group row">
-              <div class="col-sm-3">
-              </div>
-              <div class="col-sm-6">
-                <input type="submit" name="submit" class="btn-warning" value="Agregar Nuevo" id="btnagregar">
-               <!--  <button type="button" class="btn-warning" id="btnagregar" onclick="agregarcliente();">Agregar Nuevo</button> -->
-                <button type="button" class="btn-success" id="btnagregar" onclick="aceptarcliente();" style="display: none;">Aceptar</button>
-                </div>
-              </div>
-          </form>
+        </div><!-- row-->
+        <div class="row">
+          <div class="col-sm-12">
+          <?php include "pdv2/person_form.php" ?>
         </div><!-- col-->
       </div><!-- row-->
     </div><!--col -->
