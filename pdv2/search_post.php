@@ -14,7 +14,10 @@
       $searchq = $_POST['search'];
       $searchq = preg_replace("#[^0-9a-z\w\ ]#i", "", $searchq);
 
-      $sql = "SELECT * FROM Producto WHERE nombre = '$searchq' ";
+      $sql_nombre = "SELECT * FROM Producto WHERE nombre = '$searchq' ";
+      $sql_id = "SELECT * FROM Producto WHERE codigo = '$searchq'";
+
+      $sql = $_POST['search_select'] == "Nombre" ? $sql_nombre : $sql_id;
 
       $statement = $connection->prepare($sql);
       $statement->bindValue(1, "%$searchq%", PDO::PARAM_STR);
@@ -22,11 +25,12 @@
 
 
       if(!$statement->rowCount() == 0){
+
         while($row = $statement->fetch()){
           echo "<tr id=prod-".$row['idProducto'].">";
           echo "<th>".$row['idProducto']."</th>";
           echo "<th>".$row['nombre']."</th>";
-          echo "<th></th>";
+          echo "<th>".$row['codigo']."</th>";
           echo "<th><input type='number' min='0' max='100' id='discount-prod-".$row['idProducto']."' class='form-control' value='".$row['descuento']."' onchange="."'changeProdDiscountPrice(".'"prod-'.$row['idProducto'].'"'.")'></th>";
           echo "<th id='quantity-prod-".$row['idProducto']."'>1</th>";
           echo "<th id='price-prod-".$row['idProducto']."'>".$row['precio']."</th>";

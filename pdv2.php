@@ -56,7 +56,7 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Articulo</th>
-                    <th scope="col">Descripción</th>
+                    <th scope="col">Código</th>
                     <th scope="col">Dcto</th>
                     <th scope="col">Cantidad</th>
                     <th scope="col">Precio Unit</th>
@@ -78,15 +78,15 @@
                       <div class="row">
                         <form method="post" id="search_form">
                           <input type="text" name="search" class="form-control col-sm-10" style="margin: 0px;width:50%;display: inline-block;" id="productid" autofocus="autofocus" onkeydown="searchfield(event);">
-                          <select class="form-control form-control-sm" style="width: 100px;display:inline-block;height:38px;padding:6px 12px;">
+                          <select name="search_select" class="form-control form-control-sm" style="width: 100px;display:inline-block;height:38px;padding:6px 12px;">
                             <option>
                               Nombre
                             </option>
                             <option>
-                              Numero
+                              Código
                             </option>
                           </select>
-                          <button id="submit" class="btn btn-dark" type="submit" style="height: 38px;">
+                          <button id="submit" class="btn btn-dark" type="submit" style="height: 36px;">
                             <i class="fa fa-search pt-2" style="padding-bottom: 15px;"></i>
                           </button>
                         </form>
