@@ -279,6 +279,7 @@
 
   var clientNum = $("#clientNumber").val();
   $("#clientNumber").val(1);
+  $("#btnagregar").attr("disabled", true);
   function apartadoClick(isDefault){
     if(isDefault) {
       $("#clientNumber").val(1);
@@ -287,6 +288,7 @@
       $("#LastName").attr("readonly", true);
       $("#RFC").attr("readonly", true);
       $("#Tel").attr("readonly", true);
+      $("#btnagregar").attr("disabled", true);
     } else {
       $("#clientNumber").val(clientNum);
       $("#clientNumber").focus();
@@ -294,6 +296,7 @@
       $("#LastName").attr("readonly", false);
       $("#RFC").attr("readonly", false);
       $("#Tel").attr("readonly", false);
+      $("#btnagregar").removeAttr("disabled");
     }
   }
 
