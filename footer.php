@@ -43,34 +43,36 @@
     <script src="js/sb-admin-datatables.min.js"></script>
     <script src="js/sb-admin-charts.min.js"></script>
     <script type="text/javascript">
-        //plugin bootstrap filter number
+        
+
         $('.input-number').focusin(function(){
-           $(this).data('oldValue', $(this).val());
-        });
+         $(this).data('oldValue', $(this).val());
+      });
         $('.input-number').change(function() {
             
-            minValue =  parseInt($(this).attr('min'));
-            maxValue =  parseInt($(this).attr('max'));
-            valueCurrent = parseInt($(this).val());
-            
-            name = $(this).attr('name');
-            if(valueCurrent >= minValue) {
-                $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-            } else {
-                alert('Sorry, the minimum value was reached');
-                $(this).val($(this).data('oldValue'));
-            }
-            if(valueCurrent <= maxValue) {
-                $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-            } else {
-                alert('Sorry, the maximum value was reached');
-                $(this).val($(this).data('oldValue'));
-            }    
-        });
-
+          minValue =  parseInt($(this).attr('min'));
+          maxValue =  parseInt($(this).attr('max'));
+          valueCurrent = parseInt($(this).val());
+          
+          name = $(this).attr('name');
+          if(valueCurrent >= minValue) {
+              
+          } else {
+              alert('No es valido valores menores a 0');
+              $(this).val($(this).data('oldValue'));
+          }
+          if(valueCurrent <= maxValue) {
+              
+          } else {
+              alert('Valor maximo sobrepasado');
+              $(this).val($(this).data('oldValue'));
+          }
+          
+          
+      });
         $(".input-number").keydown(function (e) {
                 // Allow: backspace, delete, tab, escape, enter and .
-                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13]) !== -1 ||
                      // Allow: Ctrl+A
                     (e.keyCode == 65 && e.ctrlKey === true) || 
                      // Allow: home, end, left, right
@@ -83,6 +85,7 @@
                     e.preventDefault();
                 }
             });
+
       </script>
   </div><!--content Wrapper (header)-->
 </body>

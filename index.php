@@ -2,13 +2,12 @@
 	include("header.php");
 ?>
 	<!-- Area Chart Example-->
-	<div class="card mb-3">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Venta del Mes</div>
-        <div class="card-body">
-          	<canvas id="myAreaChart" width="100%" height="30"></canvas>
-        </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-  	</div>
+  <div class="text-center">
+  	<h1>Punto de Venta Joyería Claro</h1>
+    <h2>Panel de Administración</h2>
+    <h3>Sucursal: Almacen Central</h3>
+    <img src="img/index.jpg" style="display: block; margin: auto;width: 80%;">
+  </div>
 <?php
 	include "footer.php";
 ?>

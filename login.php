@@ -1,3 +1,11 @@
+<?php
+    require "config/database.php";
+    $status="nada";
+  if (isset($_GET['status'])) {
+    $status = $_GET['status'];
+  }
+  
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +29,7 @@
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Ingresar</div>
       <div class="card-body">
-        <form method="Post" action="login.php">
+        <form method="Post" action="login_session.php">
           <div class="form-group">
             <label for="exampleInputEmail1">Email</label>
             <input class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Ingresar email">
@@ -33,12 +41,32 @@
           <div class="form-group">
             <label for="sucursal">Sucursal</label>
             <select class="form-control" id="Sucursal" >
+            <?php
+
+                    try {
+                      $connection = new PDO($dsn, $username, $password, $options );
+                      $sql = "SELECT * From Almacen;";                 
+                      $query = $connection->query($sql);
+                      foreach($query->fetchAll() as $row) {
+                      echo "<option value='".$row["idAlmacen"]."'>".$row["name"];
+                    }
+                      
+
+                    } catch(PDOException $error) {
+                      echo $sql . "<br>" . $error->getMessage();
+
+                    }
+                   
+
+                    ?>  
+            </select>
           </div>
           
-          <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>
+          <button class="btn btn-primary btn-block" >Ingresar</button>
         </form>
         <div class="text-center">
           <a class="d-block small" href="forgot-password.html">Olvidaste la contraseña?</a>
+          <span style="color:red; display: <?php if ($status== 'loginerror') { echo "inline-block";} else {echo "none";}?>">  Email o contraseña no válido</span>
         </div>
       </div>
     </div>

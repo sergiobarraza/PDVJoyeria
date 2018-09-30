@@ -1,42 +1,90 @@
 <?php
-	//include 'conexion.php';
+	require "config/database.php";
+    require "config/common.php";
 
 	$sku = $_POST["sku"];
-	$sql1 = "SELECT distinct idProducto from Producto where idProducto =$sku;";	
-	//$result1 = mysqli_query($con, $sql1);
-	$result1= "asd";
-	if ($result1 != ""){
+	try {
+	      $connection = new PDO($dsn, $username, $password, $options );
+	      $sql = "SELECT distinct idProducto, codigo from Producto where codigo =$sku limit 1;";							   
+	      $query = $connection->query($sql);
+	      
+
+	    } catch(PDOException $error) {
+	      echo $sql . "<br>" . $error->getMessage();
+
+	    }
+	    if ($query->rowCount() == 0){
+	      	 echo "No existe SKU";
+	      	 header("Location: inventario.php?status=errorSKU#nuevoDepto");
+	      	 exit;
+	      }else{
+	      	$row = $query->fetch(PDO::FETCH_ASSOC);
+	      	$idProducto = $row["idProducto"]; 
+	      }
 
 		$almEntrada = $_POST["destino"];
 		$almSalida = $_POST["from"];
-		if ($almEntrada == $almSalida) {
-			header("Refresh:0; url=inventario.php?status=errorAlm#nuevoMovimiento");
-		}else{
-
-			$fecha = date("Y-m-d H:i:s");
-			//$cantidad = $_POST["quant[2]"];
-			$sqlIn= array();
-			$sqlOut = array();
-			$fecha = date("Y-m-d H:i:s");
-			$persona =0;
-
-			for ($i=0; $i < 10 ; $i++) { 	
-				$sqlIn[$i] = "INSERT INTO Entrada ( idAlmacen, idProducto, date, tipo, idPersona) VALUES ($almEntrada, $sku, $fecha, 'movimiento', $persona);";
-				$sqlOut[$i] = "INSERT INTO Salida ( idAlmacen, idProducto, date, tipo, idPersona) VALUES ($almSalida, $sku, $fecha, 'movimiento', $persona);";
-
-				//$resultIn[$i] = mysqli_query($con, $sqlIn[$i]);
-				//$resultOut[$i] = mysqli_query($con, $sqlOut[$i]);
-
-				echo $sqlIn[$i]."<br>";
-				echo $sqlOut[$i]."<br>";
-
-			}
-			header("Refresh:0; url=inventario.php?status=successmovimiento#nuevoMovimiento");
+		if ($almEntrada == $almSalida){ 
+			echo "ALMACENES IGUALES";
+			header("Location: inventario.php?status=errorAlm#nuevoMovimiento");
+			exit;
 		}
 
-	}else {
-		//header("Refresh:0; url=inventario.php?status=errorSKU#nuevoMovimiento");
-	}
-	//$result = mysqli_query($con, $sql);
+			$fecha = date("Y-m-d H:i:s");
+			$cantidad = $_POST["cantidad1"];
+			$queryIn= [];
+			$queryOut = [];
+			$persona =2;
+		//Entrada a nuevo Almacen
+		try {
+    		  $sql2 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almEntrada, 1, 'Movimiento Entrada Producto');";
+    		  $query2 = $connection->query($sql2);
+
+    		  $sql3 = "SELECT idFolio from Folio order by idFolio desc limit 1;";
+    		  $query3 = $connection->query($sql3);
+    		  $row3 = $query3->fetch(PDO::FETCH_ASSOC);
+  		      $folionuevo = $row3["idFolio"];
+
+		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, 1, '$fecha', $folionuevo);";						   
+			  $query4=[];						   
+		   
+				for ($i=0; $i < $cantidad ; $i++) { 
+					$query4[$i] = $connection->query($sql4);
+				}		     
+
+  		      
+		    } catch(PDOException $error2) {
+		      echo $sql2 . "<br>" . $error2->getMessage();
+		      header("Location: inventario.php?status=errormovimientoa#nuevoMovimiento");
+  		     		exit;
+
+		    }
+		    //Salida de producto
+		    try {
+    		  $sql5 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almSalida, 1, 'Movimiento Salida Producto');";
+    		  $query5 = $connection->query($sql5);
+    		  $sql6 = "SELECT idFolio from Folio order by idFolio desc limit 1;";
+    		  $query6 = $connection->query($sql6);
+    		  $row6 = $query6->fetch(PDO::FETCH_ASSOC);
+  		      $folionuevo = $row6["idFolio"];
+
+		      $sql7 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, -1, '$fecha', $folionuevo);";						   
+			  $query7=[];						   
+		   
+				for ($i=0; $i < $cantidad ; $i++) { 
+					$query7[$i] = $connection->query($sql7);
+				}		     
+
+  		      
+		    } catch(PDOException $error5) {
+		      echo $sql5 . "<br>" . $error5->getMessage();
+		      header("Location: inventario.php?status=errormovimiento#nuevoMovimiento");
+  		     		exit;
+
+		    }
+			
+			
+			header("Refresh:0; url=inventario.php?status=successmovimiento#nuevoMovimiento");
+
 
 ?>

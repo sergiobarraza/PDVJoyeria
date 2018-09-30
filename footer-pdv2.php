@@ -86,20 +86,20 @@
          $(this).data('oldValue', $(this).val());
       });
       $('.input-number').change(function() {
-            
+          alert();
           minValue =  parseInt($(this).attr('min'));
           maxValue =  parseInt($(this).attr('max'));
           valueCurrent = parseInt($(this).val());
           
           name = $(this).attr('name');
           if(valueCurrent >= minValue) {
-              $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+              //$(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
           } else {
               alert('No es valido valores menores a 0');
               $(this).val($(this).data('oldValue'));
           }
           if(valueCurrent <= maxValue) {
-              $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+              //$(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
           } else {
               alert('Valor maximo sobrepasado');
               $(this).val($(this).data('oldValue'));
