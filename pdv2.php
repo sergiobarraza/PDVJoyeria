@@ -93,13 +93,13 @@
                       </div>
                     </div>
                     <div class="form-check col-sm-2">
-                      <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo"  checked="true">
+                      <input class="form-check-input" type="checkbox" value="" id="checkCash"  checked="true">
                       <label class="form-check-label" for="defaultCheck1" >
                         Efectivo
                       </label>
                     </div>
                     <div class="form-check col-sm-3">
-                      <input class="form-check-input" type="checkbox" value="" id="CheckEfectivo" >
+                      <input class="form-check-input" type="checkbox" value="" id="checkCard" >
                       <label class="form-check-label" for="defaultCheck1" >
                         Tarjeta de Credito
                       </label>
@@ -125,7 +125,7 @@
                       <td>
                         <input type="text" name="dcto" id="prod-total" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly="">
                       </td>
-                      <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button></td>
+                      <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal" onclick="fillCheckoutModal()">Checkout</button></td>
                     </tr>
                   </table>
                 </div>
@@ -278,6 +278,7 @@
   });
 
   var clientNum = $("#clientNumber").val();
+  var products;
   $("#clientNumber").val(1);
   $("#btnagregar").attr("disabled", true);
   function apartadoClick(isDefault){
@@ -300,6 +301,158 @@
     }
   }
 
+  function fillCheckoutModal() {
+    var date = getDate();
+    $("#checkout-modal__date").text("fecha: "+date);
 
+
+    //Articulos
+    products = $("#salestable").children().map(function(){
+      var obj = {}
+      var id = this.id;
+
+       obj["name"] = $(this).find(".prod-name").text();
+       obj["price"] = $(this).find("#price-"+id).text();
+       obj["porc_dcto"] = $(this).find("#discount-"+id).val();
+       obj["importe"] = $(this).find("#total-price-"+id).text();
+       obj["qty"] = $(this).find("#quantity-"+id).text();
+       obj["dcto"] = parseInt(obj["importe"] - $(this).find("#price-discount-"+id).text());
+
+      return obj;
+    });
+
+    $("#checkout-modal__products").text("");
+    products.each(function(){
+      $("#checkout-modal__products").append('<tr>');
+      $("#checkout-modal__products").append('<td>'+this['name']+'</td>')
+      $("#checkout-modal__products").append('<td>'+this['price']+'</td>')
+      $("#checkout-modal__products").append('<td>'+this['qty']+'</td>')
+      $("#checkout-modal__products").append('<td>'+this['porc_dcto']+'%</td>')
+      $("#checkout-modal__products").append('<td>'+this['dcto']+'</td>')
+      $("#checkout-modal__products").append('<td>'+this['importe']+'</td>')
+      $("#checkout-modal__products").append('</tr>');
+      return true
+    });
+
+    var nums = $(products).map(function(){ return parseInt(this['qty'])}).toArray();
+    var subtotal = $("#prod-subtotal").val();
+    var descuento = subtotal - $("#prod-total").val();
+    var iva_total = $("#iva-total").val();
+    var prod_total = $("#prod-total").val();
+    $("#checkout-modal__products").append('<tr>');
+    $("#checkout-modal__products").append('<td>'+nums.reduce((a,b)=> a + b, 0) + " Art(s)"+'</td>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td>Subtotal: </td>');
+    $("#checkout-modal__products").append('<td>'+parseFloat(subtotal).toFixed(2)+'</td>');
+    $("#checkout-modal__products").append('</tr>');
+
+    $("#checkout-modal__products").append('<tr>');
+    $("#checkout-modal__products").append('</tr>');
+
+    $("#checkout-modal__products").append('<tr>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td>Descuento: </td>');
+    $("#checkout-modal__products").append('<td>'+descuento.toFixed(2)+'</td>');
+    $("#checkout-modal__products").append('</tr>');
+
+    $("#checkout-modal__products").append('<tr>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td></td>');
+    $("#checkout-modal__products").append('<td>Total: </td>');
+    $("#checkout-modal__products").append('<td><b>$'+parseFloat(prod_total).toFixed(2)+'</b></td>');
+    $("#checkout-modal__products").append('</tr>');
+
+    $(".cash_payment").hide();
+    if($("#checkCash").is(':checked')){
+      $(".cash_payment").show();
+      if(!$("#checkCard").is(':checked')){
+        $("#cash_payment").val(prod_total);
+        $("#cash_payment").attr('readonly', true);
+      }
+    }
+
+    $(".card_payment").hide();
+    $(".full_card_payment").hide();
+    if($("#checkCard").is(':checked')){
+      $(".card_payment").show();
+      $("#cash_payment").attr('readonly', false);
+      if(!$("#checkCash").is(':checked')){
+        $(".full_card_payment").show();
+        $("#cash_received").val(0);
+        $("#card_payment").val(prod_total).attr("readonly", true);
+        togglePurchaseButton();
+      }
+    }
+
+
+    $("#cash_received, #card_received").change(()=>{
+      var cash = parseInt($("#cash_payment").val());
+      var received = parseInt($("#cash_received").val());
+      var card_received = parseInt($("#card_received").val());
+      togglePurchaseButton();
+
+      $("#change").val("$ " + (received + card_received - cash));
+    });
+
+    function togglePurchaseButton(){
+      var cash = $("#cash_received").val();
+      var card = $("#card_received").val();
+      var btn = $("#purchaseButton");
+
+      if(parseFloat(card + cash) >= prod_total ){
+        if(btn.hasClass("disabled")){
+          btn.removeClass("disabled");
+        }
+      } else {
+        if(!btn.hasClass("disabled")){
+          btn.addClass("disabled");
+        }
+      }
+    }
+
+    $("#purchaseButton").click(function(){
+      var data = {
+        register_purchase: {
+          idPersona: $("#clientNumber").val(),
+          monto: prod_total,
+          fecha: getDate(),
+          productos: products
+        }
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "pdv2/register_purchase.php",
+        data: data,
+        cache: false,
+        success: function(result) {
+          debugger;
+        }
+      })
+    });
+
+    function getDate(){
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1;
+      var yyyy = today.getFullYear();
+
+      if(dd<10) {
+        dd = '0'+dd
+      }
+
+      if(mm<10) {
+        mm = '0'+mm
+      }
+
+      today = dd + '/' + mm + '/' + yyyy;
+      return today;
+    }
+
+ 	}
 
 </script>

@@ -56,8 +56,8 @@
       </div>
     <div class="col-sm-6">
       <input type="submit" name="submit" class="btn-warning" value="Agregar Nuevo" id="btnagregar">
-      </div>
     </div>
+  </div>
 </form>
 
 <script>

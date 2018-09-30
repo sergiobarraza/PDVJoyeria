@@ -29,8 +29,8 @@
         while($row = $statement->fetch()){
           echo "<tr id=prod-".$row['idProducto'].">";
           echo "<th>".$row['idProducto']."</th>";
-          echo "<th>".$row['nombre']."</th>";
-          echo "<th>".$row['codigo']."</th>";
+          echo "<th class='prod-name'>".$row['nombre']."</th>";
+          echo "<th class='prod-code'>".$row['codigo']."</th>";
           echo "<th><input type='number' min='0' max='100' id='discount-prod-".$row['idProducto']."' class='form-control' value='".$row['descuento']."' onchange="."'changeProdDiscountPrice(".'"prod-'.$row['idProducto'].'"'.")'></th>";
           echo "<th id='quantity-prod-".$row['idProducto']."'>1</th>";
           echo "<th id='price-prod-".$row['idProducto']."'>".$row['precio']."</th>";
