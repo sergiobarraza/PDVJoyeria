@@ -80,10 +80,10 @@
                           <input type="text" name="search" class="form-control col-sm-10" style="margin: 0px;width:50%;display: inline-block;" id="productid" autofocus="autofocus" onkeydown="searchfield(event);">
                           <select name="search_select" class="form-control form-control-sm" style="width: 100px;display:inline-block;height:38px;padding:6px 12px;">
                             <option>
-                              Nombre
+                              Código
                             </option>
                             <option>
-                              Código
+                              Nombre
                             </option>
                           </select>
                           <button id="submit" class="btn btn-dark" type="submit" style="height: 36px;">
