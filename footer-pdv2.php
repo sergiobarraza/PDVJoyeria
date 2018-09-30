@@ -86,7 +86,6 @@
          $(this).data('oldValue', $(this).val());
       });
       $('.input-number').change(function() {
-          alert();
           minValue =  parseInt($(this).attr('min'));
           maxValue =  parseInt($(this).attr('max'));
           valueCurrent = parseInt($(this).val());

@@ -360,7 +360,6 @@
       function searchfield(event){
         e=event.which;
         if(e== 13)
-        alert(e);
       }
     </script>
   </div>
