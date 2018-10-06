@@ -311,6 +311,7 @@
       var obj = {}
       var id = this.id;
 
+       obj["id"] = $(this).find("#id-"+id).text();
        obj["name"] = $(this).find(".prod-name").text();
        obj["price"] = $(this).find("#price-"+id).text();
        obj["porc_dcto"] = $(this).find("#discount-"+id).val();
@@ -414,13 +415,25 @@
       }
     }
 
-    $("#purchaseButton").click(function(){
+    $("#purchaseButton").click(function(e){
+      let btn = $(this);
+      btn.attr("disabled", true);
+      btn.text("CARGANDO...");
+      e.preventDefault();
+
+      let order_type = $("input[name='payment_type']:checked").attr('id');
+
       var data = {
         register_purchase: {
           idPersona: $("#clientNumber").val(),
           monto: prod_total,
-          fecha: getDate(),
-          productos: products
+          fecha: new Date().toJSON().slice(0,10),
+          payment_type: {
+            efectivo: $("#checkCash").is(':checked'),
+            tarjeta: $("#checkCard").is(':checked'),
+          },
+          order_type: order_type,
+          productos: products.toArray()
         }
       }
 
@@ -430,7 +443,8 @@
         data: data,
         cache: false,
         success: function(result) {
-          debugger;
+          btn.text("OK!");
+          console.log(result);
         }
       })
     });

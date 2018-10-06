@@ -359,7 +359,8 @@
 
       function searchfield(event){
         e=event.which;
-        if(e== 13)
+        if(e== 13){
+        }
       }
     </script>
   </div>
