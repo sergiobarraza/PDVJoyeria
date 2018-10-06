@@ -389,8 +389,7 @@
       }
     }
 
-
-    $("#cash_received, #card_received").change(()=>{
+    $("#cash_received, #card_received, input[name='payment_type']").change(()=>{
       var cash = parseInt($("#cash_payment").val());
       var received = parseInt($("#cash_received").val());
       var card_received = parseInt($("#card_received").val());
@@ -399,12 +398,18 @@
       $("#change").val("$ " + (received + card_received - cash));
     });
 
+    $("#btnagregar").click(()=>{
+      togglePurchaseButton();
+    });
+
     function togglePurchaseButton(){
       var cash = $("#cash_received").val();
       var card = $("#card_received").val();
+      var deposit = parseFloat(card + cash);
+      var is_separated = $("#defaultCheck2").is(":checked");
       var btn = $("#purchaseButton");
 
-      if(parseFloat(card + cash) >= prod_total ){
+      if(deposit >= prod_total ){
         if(btn.hasClass("disabled")){
           btn.removeClass("disabled");
         }
@@ -413,9 +418,17 @@
           btn.addClass("disabled");
         }
       }
+
+      if(deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated){
+        if(btn.hasClass("disabled")){
+          btn.removeClass("disabled");
+        }
+      }
     }
 
     $("#purchaseButton").click(function(e){
+      togglePurchaseButton();
+
       let btn = $(this);
       btn.attr("disabled", true);
       btn.text("CARGANDO...");
@@ -429,12 +442,16 @@
           monto: prod_total,
           fecha: new Date().toJSON().slice(0,10),
           payment_type: {
-            efectivo: $("#checkCash").is(':checked'),
-            tarjeta: $("#checkCard").is(':checked'),
           },
           order_type: order_type,
           productos: products.toArray()
         }
+      }
+      if($("#checkCash").is(':checked')){
+        data['register_purchase']['payment_type']['efectivo'] = true;
+      }
+      if($("#checkCard").is(':checked')){
+        data['register_purchase']['payment_type']['tarjeta'] = true;
       }
 
       $.ajax({
@@ -445,6 +462,7 @@
         success: function(result) {
           btn.text("OK!");
           console.log(result);
+          document.location.reload();
         }
       })
     });
