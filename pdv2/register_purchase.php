@@ -34,12 +34,12 @@
     function createTrasaction($concepto, $folioId){
       global $connection, $data;
       $paymentType = implode(", ", array_keys($data["payment_type"]));
-      echo $paymentType;
 
       $transaccion = array(
         "monto" => $data['monto'],
-        "concepto" => "Venta",
+        "concepto" => $concepto,
         "idFolio" => $folioId,
+        "fecha" => $data['fecha'],
         "tipoDePago" => $paymentType
       );
 
@@ -55,39 +55,58 @@
       return true;
     }
 
+    function createInventario($folioId){
+      global $connection, $data;
+      foreach($data['productos'] as $producto){
+        $inventario = array(
+          "idProducto" => intval($producto["id"]),
+          "tipo" => - $producto["qty"],
+          "fecha" => $data['fecha'],
+          "idFolio" => $folioId
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Inventario",
+          implode(", ", array_keys($inventario)),
+          ":" . implode(", :", array_keys($inventario))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($inventario);
+      }
+    }
 
     try {
-
-      if($data['order_type'] == "defaultCheck1"){
+      if($data['order_type'] == "defaultCheck1" || $data['order_type'] == "defaultCheck3"){
         //Mostrador
         createFolio(1, $data['idPersona'], "Compra a Mostrador");
         $folioId = $connection->lastInsertId();
 
-        foreach($data['productos'] as $producto){
-          $inventario = array(
-            "idProducto" => intval($producto["id"]),
-            "tipo" => - $producto["qty"],
-            "fecha" => $data['fecha'],
-            "idFolio" => $folioId
-          );
-
-          $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "Inventario",
-            implode(", ", array_keys($inventario)),
-            ":" . implode(", :", array_keys($inventario))
-          );
-
-          $statement = $connection->prepare($sql);
-          $statement->execute($inventario);
-        }
-
+        createInventario($folioId);
         createTrasaction("Venta", $folioId);
       }elseif ($data['order_type'] == "defaultCheck2") {
         //Apartado
-      }elseif ($data['order_type'] == "defaultCheck3") {
-        //Factura
-        echo "Factura";
+        createFolio(1, $data['idPersona'], "Apartado");
+        $folioId = $connection->lastInsertId();
+        createInventario($folioId);
+        createTrasaction("Abono", $folioId);
+
+        $cobranza = array(
+          "monto" => $data['abono'],
+          "idFolio" => $folioId,
+          "fecha" => $data['fecha']
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Cobranza",
+          implode(", ", array_keys($cobranza)),
+          ":" . implode(", :", array_keys($cobranza))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($cobranza);
       }
 
     } catch(PDOException $error) {

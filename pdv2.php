@@ -419,7 +419,7 @@
         }
       }
 
-      if(deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated){
+      if(deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated && prod_total > 250){
         if(btn.hasClass("disabled")){
           btn.removeClass("disabled");
         }
@@ -454,6 +454,14 @@
         data['register_purchase']['payment_type']['tarjeta'] = true;
       }
 
+      var cash = $("#cash_received").val();
+      var card = $("#card_received").val();
+      var deposit = parseFloat(card + cash);
+
+      if($("#defaultCheck2").is(":checked")){
+        data['register_purchase']['abono'] = deposit;
+      }
+
       $.ajax({
         type: "POST",
         url: "pdv2/register_purchase.php",
@@ -461,7 +469,6 @@
         cache: false,
         success: function(result) {
           btn.text("OK!");
-          console.log(result);
           document.location.reload();
         }
       })
