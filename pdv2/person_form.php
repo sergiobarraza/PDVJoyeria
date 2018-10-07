@@ -38,6 +38,13 @@
       </div>
     </div>
     <div class="form-group row">
+      <label for="Email" class="col-sm-3 col-form-label">Email</label>
+      <div class="col-sm-9 row">
+          <input type="text" class="form-control col-sm-10" id="Email" name="email" placeholder="Correo Electronico" readonly>
+          <div class="col-sm-2" onclick="search_person('email')" ><i class="fa fa-search clickable"></i></div>
+      </div>
+    </div>
+    <div class="form-group row">
       <label for="RFC" class="col-sm-3 col-form-label">RFC</label>
       <div class="col-sm-9 row">
         <input type="text" class="form-control col-sm-10" id="RFC" name="rfc" placeholder="(opcional)" readonly>
@@ -68,6 +75,8 @@
         str = $("#RFC").val();
       } else if(opt == "tel") {
         str = $("#Tel").val();
+      } else if(opt == "email") {
+        str = $("#Email").val();
       }
 
       $.ajax({
@@ -79,6 +88,7 @@
           $("#clientNumber").val(res["id"]);
           $("#Name").val(res["nombre"]);
           $("#LastName").val(res["apellido"]);
+          $("#Email").val(res["email"]);
           $("#RFC").val(res["rfc"]);
           $("#Tel").val(res["tel"]);
         }

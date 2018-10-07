@@ -16,11 +16,17 @@
 
     $sql = "SELECT * FROM Persona WHERE tel = '$searchq' ";
 
-  } else if ($_POST['rfc']) {
+  } elseif (isset($_POST['rfc'])) {
     $searchq = $_POST['rfc'];
     $searchq = preg_replace("/\s+/", '', $searchq);
 
     $sql = "SELECT * FROM Persona WHERE rfc = '$searchq' ";
+
+  } elseif (isset($_POST['email'])) {
+    $searchq = $_POST['email'];
+    $searchq = preg_replace("/\s+/", '', $searchq);
+
+    $sql = "SELECT * FROM Persona WHERE email = '$searchq' ";
   }
 
   try {
@@ -36,6 +42,7 @@
           'id' => $row['idPersona'],
           'nombre' => $row['nombre'],
           'apellido' => $row['apellido'],
+          'email' => $row['email'],
           'rfc' => $row['rfc'],
           'tel' => $row['tel']
         ];

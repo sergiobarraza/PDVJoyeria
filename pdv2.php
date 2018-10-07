@@ -287,6 +287,7 @@
       $("#clientNumber").focus();
       $("#Name").attr("readonly", true);
       $("#LastName").attr("readonly", true);
+      $("#Email").attr("readonly", true);
       $("#RFC").attr("readonly", true);
       $("#Tel").attr("readonly", true);
       $("#btnagregar").attr("disabled", true);
@@ -295,6 +296,7 @@
       $("#clientNumber").focus();
       $("#Name").attr("readonly", false);
       $("#LastName").attr("readonly", false);
+      $("#Email").attr("readonly", false);
       $("#RFC").attr("readonly", false);
       $("#Tel").attr("readonly", false);
       $("#btnagregar").removeAttr("disabled");
