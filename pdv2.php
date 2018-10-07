@@ -55,7 +55,7 @@
               <table class="table" cellspacing="0" >
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col" style="display: none;">#</th>
                     <th scope="col">Articulo</th>
                     <th scope="col">Código</th>
                     <th scope="col">Dcto</th>
@@ -370,8 +370,8 @@
     $(".cash_payment").hide();
     if($("#checkCash").is(':checked')){
       $(".cash_payment").show();
+      $("#cash_payment").val(prod_total);
       if(!$("#checkCard").is(':checked')){
-        $("#cash_payment").val(prod_total);
         $("#cash_payment").attr('readonly', true);
       }
     }

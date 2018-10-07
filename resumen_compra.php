@@ -39,7 +39,7 @@
               </td>
             </tr>
             <tr>
-              <td class="cash_payment">Pago en Efectivo: </td>
+              <td class="cash_payment">Monto a recibir: </td>
               <td style="padding-right: 15px;" class="cash_payment"><input type="text" name="cash_payment" id="cash_payment" class="form-control" style="width: 60px;"></td>
               <td class="full_card_payment">Pago con Tarjeta: </td>
               <td class="full_card_payment"><input type="text" name="card_payment" id="card_payment" class="form-control" style="width: 60px;" ></td>
