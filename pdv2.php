@@ -10,6 +10,7 @@
         "nombre" => $_POST['nombre'],
         "apellido" => $_POST['apellido'],
         "tel" => $_POST['tel'],
+        "email" => $_POST['email'],
         "tipo" => "cliente",
         "rfc" => $_POST['rfc']
       );
