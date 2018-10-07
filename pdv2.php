@@ -190,6 +190,9 @@
       var totprice = parseInt($("#total-price-"+this.id).text());
       var disc = parseInt($("#discount-"+this.id).val());
       var iva = parseInt($("#iva-total").val());
+      var qty = parseInt($("#quantity-"+this.id).text());
+      var price = parseInt($("#price-"+this.id).text());
+      $("#price-discount-"+this.id).text(qty * (price - price * disc / 100));
       return total += (totprice - (totprice * disc / 100) - (totprice * iva / 100));
     });
     $("#prod-total").val(total);
