@@ -94,13 +94,13 @@
                     </div>
                     <div class="form-check col-sm-2">
                       <input class="form-check-input" type="checkbox" value="" id="checkCash"  checked="true">
-                      <label class="form-check-label" for="defaultCheck1" >
+                      <label class="form-check-label" for="checkCash" >
                         Efectivo
                       </label>
                     </div>
                     <div class="form-check col-sm-3">
                       <input class="form-check-input" type="checkbox" value="" id="checkCard" >
-                      <label class="form-check-label" for="defaultCheck1" >
+                      <label class="form-check-label" for="checkCard" >
                         Tarjeta de Credito
                       </label>
                     </div>
@@ -284,17 +284,15 @@
   function apartadoClick(isDefault){
     if(isDefault) {
       $("#clientNumber").val(1);
-      $("#clientNumber").focus();
-      $("#Name").attr("readonly", true);
-      $("#LastName").attr("readonly", true);
-      $("#Email").attr("readonly", true);
-      $("#RFC").attr("readonly", true);
-      $("#Tel").attr("readonly", true);
+      $("#Name").attr("readonly", true).val("");
+      $("#LastName").attr("readonly", true).val("");
+      $("#Email").attr("readonly", true).val("");
+      $("#RFC").attr("readonly", true).val("");
+      $("#Tel").attr("readonly", true).val("");
       $("#btnagregar").attr("disabled", true);
     } else {
       $("#clientNumber").val(clientNum);
-      $("#clientNumber").focus();
-      $("#Name").attr("readonly", false);
+      $("#Name").attr("readonly", false).focus();
       $("#LastName").attr("readonly", false);
       $("#Email").attr("readonly", false);
       $("#RFC").attr("readonly", false);
@@ -306,7 +304,6 @@
   function fillCheckoutModal() {
     var date = getDate();
     $("#checkout-modal__date").text("fecha: "+date);
-
 
     //Articulos
     products = $("#salestable").children().map(function(){
