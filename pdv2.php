@@ -497,4 +497,22 @@
 
  	}
 
+// Tecla Enter funciona como tecla Tab
+  $(document).ready(function(){
+    $("form.create_person_form").keydown(function(e){
+      if(e.keyCode == 13) {
+        var inputs = $(this).eq(0).find(":input");
+        var idx = inputs.index(e.target);
+        if (idx == inputs.length - 1) {
+          inputs[0].select()
+        } else {
+          inputs[idx + 1].focus();
+          inputs[idx + 1].select();
+				}
+        e.preventDefault();
+        return e.keyCode = 9; // event a tecla tab
+      }
+    });
+  });
+
 </script>

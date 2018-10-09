@@ -1,4 +1,4 @@
-<form method="post">
+<form method="post" class="create_person_form">
   <div class="row mb-2">
     <div class="form-check col-sm-4">
       <input class="form-check-input" checked type="radio" name="payment_type" value="" id="defaultCheck1" onchange="apartadoClick(true);">
@@ -96,3 +96,4 @@
     }
   }
 </script>
+

@@ -161,11 +161,8 @@
                 alert('No es valido valores menores a 0');
                 $(this).val($(this).data('oldValue'));
             }
-            
-            
-            
         });
-        
+
          $(".input-number2").keydown(function (e) {
                 // Allow: backspace, delete, tab, escape, enter and .
                 if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
