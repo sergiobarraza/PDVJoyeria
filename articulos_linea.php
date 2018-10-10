@@ -19,6 +19,7 @@
     } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
       header("Refresh:0; url=articulos.php?status=errorlinea#nuevaLinea");
+      exit;
     }
  
 	//$result = mysqli_query($con, $sql);

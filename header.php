@@ -1,3 +1,7 @@
+<?php 
+      session_start();
+      //$_SESSION['newsession']=2;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
