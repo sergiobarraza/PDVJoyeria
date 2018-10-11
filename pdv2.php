@@ -513,6 +513,26 @@
         return e.keyCode = 9; // event a tecla tab
       }
     });
+
+    $("#btnagregar").click(()=>{
+      var data = {
+        nombre: $("#Name"),
+        lastName: $("#LastName"),
+        email: $("#Email"),
+        rfc: $("#RFC"),
+        tel: $("#Tel")
+      }
+
+      var fieldsUnique = validatePersonFieldsUnique(data);
+
+        debugger;
+      if (fieldsValidated && fieldsUnique){
+      }
+    });
+
+    function validatePersonFieldsUnique(data){
+      return false;
+    }
   });
 
 </script>
