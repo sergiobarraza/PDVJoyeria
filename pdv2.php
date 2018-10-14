@@ -4,7 +4,7 @@
 
   $connection = new PDO($dsn, $username, $password, $options);
 
-  if(isset($_POST['submit'])) {
+  if(isset($_POST['create_person'])) {
     try {
       $new_user = array(
         "nombre" => $_POST['nombre'],
@@ -291,7 +291,7 @@
       $("#Name").attr("readonly", true).val("");
       $("#LastName").attr("readonly", true).val("");
       $("#Email").attr("readonly", true).val("");
-      $("#RFC").attr("readonly", true).val("");
+      $("#Rfc").attr("readonly", true).val("");
       $("#Tel").attr("readonly", true).val("");
       $("#btnagregar").attr("disabled", true);
     } else {
@@ -299,7 +299,7 @@
       $("#Name").attr("readonly", false).focus();
       $("#LastName").attr("readonly", false);
       $("#Email").attr("readonly", false);
-      $("#RFC").attr("readonly", false);
+      $("#Rfc").attr("readonly", false);
       $("#Tel").attr("readonly", false);
       $("#btnagregar").removeAttr("disabled");
     }
@@ -513,26 +513,66 @@
         return e.keyCode = 9; // event a tecla tab
       }
     });
+  });
+    let canSubmitForm = false;
 
-    $("#btnagregar").click(()=>{
+    $("#btnagregar").click((e)=>{
+      e.preventDefault();
       var data = {
         nombre: $("#Name"),
         lastName: $("#LastName"),
         email: $("#Email"),
-        rfc: $("#RFC"),
+        rfc: $("#Rfc"),
         tel: $("#Tel")
       }
 
       var fieldsUnique = validatePersonFieldsUnique(data);
 
-        debugger;
-      if (fieldsValidated && fieldsUnique){
+      if (canSubmitForm){
+        // verificar que no hay errores en los campos antes del submit
+        $("form.create_person_form").submit();
       }
     });
 
-    function validatePersonFieldsUnique(data){
-      return false;
+    function validateSingleField(){
+       $("#email-error").text("");
+       $("#rfc-error").text("");
+       $("#tel-error").text("");
+
+       var data = {
+        email: $("#Email"),
+        rfc: $("#Rfc"),
+        tel: $("#Tel")
+      }
+      validatePersonFieldsUnique(data);
     }
-  });
+
+    function validatePersonFieldsUnique(data){
+      var obj = {validatePersonFields: {}}
+      var result = true;
+      Object.keys(data).map(function(key, index) {
+        if(data[key].val() && data[key].hasClass("unique-field")){
+         $("#"+key.substr(0,1).toUpperCase()+key.substr(1))[0].setCustomValidity("");
+          return obj["validatePersonFields"][key] = data[key].val();
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "pdv2/verify_person_field.php",
+        data: obj,
+        dataType: "json",
+        success: function(res) {
+          Object.keys(res).map( key => {
+            if(!res[key]){
+              $(`#${key}-error`).text(`* El ${key} proporcionado ya existe.`);
+              let field = key.substr(0,1).toUpperCase()+key.substr(1);
+              $("#"+field)[0].setCustomValidity("Email existe.");
+            }
+            canSubmitForm = Object.keys(res).every((k)=> {return res[k]});
+          });
+        }
+      });
+    }
+
 
 </script>
