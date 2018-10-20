@@ -10,13 +10,13 @@
   <meta name="author" content="">
   <title>pvd - Joyería Claro</title>
   <!-- Bootstrap core CSS-->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/PDVJoyeria/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->
-  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="/PDVJoyeria/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <!-- Page level plugin CSS-->
-  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <link href="/PDVJoyeria/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
   <!-- Custom styles for this template-->
-  <link href="css/pdv.css" rel="stylesheet">
+  <link href="/PDVJoyeria/css/pdv.css" rel="stylesheet">
   <!--link href="css/sb-admin.css" rel="stylesheet"-->
 
 </head>
@@ -32,6 +32,7 @@
         <a href="index.php">Admin Panel</a>
         <a href="#">Abonos</a>
         <a href="#">Trabajos</a>
+        <a href="views/devoluciones/index.php">Devoluciones</a>
         <a href="#">Articulos</a>
         <a href="#">Corte de caja</a>
         <a href="#">Entrada y Salida de dinero</a>

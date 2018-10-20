@@ -1,0 +1,240 @@
+.devoluciones_container {
+  min-width: 900px;
+}
+
+.folio_search_list {
+  float: left;
+  display: inline-block;
+  width: 40%;
+  position: relative;
+  top: 0;
+  min-width: 400px;
+}
+
+.folio_search_table {
+  display: flex;
+  flex-flow: column;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+}
+
+
+.folio_search_tablebox {
+  height: 250px;
+}
+
+.folio_search_table--header tr {
+  width: 50%;
+  height: 40px;
+  background-color: #ece7d4;
+}
+
+.folio_search_table--header tr th {
+  border: 1px solid #ccc;
+  padding: 5px;
+  width: 250px;
+}
+
+.folio_search_table--header {
+  flex: 0 0 auto;
+  /*overflow-y: scroll;*/
+  /*width: calc(100% - 0.9em);*/
+}
+
+.folio_search_table--body {
+  flex: 1 1 auto;
+  display: block;
+ /* height: 256px; */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: white;
+}
+
+.folio_search_table--body tr {
+  height: 30px;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.folio_search_table--body tr:hover {
+  background-color: #e9ebee;
+
+}
+
+.folio_search_table--body tr th {
+  text-align: center;
+  width: 250px;
+  height: 50px;
+}
+
+.folio_box {
+  padding-top: 40px;
+}
+
+.folio_button-control {
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10%;
+  height: 300px;
+}
+
+.folio_button-control div {
+  justify-content: center;
+}
+
+.folio_button-control div button {
+  display: block;
+  padding: 5px 15px;
+  margin: 15px;
+}
+
+.folio_info_list {
+  float: left;
+  width: 40%;
+}
+
+.folio_info_tablebox {
+  padding: 0px;
+  height: 150px;
+}
+
+.folio_info_table tbody tr th{
+  border-bottom: 1px solid #ccc;
+  padding-left: 10px;
+  width: 25%;
+  height: 46px;
+}
+
+
+.folio_info_table tbody tr th:nth-child(even) {
+  border-right: 1px solid #ccc;
+}
+
+.item-box {
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  width: 100%;
+}
+
+.folio_products_tablebox {
+  height: 150px;
+  margin-top: 20px;
+}
+
+.productos_devolucion {
+  float: left;
+  display: inline-block;
+  width: 40%;
+  min-width: 400px;
+  position: relative;
+  top: 0;
+  margin-right: 93px;
+}
+
+.folio-input-control {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  width: 75%;
+}
+
+.folio_search-container {
+  padding: 10px 0px;
+  border-bottom: 1px solid #ccc;
+}
+
+.folio_search-container button {
+  float: right;
+}
+
+.folio_products_table--header {
+  flex: 0 0 auto;
+}
+
+.folio_products_table--header tr {
+  width: 50%;
+  height: 40px;
+  background-color: #ece7d4;
+}
+
+.folio_products_table--header-italic {
+  text-align: center;
+  width: 100%;
+  display: block;
+  background-color: #f1eee0;
+}
+
+.folio_products_table--header tr th {
+  border: 1px solid #ccc;
+  padding: 5px;
+  width: 250px;
+}
+
+.folio_products_table--body {
+  flex: 1 1 auto;
+  display: block;
+ /* height: 256px; */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: white;
+}
+
+.folio_products_table--body tr {
+  height: 30px;
+  border-bottom: 1px solid #ccc;
+}
+
+.folio_products_table--body tr th {
+  text-align: center;
+  width: 250px;
+}
+
+.hidden {
+  display: none;
+}
+
+.folio_calculated_fields-container {
+  float: left;
+  display: inline-block;
+  position: relative;
+  width: 40%;
+  position: relative;
+  top: 0;
+  padding-top: 40px;
+  height: 352px;
+}
+
+.folio_calculated_fields-container div {
+  width: 80%;
+  margin: auto;
+}
+
+.button_devolucion {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-top: 15px;
+  padding: 15px;
+  width: 100%;
+  display: block;
+}
+
+.isSelected {
+  background-color: #bec4cd;
+  border-left: 5px solid #278FFE;
+}
+
+.isSelected:hover {
+  background-color: #bec4cd !important;
+  border-left: 5px solid #278FFE;
+}
