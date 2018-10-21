@@ -1,4 +1,6 @@
 <?php
+  $pageSecurity = array("admin");
+  require "config/security.php";
 	include("header.php");
 ?>
 	<!-- Area Chart Example-->
@@ -10,6 +12,8 @@
     <?php
     	echo "Bienvenido(a) ";
     	echo $_SESSION['username'];
+      echo $_SESSION['tipo'];
+
     ?>
 		</h3>
     <img src="img/index.jpg" style="display: block; margin: auto;width: 80%;">

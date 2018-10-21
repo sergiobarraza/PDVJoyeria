@@ -1,4 +1,6 @@
 <?php
+	$pageSecurity = array("admin");
+  	require "config/security.php";
 	include("header.php");
 	require "config/database.php";
     //require "config/common.php";
@@ -73,7 +75,7 @@
 					    	</div>
 					  	</div>
 					  	<div class="form-group row">
-					    	<label for="price" class="col-sm-2 col-form-label">Price:</label>
+					    	<label for="price" class="col-sm-2 col-form-label">Precio:</label>
 					    	<div class="col-sm-10">
 					      		<input type="text" class="form-control input-number" id="price" min="1" max="99999" step=".01" name="price" required>			      						      		
 					    	</div>
@@ -84,7 +86,31 @@
 					      		<input type="text" class="form-control input-number" id="cantidad" min="1" max="99999" step=".01" name="cantidad" required value="1" data-oldValue="0">			      						      		
 					    	</div>
 					  	</div>					  	
-			
+						<div class="form-group row">
+			    	<label for="almacen" class="col-sm-2 col-form-label">Almacen:</label>
+			    	<div class="col-sm-10">
+			      		<select type="text" class="form-control" id="almacen" name="almacen" required >
+			      		<?php
+
+					      		try {
+								      $sql2 = "SELECT * From Almacen;";							   
+								      $query2 = $connection->query($sql2);
+								      foreach($query2->fetchAll() as $row2) {
+										  echo "<option value='".$row2["idAlmacen"]."'>".$row2["name"]."</option>";
+										}
+								      
+
+								    } catch(PDOException $error) {
+								      echo $sql . "<br>" . $error->getMessage();
+
+								    }
+								   
+
+					      		?>	
+			      			
+			      		</select>			      		
+			    	</div>
+			  	</div>
 					  	<div class="form-group row">
 						  	<div class="col-sm-2"></div>
 							<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</button>

@@ -1,8 +1,12 @@
 <?php
+	$pageSecurity = array("admin");
+  require "config/security.php";
 	require "config/database.php";
-    require "config/common.php";
+    //require "config/common.php";
 
 	$sku = $_POST["sku"];
+	$persona =$_SESSION['user'];
+
 	try {
 	      $connection = new PDO($dsn, $username, $password, $options );
 	      $sql = "SELECT distinct idProducto, codigo from Producto where codigo =$sku limit 1;";							   
@@ -37,7 +41,7 @@
 			$persona =2;
 		//Entrada a nuevo Almacen
 		try {
-    		  $sql2 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almEntrada, 1, 'Movimiento Entrada Producto');";
+    		  $sql2 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almEntrada, $persona, 'Movimiento Entrada Producto');";
     		  $query2 = $connection->query($sql2);
 
     		  $sql3 = "SELECT idFolio from Folio order by idFolio desc limit 1;";
@@ -45,12 +49,10 @@
     		  $row3 = $query3->fetch(PDO::FETCH_ASSOC);
   		      $folionuevo = $row3["idFolio"];
 
-		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, 1, '$fecha', $folionuevo);";						   
-			  $query4=[];						   
-		   
-				for ($i=0; $i < $cantidad ; $i++) { 
-					$query4[$i] = $connection->query($sql4);
-				}		     
+		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, $cantidad, '$fecha', $folionuevo);";						   
+			  
+					$query4 = $connection->query($sql4);
+						     
 
   		      
 		    } catch(PDOException $error2) {
@@ -61,19 +63,17 @@
 		    }
 		    //Salida de producto
 		    try {
-    		  $sql5 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almSalida, 1, 'Movimiento Salida Producto');";
+    		  $sql5 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almSalida, $persona, 'Movimiento Salida Producto');";
     		  $query5 = $connection->query($sql5);
     		  $sql6 = "SELECT idFolio from Folio order by idFolio desc limit 1;";
     		  $query6 = $connection->query($sql6);
     		  $row6 = $query6->fetch(PDO::FETCH_ASSOC);
   		      $folionuevo = $row6["idFolio"];
 
-		      $sql7 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, -1, '$fecha', $folionuevo);";						   
-			  $query7=[];						   
-		   
-				for ($i=0; $i < $cantidad ; $i++) { 
-					$query7[$i] = $connection->query($sql7);
-				}		     
+		      $sql7 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, -$cantidad, '$fecha', $folionuevo);";						   
+			 
+			  $query7 = $connection->query($sql7);
+						     
 
   		      
 		    } catch(PDOException $error5) {

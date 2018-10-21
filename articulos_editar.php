@@ -1,8 +1,10 @@
 <?php
+	$pageSecurity = array("admin");
+  require "config/security.php";
 	include("header.php");
 	require "config/database.php";
     //require "config/common.php";
-	$sku=0;
+	$sku=0;	
 	$status = "Nada";
 	if (isset($_GET['sku'])) {
 		$sku = $_GET['sku'];

@@ -1,7 +1,9 @@
 <?php
 	//include 'conexion.php';
-require "config/database.php";
-    require "config/common.php";
+$pageSecurity = array("admin");
+  require "config/security.php";
+  require "config/database.php";
+   // require "config/common.php";
 
 	$depto = $_POST["depto"];
 	$sql = "INSERT INTO Departamento(nombre) VALUES ('$depto');";

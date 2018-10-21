@@ -9,8 +9,9 @@
 	$depto = $_POST["depto"];
 	$precio = $_POST["price"];
 	$cantidad = $_POST["cantidad"];
-	$persona = "Admin1";
-	$fecha = date("Y-m-d H:i:s");	
+	$persona = $_SESSION['user'];
+	$fecha = date("Y-m-d H:i:s");
+	$almacen = $_POST["almacen"];	
 	
 	try {
 		      $connection = new PDO($dsn, $username, $password, $options );
@@ -45,7 +46,7 @@
     }
 
     try {
-    		  $sql2 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES (1, 1, 'Entrada Producto');";
+    		  $sql2 = "INSERT INTO Folio (idAlmacen, idPersona, estado) VALUES ($almacen, $persona, 'Entrada Producto');";
     		  $query2 = $connection->query($sql2);
 
     		  $sql3 = "SELECT idFolio from Folio order by idFolio desc limit 1;";
@@ -53,12 +54,9 @@
     		  $row3 = $query3->fetch(PDO::FETCH_ASSOC);
   		      $folionuevo = $row3["idFolio"];
 
-		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, 1, '$fecha', $folionuevo);";						   
-			  $query4=[];						   
-		   
-				for ($i=0; $i < $cantidad ; $i++) { 
-					$query4[$i] = $connection->query($sql4);
-				}		     
+		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES ($idProducto, $cantidad, '$fecha', $folionuevo);";	  
+			  $query4 = $connection->query($sql4);
+						     
 
   		      
 		    } catch(PDOException $error2) {

@@ -1,7 +1,9 @@
 <?php
-	//include 'conexion.php';
+	$pageSecurity = array("admin");
+  require "config/security.php";
+  //include 'conexion.php';
   require "config/database.php";
-    require "config/common.php";
+  //require "config/common.php";
 
 	$linea = $_POST["linea"];
 	$sql = "INSERT INTO Linea(nombre) VALUES ('$linea');";

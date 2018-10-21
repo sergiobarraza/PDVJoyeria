@@ -1,5 +1,4 @@
 <?php 
-      session_start();
       //$_SESSION['newsession']=2;
 ?>
 <!DOCTYPE html>
@@ -160,7 +159,8 @@
           </form>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+          <!--data-toggle="modal" data-target="#exampleModal"- -->
+          <a class="nav-link" href="logout.php">
             <i class="fa fa-fw fa-sign-out"></i>Salir</a>
         </li>
       </ul>

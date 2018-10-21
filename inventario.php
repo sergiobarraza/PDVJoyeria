@@ -1,4 +1,6 @@
 <?php
+	$pageSecurity = array("admin");
+  require "config/security.php";
 	include("header.php");
 	//include 'conexion.php';
 		require "config/database.php";
@@ -21,13 +23,32 @@
 			    	</div>
 			    	<div class="col-sm-1"><i class="fa fa-search pt-2"></i></div>
 			  	</div>
-				<!--div class="form-group row">
-			    	<label for="desc" class="col-sm-2 col-form-label">Descripcion</label>
+				<div class="form-group row">
+			    	<label for="almacen" class="col-sm-2 col-form-label">Almacen:</label>
 			    	<div class="col-sm-10">
-			      		<input type="text" class="form-control" id="desc" name="desc" readonly="true">			      		
-			    	</div>			    
-			  	</div-->			
-			  	<div class="form-group row">
+			      		<select type="text" class="form-control" id="almacen" name="almacen" required >
+			      		<?php
+
+					      		try {
+								      $connection = new PDO($dsn, $username, $password, $options );
+								      $sql = "SELECT * From Almacen;";							   
+								      $query = $connection->query($sql);
+								      foreach($query->fetchAll() as $row) {
+										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"]."</option>";
+										}
+								      
+
+								    } catch(PDOException $error) {
+								      echo $sql . "<br>" . $error->getMessage();
+
+								    }
+								   
+
+					      		?>	
+			      			
+			      		</select>			      		
+			    	</div>
+			  	</div>			  	<div class="form-group row">
 			    	<label for="cantidad" class="col-sm-2 col-form-label">Cantidad</label>
 			    	<div class="col-sm-10">
 			      		<input type="text" name="cantidad" class="form-control input-number" value="1" min="1" max="999" id="cantidad">
@@ -58,11 +79,10 @@
 			      		<?php
 
 					      		try {
-								      $connection = new PDO($dsn, $username, $password, $options );
-								      $sql = "SELECT * From Almacen;";							   
+								    							   
 								      $query = $connection->query($sql);
 								      foreach($query->fetchAll() as $row) {
-										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"];
+										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"]."</option>";
 										}
 								      
 
@@ -86,7 +106,7 @@
 
 								      $query = $connection->query($sql);
 								      foreach($query->fetchAll() as $row) {
-										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"];
+										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"]."</option>";
 										}
 								      
 								   
@@ -351,7 +371,9 @@
 										  echo "<td>".$row3["address"]."</td>";
 										  echo "<td>".$row3["rfc"]."</td>";
 										  echo "<td>".$row3["tel"]."</td>";
-										  echo "<td><a class='btn btn-primary' href='inventario_update.php?idAlmacen='".$row3["idAlmacen"]."'>Actualizar</a></td>";
+										  echo "<td><a class='btn btn-primary' href='settings.php?idAlmacen=";
+										  echo $row3["idAlmacen"];
+										  echo "'>Actualizar</a></td>";
 										echo "</tr>";
 										}
 								      

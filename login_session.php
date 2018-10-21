@@ -28,8 +28,11 @@ session_start();
   		     		if ($tipo == 'admin') {
   		     			header("Location: index.php");
   		     			exit;
-  		     		}else {
+  		     		}else if ($tipo == 'venta'){
   		     			header("Location: pdv2.php");
+  		     			exit;
+  		     		}else if ($tipo == 'operador'){
+  		     			header("Location: sistemajoyeria.php");
   		     			exit;
   		     		}
  

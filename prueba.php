@@ -78,6 +78,11 @@
 		?>
 
 		</div>
+		<?php
+		$cantidad = 5;
+			$sql7 = "INSERT INTO Inventario (idProducto, tipo, fecha, idFolio) VALUES (1, -$cantidad, 'Hoy', 5);";
+			echo $sql7;
+		?>
 <div id="printableArea" class="text-center" style="width: 4in; ">
       <h2 style="padding:0; margin: 0;">Joyeria Claros</h2>
       <center style="padding:0; margin: 0;"> Sandra Luz Arellano Urrutia </center>

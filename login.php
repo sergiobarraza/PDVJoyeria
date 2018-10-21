@@ -2,6 +2,8 @@
     session_start();
     if (isset($_SESSION['username'])) {
       echo $_SESSION['username'];
+      header("Refresh:0; url=index.php");
+
     }
     require "config/database.php";
     $status="nada";
