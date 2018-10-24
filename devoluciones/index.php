@@ -8,15 +8,15 @@
   error_reporting(E_ALL);
   if(isset($_POST['folio_products_list'])) {
     try {
+      $data = [];
       $sql = "SELECT * FROM Producto";
       $statement = $connection->prepare($sql);
       $folios = $statement->execute();
-      $data = [];
 
       if($statement->rowCount() > 0) {
         $index = 0;
         while($row = $statement->fetch()){
-          $data[$index] = [
+          $data['products'][$index] = [
             'idProducto' => $row['idProducto'],
             'descuento' => $row['descuento'],
             'idDepartamento' => $row['idDepartamento'],
@@ -28,6 +28,21 @@
           $index++;
         }
       }
+      $sql = "SELECT * FROM Linea";
+      $statement = $connection->prepare($sql);
+      $statement->execute();
+
+      if($statement->rowCount() > 0) {
+        $index = 0;
+        while($row = $statement->fetch()){
+          $data['lines'][$index] = [
+            'idLinea' => $row['idLinea'],
+            'nombre' => $row['nombre'],
+          ];
+          $index++;
+        }
+      }
+
       echo json_encode($data);
     } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
@@ -36,7 +51,7 @@
 
   if(isset($_POST['folio_index'])) {
     try {
-      $sql = "SELECT * FROM Folio WHERE estado = 'Apartado'";
+      $sql = "SELECT * FROM Folio where Codigo IS NOT NULL;";
 
       $statement = $connection->prepare($sql);
       $folios = $statement->execute();
@@ -114,6 +129,20 @@
             $cob_index++;
           }
 
+          $sql = "SELECT * FROM Cobranza WHERE idFolio = ".$row['idFolio'];
+
+          $statement = $connection->prepare($sql);
+          $statement->execute();
+          $cob_index = 0;
+          while($cob_row = $statement->fetch()){
+            $data[$key]['cobranza'][$cob_index] = [
+              'idCobranza' => $cob_row['idCobranza'],
+              'monto' => $cob_row['monto'],
+              'idFolio' => $cob_row['idFolio'],
+              'fecha' => $cob_row['fecha']
+            ];
+            $cob_index++;
+          }
         }
       }
       echo json_encode($data);

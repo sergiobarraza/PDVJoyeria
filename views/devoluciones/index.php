@@ -1,7 +1,7 @@
 <?php include("../../header-pdv.php"); ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link href="/PDVJoyeria/css/devoluciones.css" rel="stylesheet">
-<div>
+<div class="row" style="padding-bottom: 15px;">
   <div class="container devoluciones_container">
     <div class="folio_box">
       <div class="folio_search_list">
@@ -14,6 +14,7 @@
                 <th class="hidden">idAlmacen</th>
                 <th class="hidden">idPersona</th>
                 <th>Codigo</th>
+                <th>Cliente</th>
                 <th>Estado</th>
                 <th>Almacen</th>
               </tr>
@@ -118,21 +119,24 @@
           <input
             placeholder="$$$"
             id="changed_products_value"
-            class="form-control">
+            class="form-control"
+            disabled>
         </div>
         <div>
           Valor de productos a devolver
           <input
             placeholder="$$$"
             id="returned_products_value"
-            class="form-control">
+            class="form-control"
+            disabled>
         </div>
         <div>
           Valor restante a pagar
           <input
             placeholder="$$$"
             id="missing_payment"
-            class="form-control">
+            class="form-control"
+            disabled>
         </div>
         <div>
           <button class="button_devolucion btn btn-primary">Aceptar devolucion</button>
@@ -141,11 +145,13 @@
     </div>
   </div>
 </div>
+<?php include "../../footer-pdv.php"; ?>
 
 <script>
   $(document).ready(function(){
     let data = [];
     let products = [];
+    let lines = [];
     let displayRow = [];
     let elementClicked;
     let productClicked;
@@ -170,8 +176,9 @@
       data: {folio_products_list: true},
       dataType: "json",
       success: function(res){
-        products = res;
-        res.map(row => {
+        products = res.products;
+        lines = res.lines;
+        products.map(row => {
           addProductElement(row);
         });
       }
@@ -210,21 +217,24 @@
     });
 
     $("#folio_index").click(function(e){
-      changeSelectedElement(elementClicked, e.target.parentElement);
-      elementClicked = e.target.parentElement;
+      if($(e.target).is('th')){
+        changeSelectedElement(elementClicked, e.target.parentElement);
+        elementClicked = e.target.parentElement;
+      }
     });
 
     $("#product_index").click(function(e){
-      changeSelectedProduct(productClicked, e.target.parentElement);
-      productClicked = e.target.parentElement;
+      if($(e.target).is('th')){
+        changeSelectedProduct(productClicked, e.target.parentElement);
+        productClicked = e.target.parentElement;
+      }
     });
 
     $("#addProductBtn").click(function(e){
       if(productClicked && folio_selected){
         last_id_inventario++;
         selectedProductInfo = products.find(obj => obj.idProducto == productClicked.id);
-        addFolioProductElement(last_id_inventario, selectedProductInfo.idProducto);
-        $("#folio_products_list").find("#"+last_id_inventario).addClass("bg-green");
+        addFolioProductElement(last_id_inventario, selectedProductInfo.idProducto, true);
         var precio = parseInt(selectedProductInfo.precio);
         var tot_precio = parseInt($("#changed_products_value").val()) || 0;
         $("#changed_products_value").val(precio + tot_precio);
@@ -247,7 +257,11 @@
         }
 
         if(selectedRowInfo.inventario){
-          num_prods = selectedRowInfo.inventario.reduce((a,b) => {return a + parseInt(b.tipo)},0) * -1;
+          num_prods = selectedRowInfo.inventario.reduce((a,b) => {return a + parseInt(b.tipo)},0);
+
+          if(num_prods < 0){
+            num_prods = num_prods * -1;
+          }
         }
 
         if(selectedRowInfo.cobranza) {
@@ -265,15 +279,31 @@
         if(selectedRowInfo.inventario){
           selectedRowInfo.inventario.map(( obj ) => {
             last_id_inventario = obj.idInventario;
-            addFolioProductElement(obj.idInventario, obj.idProducto)
+
+            var tipo = parseInt(obj.tipo) * -1;
+            for(var i=0; i < tipo; i++){
+              addFolioProductElement(obj.idInventario, obj.idProducto)
+            }
           });
         }
       }
     });
 
+    $("#removeFolioBtn").click(function(e){
+      if(elementClicked && folio_selected){
+        clearFolioProductElements();
+      }
+    });
+
+    $("#removeProductBtn").click(function(e){
+      if(elementClicked && folio_selected){
+        $("#folio_products_list input:checked.isReplacement").map(function(obj) {$(this).parent().parent().remove()});
+      }
+    });
+
     $("#folio_products_list").click(function(e){
-      var prices = $( "#folio_products_list input:checked" ).map(function() {return $(this).parent().parent().find(".folioProd-precio").text()});
-      var total = prices.toArray().reduce((a,b) => { return parseInt(a) + parseInt(b)});
+      var prices = $( "#folio_products_list input:checked" ).map(function() {return $(this).parent().parent().not('.isReplacement').find(".folioProd-precio").text()});
+      var total = prices.toArray().reduce((a,b) => { return parseInt(a || 0) + parseInt(b || 0)}, 0);
       $("#returned_products_value").val(total);
       calculateMissingPayment();
     });
@@ -299,7 +329,16 @@
     }
 
     function clearFolioProductElements(){
-      return $("#folio_products_list").html("");
+      $("#folio_products_list").html("");
+      $("#info_codigo").text("");
+      $("#info_nombre").text("");
+      $("#info_almacen").text("");
+      $("#info_num_productos").text("");
+      $("#info_monto_total").text("$");
+      $("#info_monto_debido").text("$");
+      $("#changed_products_value").val("");
+      $("#returned_products_value").val("");
+      $("#missing_payment").val("");
     }
 
     function addRowElement(row){
@@ -308,31 +347,35 @@
         str += "<th class='hidden'>"+row['idAlmacen']+"</th>"
         str += "<th class='hidden'>"+row['idPersona']+"</th>"
         str += "<th>"+row['codigo']+"</th>"
+        str += "<th>"+row.persona.nombre + " " + row.persona.apellido+"</th>"
         str += "<th>"+row['estado']+"</th>"
         str += "<th>"+row['almacen']['name']+"</th>"
         str += "</tr>"
-      $("#folio_index").append(str);
+      $("#folio_index").prepend(str);
       return str;
     }
 
     function addProductElement(row) {
+      let linea = lines.find(obj => obj.idLinea == row["idLinea"]);
       let str = "<tr id="+row['idProducto']+">"
         str += "<th>"+row['codigo']+"</th>"
         str += "<th>"+row['nombre']+"</th>"
-        str += "<th>"+row['idLinea']+"</th>"
+        str += "<th>"+linea.nombre+"</th>"
         str += "<th>"+row['precio']+"</th>"
         str += "</tr>"
       $("#product_index").append(str);
     }
 
-    function addFolioProductElement(inventarioId, productoId){
+    function addFolioProductElement(inventarioId, productoId, isReplacement = false){
       var prod = products.find(obj => obj.idProducto == productoId);
+      let linea = lines.find(obj => obj.idLinea == prod.idLinea);
 
-      let str = "<tr id="+inventarioId+">"
-        str += "<th class='folio_prod_input'><input class='folio_prod_chck' id='"+inventarioId+"' type='checkbox'></th>"
+      let str = isReplacement ? "<tr id='"+inventarioId+"' class='isReplacement bg-green'>" : "<tr id='"+inventarioId+"'>";
+        str += "<th class='folio_prod_input'>";
+        str += "<input class='folio_prod_chck "+ (isReplacement ? "isReplacement" : "") +"' id='"+inventarioId+"' type='checkbox'></th>";
         str += "<th>"+prod['codigo']+"</th>"
         str += "<th>"+prod['nombre']+"</th>"
-        str += "<th>"+prod['idLinea']+"</th>"
+        str += "<th>"+linea.nombre+"</th>"
         str += "<th class='folioProd-precio'>"+prod['precio']+"</th>"
         str += "</tr>"
       $("#folio_products_list").prepend(str);
