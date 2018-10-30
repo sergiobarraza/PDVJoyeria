@@ -64,6 +64,7 @@
             'idAlmacen' => $row['idAlmacen'],
             'idPersona' => $row['idPersona'],
             'estado' => $row['estado'],
+            'devuelto' => $row['devuelto'],
             'codigo' => $row['codigo']
           ];
           $index++;

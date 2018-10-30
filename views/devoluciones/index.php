@@ -6,6 +6,9 @@
     <div class="folio_box">
       <div class="folio_search_list">
         <h2>Folios</h2>
+        <div class="loader-parent" id="folio-loader-parent">
+          <div class="loader"></div>
+        </div>
         <div class="folio_search_tablebox item-box">
           <table class="folio_search_table">
             <thead class="folio_search_table--header">
@@ -80,6 +83,9 @@
             <tbody class="folio_products_table--body" id="folio_products_list">
             </tbody>
           </table>
+          <div id="folio_already_returned" class="bg-danger hidden" style="color: white;text-align: center; padding: 5px;">
+            Este folio ya ha sido devuelto anteriormente!
+          </div>
         </div>
       </div>
     </div>
@@ -87,6 +93,9 @@
       <div class="productos_devolucion">
         <div>
           <h2>Productos</h2>
+          <div class="loader-parent" id="products-loader-parent">
+            <div class="loader"></div>
+          </div>
           <div class="item-box">
             <table class="folio_search_table">
               <thead class="folio_search_table--header">
@@ -139,7 +148,7 @@
             disabled>
         </div>
         <div>
-          <button class="button_devolucion btn btn-primary">Aceptar devolucion</button>
+          <button id="btn_accept_devolution" class="button_devolucion btn btn-primary">Aceptar devolucion</button>
         </div>
       </div>
     </div>
@@ -163,6 +172,7 @@
       data: {folio_index: true},
       dataType: "json",
       success: function(res){
+        $("#folio-loader-parent").hide();
         data = res;
         res.map(row => {
           addRowElement(row);
@@ -176,6 +186,7 @@
       data: {folio_products_list: true},
       dataType: "json",
       success: function(res){
+        $("#products-loader-parent").hide();
         products = res.products;
         lines = res.lines;
         products.map(row => {
@@ -286,6 +297,9 @@
             }
           });
         }
+        if (selectedRowInfo.devuelto == "1"){
+          $("#folio_already_returned").show();
+        }
       }
     });
 
@@ -339,6 +353,7 @@
       $("#changed_products_value").val("");
       $("#returned_products_value").val("");
       $("#missing_payment").val("");
+      $("#folio_already_returned").hide();
     }
 
     function addRowElement(row){
@@ -369,11 +384,11 @@
     function addFolioProductElement(inventarioId, productoId, isReplacement = false){
       var prod = products.find(obj => obj.idProducto == productoId);
       let linea = lines.find(obj => obj.idLinea == prod.idLinea);
-
       let str = isReplacement ? "<tr id='"+inventarioId+"' class='isReplacement bg-green'>" : "<tr id='"+inventarioId+"'>";
         str += "<th class='folio_prod_input'>";
         str += "<input class='folio_prod_chck "+ (isReplacement ? "isReplacement" : "") +"' id='"+inventarioId+"' type='checkbox'></th>";
-        str += "<th>"+prod['codigo']+"</th>"
+        str += "<th class='folioProd-id hidden'>"+prod['idProducto']+"</th>"
+        str += "<th class='folioProd-code'>"+prod['codigo']+"</th>"
         str += "<th>"+prod['nombre']+"</th>"
         str += "<th>"+linea.nombre+"</th>"
         str += "<th class='folioProd-precio'>"+prod['precio']+"</th>"
@@ -395,7 +410,43 @@
       $(newrow).addClass('isSelected');
     }
 
-    function folio_prod_chck_click(id){
+    $("#btn_accept_devolution").click(function(){
+      if(folio_selected && productClicked && elementClicked){
+        var devolution = {
+          devolution: {
+            folio: {},
+            new_products: {},
+            returned_products: [],
+            transaction: {},
+            almacen: {}
+          }
+        }
+
+        selectedFolioInfo = data.find(obj => obj.idFolio == elementClicked.id);
+        devolution.devolution.folio = selectedFolioInfo;
+
+        devolution.devolution.returned_products = $( "#folio_products_list input:checked" ).map(function() {return $(this).parent().parent().not('.isReplacement').find(".folioProd-id").text()}).toArray();
+        devolution.devolution.new_products = $("#folio_products_list").find(".isReplacement").map(function(child){return $(this).find(".folioProd-id").text()}).toArray().filter(Boolean);
+
+        devolution.devolution.transaction.new_products_value = $("#changed_products_value").val();
+        devolution.devolution.transaction.returned_products_value = $("#returned_products_value").val();
+        devolution.devolution.transaction.payment_value = $("#missing_payment").val();
+
+        submitDevolution(devolution);
+      }
+    });
+
+    function submitDevolution(devolution) {
+      $.ajax({
+        type: "POST",
+        url: "../../devoluciones/create.php",
+        data: devolution,
+        dataType: "json",
+        success: function(res){
+          debugger;
+          data = res;
+        }
+      });
     }
   });
 </script>

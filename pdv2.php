@@ -112,15 +112,15 @@
                     <tr>
                       <td class="pt-2">Subtotal</td>
                       <td>
-                        <input type="text" name="dcto" value="0.00" id="prod-subtotal" readonly class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                        <input type="text" name="dcto" value="0.00" id="prod-subtotal" readonly class="form-control pt-1 pb-1 pl-2" style="width: 80px;">
                       </td>
                       <td class="pt-2">Dct</td>
                       <td>
-                        <input type="number" min="0" max="100" name="dcto" id="total-dcto" placeholder="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                        <input type="number" min="0" max="37" name="dcto" id="total-dcto" placeholder="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 80px;">
                       </td>
                       <td class="pt-2">IVA</td>
                       <td>
-                        <input type="number" id="iva-total" min="0" max="100" name="iva" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;">
+                        <input type="number" id="iva-total" min="0" max="100" name="iva" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 80px;">
                       </td>
                       <td class="pt-2">Total</td>
                       <td>
@@ -131,8 +131,8 @@
                   </table>
                 </div>
               </div>
-        </div><!--col-->
-            </div><!--row -->
+            </div><!--col-->
+          </div><!--row -->
         </div><!--col -->
         <div class="col-sm-12 col-md-3 bg-white pt-3">
       <div class="row mb-3" style="height: 300px; overflow-y: scroll; max-height: 240px;">
@@ -202,6 +202,10 @@
     var qty = parseInt($("#quantity-"+id).text());
     var price = parseInt($("#price-"+id).text());
     var dcto = parseInt($("#discount-"+id).val());
+    if (dcto > 37){
+      dcto = 37;
+      $("#discount-"+id).val(37);
+    }
     $("#price-discount-"+id).text(qty * (price - price * dcto / 100));
     changeGeneralTotalPrice();
   }
@@ -267,6 +271,9 @@
     }
 
     $("#total-dcto").on('change', function(){
+      if (parseInt(this.value) > 37){
+        $(this).val(37);
+      }
       var newVal = $(this).val();
 
       $("#salestable").children().map(function(){

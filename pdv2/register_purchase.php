@@ -55,12 +55,12 @@
       return true;
     }
 
-    function createInventario($folioId){
+    function createInventario($folioId, $multiplier = -1){
       global $connection, $data;
       foreach($data['productos'] as $producto){
         $inventario = array(
           "idProducto" => intval($producto["id"]),
-          "tipo" => - $producto["qty"],
+          "tipo" => $multiplier * $producto["qty"],
           "fecha" => $data['fecha'],
           "idFolio" => $folioId
         );
@@ -91,6 +91,11 @@
         $folioId = $connection->lastInsertId();
         createInventario($folioId);
         createTrasaction("Abono", $folioId);
+
+        createFolio(200, $data['idPersona'], "Apartado");
+        $folioId = $connection->lastInsertId();
+        createInventario($folioId, +1);
+
 
         $cobranza = array(
           "monto" => $data['abono'],
