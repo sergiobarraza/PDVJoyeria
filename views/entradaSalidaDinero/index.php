@@ -59,14 +59,25 @@
     });
 
     function confirmTransaction(obj) {
+      $("#btn-deposit").addClass("disabled");
+      $("#btn-deposit").text("Cargando...");
+      $("#btn-withdraw").addClass("disabled");
+      $("#btn-withdraw").text("Cargando...");
       $.ajax({
         type: "POST",
         url: "../../entradaSalida/create.php",
         data: obj,
-        dataType: "json",
         success: function(res){
-          data = res;
-          debugger;
+          $("#deposit-concepto").val("");
+          $("#deposit-qty").val("");
+
+          $("#withdraw-concepto").val("");
+          $("#withdraw-qty").val("");
+
+          alert(res);
+          if(confirm) {
+            document.location.reload();
+          }
         }
       });
     }

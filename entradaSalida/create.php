@@ -39,7 +39,7 @@
     try{
       $data = $_POST['deposit'];
       createTransaction($_SESSION['almacen'], $data['monto'], $data['concepto'], "Efectivo");
-      return true;
+      echo "La cantidad de $".$data['monto']." ha sido depositada exitosamente.";
     } catch(PDOException $error) {
       echo $error->getMessage();
     }
@@ -49,7 +49,7 @@
     try{
       $data = $_POST['withdraw'];
       createTransaction($_SESSION['almacen'], -$data['monto'], $data['concepto'], "Efectivo");
-      return true;
+      echo "La cantidad de $".$data['monto']." ha sido retirada exitosamente.";
     } catch(PDOException $error) {
       echo $error->getMessage();
     }
