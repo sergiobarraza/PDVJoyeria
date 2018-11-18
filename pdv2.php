@@ -137,42 +137,8 @@
           </div><!--row -->
         </div><!--col -->
         <div class="col-sm-12 col-md-3 bg-white pt-3">
-      <div class="row mb-3" style="height: 300px; overflow-y: scroll; max-height: 240px;">
+      <div class="row mb-3" style="">
         <div class="col-sm-12 col-md-12" >
-            <table class="table">
-              <thead>
-                <tr>
-                    <th scope="col">Folio</th>
-                    <th scope="col">Nombre</th>
-                </tr>
-            </thead>
-              <tbody>
-                <tr>
-                    <td>12345</td>
-                    <td>Otto</td>
-                </tr>
-                <tr>
-                    <td>123678</td>
-                    <td>Thornton</td>
-                </tr>
-                <tr>
-                    <td>12908</td>
-                    <td>the Bird</td>
-                </tr>
-                <tr >
-                    <td >12678</td>
-                    <td>the Bird</td>
-                </tr>
-                <tr>
-                    <td>12678</td>
-                    <td>the Bird</td>
-                </tr>
-              </tbody>
-            </table>
-          </div><!-- col-->
-        </div><!-- row-->
-        <div class="row">
-          <div class="col-sm-12">
           <?php include "pdv2/person_form.php" ?>
         </div><!-- col-->
       </div><!-- row-->

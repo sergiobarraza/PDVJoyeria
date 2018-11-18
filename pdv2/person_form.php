@@ -1,4 +1,4 @@
-<form method="post" class="create_person_form">
+<form method="post" class="create_person_form" style="padding-top: 25px;">
   <input type="text" name="create_person" value="" id="hidden_create_person_field" style="display: none;">
   <div class="row mb-2">
     <div class="form-check col-sm-4">
