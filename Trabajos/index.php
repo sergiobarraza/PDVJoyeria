@@ -298,23 +298,23 @@
 		        		<div class="w3-container w3-padding w3-black">
 		          			<h4>terminados</h4>
 		        		</div>
-		        		<div style="padding:15px 10px; font-size: 24px;" class="w3-ul w3-hoverable w3-white">
+		        		<div style="padding:0; font-size: 24px;" class="w3-ul w3-hoverable w3-white">
 		        			<div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
 			          			<?php
-			          					$sqlFila = "SELECT Fila.idFolio, Fila.urgencia, Trabajo.idCliente, Trabajo.tiempo_estimado 
+			          					$sqlFila = "SELECT Fila.idFolio, Fila.urgencia, Trabajo.idCliente, Trabajo.tiempo_estimado , Fila.estado
 													from Fila 
 													join trabajo on Fila.idFolio = Trabajo.idTrabajo
-													where estado = 2
+													where estado = 2 OR estado = 3
 													group by idFolio 
-													order by urgencia desc,fecha asc;";
+													order by estado desc,fecha desc;";
 										$resultFila = mysqli_query($con, $sqlFila);
 			          					$rows = $resultFila->num_rows;
 			          					for ($i=0 ; $i < $rows ; $i++){
 					        	  			$rowFila = $resultFila->fetch_assoc();
-					        	  			if ($rowFila["urgencia"]==3)
-					          				echo '<div class="button-prenda prenda-1 w3-center" onclick="Myclick('.$rowFila["idFolio"].')">';
+					        	  			if ($rowFila["estado"]==2)
+					          				echo '<div class="button-aceptar prenda-1 w3-center w3-col s12" onclick="Myclick('.$rowFila["idFolio"].')">';
 			          						else
-			          						echo '<div class="button-prenda prenda-2 w3-center" onclick="Myclick('.$rowFila["idFolio"].')">';
+			          						echo '<div class="button-aceptar prenda-2 w3-center" onclick="Myclick('.$rowFila["idFolio"].')">';
 					          				echo "<span style='font-size: 18px;display: block;'>Folio: ".$rowFila["idFolio"]."</span>
 			          						<span style='font-size: 18px;display: block;'>".$rowFila["tiempo_estimado"]." Segs</span>
 			          						<span style='font-size: 18px;display: block;'>Cliente: ".$rowFila["idCliente"]."</span>

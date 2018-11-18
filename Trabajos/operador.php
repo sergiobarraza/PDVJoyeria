@@ -92,7 +92,7 @@
                   <input type="submit" id="AssignButton">
                 </form>
            <!--En Fila-->
-          <div  id="divOperador" class="w3-col l2" style="display: none;">
+          <div  id="divOperador" class="w3-col l2 s6" style="display: none;">
               <div class="w3-white w3-margin">
                 <div class="w3-container w3-padding w3-black">
                     <h4>¿A qué operador?</h4>
@@ -145,127 +145,69 @@
                               <th colspan="2">
                                 <?php 
                                   echo $nombre;
-                                  $sql3= "SELECT fila.idFolio, trabajo.idCliente, prenda.nombre_prenda, proceso.nombre_proceso, Trabajo.comentarios 
+                                  $sql3= "SELECT fila.idFolio, trabajo.idCliente, prenda.nombre_prenda, proceso.nombre_proceso, Trabajo.comentario, asignado.idAsignado 
                                     From asignado 
                                     JOIN Fila ON Fila.idFila = asignado.idfila 
                                     JOIN prenda_proceso ON prenda_proceso.id = Fila.prenda_proceso
                                     JOIN prenda ON prenda_proceso.prenda = prenda.id_prenda
                                     JOIN PROCESO ON prenda_proceso.proceso = proceso.id_proceso
                                     JOIN TRABAJO ON Fila.idFolio = Trabajo.idTrabajo
-                                    where asignado.operador =  '$usuario' ORDER BY asignado.fechaInicio ASC limit 1;";
-                                    echo $sql3;
-                                  //echo $sql3;
-                                  $sql3 = "SELECT folio FROM cola WHERE operador= '$usuario' ORDER BY urgencia DESC, folio ASC limit 1";
+                                    where asignado.operador = '$usuario' ORDER BY asignado.fechaInicio ASC;";
+                                   //ECHO $sql3; 
                                   $result3 = mysqli_query($con, $sql3);
+                                  $Asignadoscount = $result3->num_rows;
                                   $row3 = $result3->fetch_assoc();
-                                  $folioo= $row3['folio']; 
-
-                                  $sql2="SELECT DISTINCT pedido.folio, pedido.nombre_cliente, pedido.operador, prenda.nombre_prenda, proceso.nombre_proceso, pedido.tiempoEstimado, pedido.urgencia, pedido.comentario FROM pedido JOIN prenda ON pedido.prenda = prenda.id_prenda JOIN prenda_proceso ON pedido.prenda = prenda_proceso.prenda JOIN proceso ON pedido.proceso = proceso.id_proceso where folio=$folioo ORDER BY prenda.id_prenda;";
-                                  $result2 = mysqli_query($con, $sql2);
-                                  if(!$result2){
-                                    $rows2=0;
-                                    $penultimo=0;
-                                  }else{
-                                    $rows2=$result2->num_rows;
-                                    $penultimo=$rows2-1;
-                                  }
+                                                                
                                 ?>
                               </th>
                             </tr>
                           </thead>
                           <tbody>
-
-
-                            <form method='post' action="terminar.php">
+                            <form method='post' action="operador_terminar.php">
                               <?php
-                                if ($rows2 != 0){
-                                  $prendaActual = "";
-                                  for($j=0 ; $j<$rows2 ; $j++){
-                                    $row2 = $result2->fetch_assoc();
-                                    if ($usuario == $row2["operador"]){
-                                      $prendaAnterior= $prendaActual;
-                                      $prendaActual = $row2["nombre_prenda"];
-
-                                      if ($j==0) {
-                                        echo "<tr style='border-bottom:solid 1px; font-size:20px; background-color: #c9c9c9';'><td sytle= 'background-color;': #c9c9c9'>Folio:</td><td><input type='text' style='background-color: #c9c9c9'; name='folio2' id='folio2' readOnly value='";
-                                        echo $row2["folio"];
-                                        echo "'></td></tr>"; 
-
-                                        echo "<tr style='border-bottom:solid 3px; font-size:20px; background-color: #c9c9c9';><td>";
-                                        echo "Cliente:</td><td>";
-                                        echo $row2["nombre_cliente"];
-                                        echo "</td></tr>" ;
-                            
-                                      }
-                                      if ($prendaActual != $prendaAnterior){
-                                        echo "<tr style='text-align:center; background-color:#6bbbe0; border-bottom:solid 1px; font-size:22px;'><td colspan='2'>";
-                                        echo $row2["nombre_prenda"]."</td></tr>";
-                                      } 
-
-                                      echo "<tr><td style='font-size:20px; text-align:left;' colspan='2'>• ".$row2["nombre_proceso"]."</td></tr>";
-                                      
-                                      if ($j==$penultimo){
-                                        echo "<tr style='border-top:solid 1px black; background-color: #c9c9c9';'><td colspan='2' style='text-align:left; font-size:20px;'> Comentarios: ".$row2["comentario"]." </td></tr>";
-                                      
-                                        echo "<tr style='border-top:solid 1px black; height:40px; '><td colspan='2'><input  style='margin:5px auto; font-size:20px;width: 60%; text-align:center;' class='button-aceptar' value='TERMINAR' type='submit' onclick='terminarproc(".$row2['folio'].")';></td></tr>";
-                                      }
-                                    }
+                                  if($Asignadoscount > 0){
+                                    echo "<tr style='border-bottom:solid 1px; font-size:20px; background-color: #c9c9c9';height:10px;'><td sytle= 'background-color: #c9c9c9'>Folio:</td><td><input type='text' style='background-color: #c9c9c9'; name='folio2' id='folio2' readOnly value='";
+                                    echo $row3["idFolio"];
+                                    echo "'></td></tr><input type='number' style='display:none;' name='idasignado' value='".$row3["idAsignado"]."' readonly>"; 
+                                    echo "<tr style='border-bottom:solid 3px; font-size:20px; background-color: #c9c9c9';><td>";
+                                    echo "Cliente:</td><td>";
+                                    echo $row3["idCliente"];
+                                    echo "</td></tr>" ;
+                                    echo "<tr style='text-align:center; background-color:#6bbbe0; border-bottom:solid 1px; font-size:22px;'><td colspan='2'>";
+                                    echo $row3["nombre_prenda"]."</td></tr>";
+                                    echo "<tr><td style='font-size:20px; text-align:left;' colspan='2'>• ".$row3["nombre_proceso"]."</td></tr>";
+                                  
+                                    echo "<tr style='border-top:solid 1px black; background-color: #c9c9c9';'><td colspan='2' style='text-align:left; font-size:20px;'> Comentarios: ".$row3["comentario"]." </td></tr>";
+                                  
+                                    echo "<tr style='border-top:solid 1px black; height:40px; '><td colspan='2'><input  style='margin:5px auto; font-size:20px;width: 60%; text-align:center;' class='button-aceptar' value='TERMINAR' type='submit' onclick='terminarproc(".$row3['idFolio'].")';></td></tr>";
                                   }
-                                }
                               ?>  
                               
                             </form>  
 
                             <?php
-                              $sqlP="SELECT DISTINCT folio, nombre_cliente FROM pedido WHERE operador= '$usuario' AND folio != $folioo ORDER BY urgencia DESC,folio ASC ;";
-                              $resultP = mysqli_query($con, $sqlP);
-                              if ($resultP) $rowsP=$resultP->num_rows; 
-                              //echo "rowsP: ".$rowsP;
-                              if ($resultP){
-                            ?>
-                            <tr>
-                              <td colspan='2' style="background-color: white; color:white;  font-size: 20px; border-right:solid 5px white; border-left:solid 6px white; border-top:solid 6px black;"> <?php if ($resultP)echo "(".$rowsP.")";?></td>
-                            </tr>
-
-                            <tr>
-                              <td colspan='2' style="background-color: #050e51; color:white;  font-size: 20px;">Próximos procesos <?php echo "(".$rowsP.")"?></td>
-                            </tr>
-                            <?php
                               
-                                for($x=0 ; $x<$rowsP ; $x++){
-                                  $rowP = $resultP->fetch_assoc();
-                                  $folioP = $rowP["folio"];
-                                  echo "<tr style='background-color: #c9c9c9; border-top:solid 1px;'>
-                                    <td style='text-align:center; font-size:18px;' colspan='2'>Folio: ".$folioP."</td>
-                                    </tr>";
+                              if($Asignadoscount > 1){
+                                $Proxprocesos = $Asignadoscount -1;
+                                 echo "<tr><td colspan='2' style='background-color: white; color:white;  font-size: 20px; border-right:solid 5px white; border-left:solid 6px white; border-top:solid 6px black; height:20px;'></td></tr>";
+                                  echo "<tr><td colspan='2' style='background-color: #050e51; color:white;  font-size: 20px;'>Próximos procesos(".$Proxprocesos.")</td></tr>";
 
+                                  for ($j=1; $j < $Asignadoscount; $j++) { 
+                                    $row3 = $result3->fetch_assoc();
                                     echo "<tr style='background-color: #c9c9c9; border-top:solid 1px;'>
-                                    <td style='text-align:center; font-size:18px;' colspan='2'>Cliente: ".$rowP["nombre_cliente"]."</td>
+                                    <td style='text-align:center; font-size:18px;' colspan='2'>Folio: ".$row3['idFolio']."</td>
                                     </tr>";
 
-
-                                  $sqlY="SELECT DISTINCT prenda.nombre_prenda, proceso.nombre_proceso,  pedido.comentario FROM pedido JOIN prenda ON pedido.prenda = prenda.id_prenda JOIN prenda_proceso ON pedido.prenda = prenda_proceso.prenda JOIN proceso ON pedido.proceso = proceso.id_proceso WHERE operador= '$usuario' AND folio = $folioP ORDER BY urgencia DESC,folio ASC ;";
-                                  $resultY = mysqli_query($con, $sqlY);
-                                  $rowsY=$resultY->num_rows;
-                                  $prendaActualY = "";
-                                  for ($y=0 ; $y<$rowsY ; $y++){
-                                      $rowY = $resultY->fetch_assoc();
-                                      $prendaAnteriorY= $prendaActualY;
-                                      $prendaActualY = $rowY["nombre_prenda"];
-
-                                      if ($prendaActual != $prendaAnterior){
-                                        echo "<tr style='text-align:center; background-color:#6bbbe0; border-bottom:solid 1px; font-size:18px;'><td colspan='2'>";
-                                        echo $rowY["nombre_prenda"]."</td></tr>";
-                                      } 
-
-                                      echo "<tr><td style='font-size:18px; text-align:left;' colspan='2'>• ".$rowY["nombre_proceso"]."</td></tr>";
-
-                                  }
+                                  echo "<tr style='background-color: #c9c9c9; border-top:solid 1px;'>
+                                    <td style='text-align:center; font-size:18px;' colspan='2'>Cliente: ".$row3["idCliente"]."</td>
+                                    </tr>";
+                                  echo "<tr style='text-align:center; background-color:#6bbbe0; border-bottom:solid 1px; font-size:18px;'><td colspan='2'>";
+                                  echo $row3["nombre_prenda"]."</td></tr>";
+                                  echo "<tr><td style='font-size:18px; text-align:left;' colspan='2'>• ".$row3["nombre_proceso"]."</td></tr>";
                                 }
                               }
+
                             ?>
-                            
-                           
                           </tbody>
                         </table>
                       </div>
@@ -273,124 +215,7 @@
                   }
                 ?>
 
-                <!--Hechuras-->
-                <div class="colaOperador">
-
-                <?php
-                  
-//                  $sql = "SELECT * FROM usuario WHERE tipo='operador';";
-                  $sql = "SELECT * FROM usuario WHERE tipo='operador' AND usuario='hechuras';";
-
-                  $result = mysqli_query($con, $sql);
-                  $rows = $result->num_rows;
-                  for ($i=0 ; $i < $rows ; $i++){
-                    $row = $result->fetch_assoc();
-                    $nombre= $row["nombre"];
-                    $usuario= $row["usuario"];
-                    ?>
-                    <table style="min-height: 250px; table-layout: fixed;">
-                                      <thead>
-                                        <tr>
-                                          <th colspan="2">
-                      
-                                <?php 
-                                  echo $nombre;
-                                  $sql3 = "SELECT folio FROM cola WHERE operador= '$usuario' ORDER BY urgencia DESC, folio ASC ";
-                                  $result3 = mysqli_query($con, $sql3);
-                                  $rows3=$result3->num_rows;
-
-
-                                  for($k=0 ; $k<$rows3 ; $k++){
-
-                                  $row3 = $result3->fetch_assoc();
-                                  $folioo= $row3['folio'];
-                                   
-                                  if ($k>0) {
-
-                                  echo '
-                                    <table style="min-height: 250px; table-layout: fixed;">
-                                      <thead>
-                                        <tr>
-                                          <th colspan="2">';
-
-                                          echo $nombre;
-                                  }
-                                  $sql2="SELECT DISTINCT pedido.folio, pedido.nombre_cliente, pedido.operador, prenda.nombre_prenda, proceso.nombre_proceso, pedido.tiempoEstimado, pedido.urgencia, pedido.comentario FROM pedido JOIN prenda ON pedido.prenda = prenda.id_prenda JOIN prenda_proceso ON pedido.prenda = prenda_proceso.prenda JOIN proceso ON pedido.proceso = proceso.id_proceso where folio=$folioo ORDER BY prenda.id_prenda;";
-                                  $result2 = mysqli_query($con, $sql2);
-                                  if(!$result2){
-                                    $rows2=0;
-                                    $penultimo=0;
-                                  }else{
-                                    $rows2=$result2->num_rows;
-                                    $penultimo=$rows2-1;
-                                  }
-                                ?>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-
-
-                            <form method='post' action="terminar.php">
-                              <?php
-                                if ($rows2 != 0){
-                                  $prendaActual = "";
-                                  for($j=0 ; $j<$rows2 ; $j++){
-                                    $row2 = $result2->fetch_assoc();
-                                    if ($usuario == $row2["operador"]){
-                                      $prendaAnterior= $prendaActual;
-                                      $prendaActual = $row2["nombre_prenda"];
-
-                                      if ($j==0) {
-                                        echo "<tr style='border-bottom:solid 1px; font-size:20px; background-color: #c9c9c9';'><td sytle= 'background-color;': #c9c9c9'>Folio:</td><td><input type='text' style='background-color: #c9c9c9'; name='folio2' id='folio2' readOnly value='";
-                                        echo $row2["folio"];
-                                        echo "'></td></tr>"; 
-
-                                        echo "<tr style='border-bottom:solid 1px; font-size:20px; background-color: #c9c9c9';><td>";
-                                        echo "Cliente:</td><td>";
-                                        echo $row2["nombre_cliente"];
-                                        echo "</td></tr>" ;   
-
-                                        echo "<tr style='border-bottom:solid 3px; font-size:20px; background-color: #c9c9c9';><td>";
-                                        echo "Operador:</td><td>";
-                                        $user=substr (  $row2["comentario"] , 0 ,8 );
-                                        echo $user;
-                                        echo "</td></tr>" ;  
-
-                                      }
-                                      if ($prendaActual != $prendaAnterior){
-                                        echo "<tr style='text-align:center; background-color:#6bbbe0; border-bottom:solid 1px; font-size:22px;'><td colspan='2'>";
-                                        echo $row2["nombre_prenda"]."</td></tr>";
-                                      } 
-
-                                      echo "<tr><td style='font-size:20px; text-align:left;' colspan='2'>• ".$row2["nombre_proceso"]."</td></tr>";
-                                      
-                                      if ($j==$penultimo){
-                                        $lenghtstring =strlen($row2["comentario"])-10; 
-                                        $comment=substr (  $row2["comentario"] , 10 ,$lenghtstring );
-                                        echo "<tr style='border-top:solid 1px black; background-color: #c9c9c9';'><td colspan='2' style='text-align:left; font-size:20px;'> Comentarios: ".$comment." </td></tr>";
-                                      
-                                        echo "<tr style='border-top:solid 1px black; height:40px;'><td colspan='2'><input  style='margin:5px auto; font-size:20px; width:60%;' class='button-aceptar' type='submit' value='TERMINAR' onclick='terminarproc(".$row2['folio'].")';></td></tr>";
-                                      }
-                                    }
-                                  }
-                                }
-                              ?>  
-                            </form>  
-
-                            <?php
-                          } //cierre del for
-                            ?>
-                            
-                           
-                          </tbody>
-                        </table>
-                      </div>
-                    <?php
-                  }
-                ?>
-
-              </div>
+                
             </div>
           </div>
         </div>
@@ -398,6 +223,7 @@
 
       </div>
     </div>
+  </div>
     <footer class="w3-container w3-dark-grey" >
       <p>Powered by BARRAZA.MX</p>
     </footer>
