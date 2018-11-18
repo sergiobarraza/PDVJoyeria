@@ -10,13 +10,58 @@
   error_reporting(E_ALL);
 
   if(isset($_POST['register_purchase'])){
-    function createFolio($idAlmacen, $idPersona, $estado) {
+    function createCobranza(){
+      global $connection, $data;
+
+      $cobranza = array(
+        "monto" => $data['monto_total'] - $data['abono'],
+        "deudaTotal" => $data['monto_total'],
+        "fecha" => $data['fecha']
+      );
+
+      $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "Cobranza",
+        implode(", ", array_keys($cobranza)),
+        ":" . implode(", :", array_keys($cobranza))
+      );
+
+      $statement = $connection->prepare($sql);
+      $statement->execute($cobranza);
+    }
+
+    function createVenta($idFolio, $idInventario, $idCobranza, $idTransaccion, $descuento, $estado) {
+      global $connection, $data;
+
+      $venta = array(
+        "idFolio" => $idFolio,
+        "idInventario" => $idInventario,
+        "idTransaccion" => $idTransaccion,
+        "idCobranza" => $idCobranza,
+        "descuento" => $descuento,
+        "estado" => $estado
+      );
+
+      $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "Venta",
+        implode(", ", array_keys($venta)),
+        ":" . implode(", :", array_keys($venta))
+      );
+
+      $statement = $connection->prepare($sql);
+      $statement->execute($venta);
+      return true;
+    }
+
+
+    function createFolio($idPersona, $estado) {
       global $connection, $data;
 
       $folio = array(
-        "idAlmacen" => $idAlmacen,
         "idPersona" => $idPersona,
-        "estado" => $estado
+        "fechaDeCreacion" => $data['fecha'],
+        "idEstadoDeFolio" => $estado
       );
 
       $sql = sprintf(
@@ -31,14 +76,13 @@
       return true;
     }
 
-    function createTrasaction($concepto, $folioId){
+    function createTrasaction($idAlmacen, $monto, $concepto, $paymentType){
       global $connection, $data;
-      $paymentType = implode(", ", array_keys($data["payment_type"]));
 
       $transaccion = array(
-        "monto" => $data['monto'],
+        "idAlmacen" => $idAlmacen,
+        "monto" => $monto,
         "concepto" => $concepto,
-        "idFolio" => $folioId,
         "fecha" => $data['fecha'],
         "tipoDePago" => $paymentType
       );
@@ -55,14 +99,13 @@
       return true;
     }
 
-    function createInventario($folioId, $multiplier = -1){
+    function createInventario($producto, $idAlmacen, $multiplier = -1){
       global $connection, $data;
-      foreach($data['productos'] as $producto){
         $inventario = array(
+          "idAlmacen" => $idAlmacen,
           "idProducto" => intval($producto["id"]),
           "tipo" => $multiplier * $producto["qty"],
-          "fecha" => $data['fecha'],
-          "idFolio" => $folioId
+          "fecha" => $data['fecha']
         );
 
         $sql = sprintf(
@@ -74,48 +117,136 @@
 
         $statement = $connection->prepare($sql);
         $statement->execute($inventario);
-      }
     }
 
     try {
       if($data['order_type'] == "defaultCheck1" || $data['order_type'] == "defaultCheck3"){
         //Mostrador
-        createFolio(1, $data['idPersona'], "Compra a Mostrador");
+        createFolio($data['idPersona'], 3);
         $folioId = $connection->lastInsertId();
 
-        createInventario($folioId);
-        createTrasaction("Venta", $folioId);
-      }elseif ($data['order_type'] == "defaultCheck2") {
+        $cashAmountRemaining = 0;
+        $cardAmountRemaining = 0;
+
+        if(isset($data['payment_type']['tarjeta'])){
+          $cardAmountRemaining = $data['monto_tarjeta'];
+        }
+
+        if(isset($data['payment_type']['efectivo'])){
+          $cashAmountRemaining = $data['monto_efectivo'];
+        }
+
+        foreach($data['productos'] as $producto){
+          $amountToPay = $producto['importe'];
+          $transactionId = 0;
+          $transactionId2 = 0;
+          if($cardAmountRemaining > 0 ){
+            if($cardAmountRemaining >= $amountToPay) {
+              createTrasaction(1, $amountToPay, "Venta", "tarjeta");
+              $transactionId = $connection->lastInsertId();
+              $cardAmountRemaining = $cardAmountRemaining - $amountToPay;
+            } else {
+              createTrasaction(1, $cardAmountRemaining, "Venta", "tarjeta");
+              $transactionId = $connection->lastInsertId();
+
+              $amountToPay = $amountToPay - $cardAmountRemaining;
+              $cardAmountRemaining = 0;
+
+              createTrasaction(1, $amountToPay, "Venta", "efectivo");
+              $transactionId2 = $connection->lastInsertId();
+
+              $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
+            }
+          } elseif($cashAmountRemaining > 0) {
+            //pago en efectivo
+            createTrasaction(1, $amountToPay, "Venta", "efectivo");
+            $transactionId = $connection->lastInsertId();
+            $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
+          }
+
+          createInventario($producto, 1);
+          $inventarioId = $connection->lastInsertId();
+
+          createVenta($folioId, $inventarioId, null, $transactionId, $producto['porc_dcto'], "Venta");
+
+          if($transactionId2 > 0) {
+            createVenta($folioId, $inventarioId, null, $transactionId2, $producto['porc_dcto'], "Venta");
+          }
+        }
+
+      } elseif ($data['order_type'] == "defaultCheck2") {
         //Apartado
-        createFolio(1, $data['idPersona'], "Apartado");
+        createFolio($data['idPersona'], 1);
         $folioId = $connection->lastInsertId();
-        createInventario($folioId);
-        createTrasaction("Abono", $folioId);
 
-        createFolio(200, $data['idPersona'], "Apartado");
-        $folioId = $connection->lastInsertId();
-        createInventario($folioId, +1);
+        createCobranza();
+        $cobranzaId = $connection->lastInsertId();
 
+        $cashAmountRemaining = 0;
+        $cardAmountRemaining = 0;
 
-        $cobranza = array(
-          "monto" => $data['abono'],
-          "idFolio" => $folioId,
-          "fecha" => $data['fecha']
-        );
+        if(isset($data['payment_type']['tarjeta'])){
+          $cardAmountRemaining = $data['monto_tarjeta'];
+        }
 
-        $sql = sprintf(
-          "INSERT INTO %s (%s) values (%s)",
-          "Cobranza",
-          implode(", ", array_keys($cobranza)),
-          ":" . implode(", :", array_keys($cobranza))
-        );
+        if(isset($data['payment_type']['efectivo'])){
+          $cashAmountRemaining = $data['monto_efectivo'];
+        }
 
-        $statement = $connection->prepare($sql);
-        $statement->execute($cobranza);
+        foreach($data['productos'] as $producto){
+          $amountToPay = $producto['importe'];
+          $transactionId = null;
+          $transactionId2 = null;
+
+          if($cardAmountRemaining > -1 ){
+            if($cardAmountRemaining >= $amountToPay) {
+              createTrasaction(1, $amountToPay, "Venta", "tarjeta");
+              $transactionId = $connection->lastInsertId();
+              $cardAmountRemaining = $cardAmountRemaining - $amountToPay;
+            } else {
+              createTrasaction(1, $cardAmountRemaining, "Venta", "tarjeta");
+              $transactionId = $connection->lastInsertId();
+
+              $amountToPay = $amountToPay - $cardAmountRemaining;
+              $cardAmountRemaining = 0;
+
+              if($cashAmountRemaining >= $amountToPay) {
+                createTrasaction(1, $amountToPay, "Venta", "efectivo");
+                $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
+              } else {
+                createTrasaction(1, $cashAmountRemaining, "Venta", "efectivo");
+                $cashAmountRemaining = 0;
+              }
+              $transactionId2 = $connection->lastInsertId();
+            }
+          } elseif($cashAmountRemaining > 0) {
+            //pago en efectivo
+            if($cashAmountRemaining >= $amountToPay) {
+              createTrasaction(1, $amountToPay, "Venta", "efectivo");
+              $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
+            } else {
+              echo "cash: ".$cashAmountRemaining;
+              createTrasaction(1, $cashAmountRemaining, "Venta", "efectivo");
+              $cashAmountRemaining = 0;
+            }
+            $transactionId = $connection->lastInsertId();
+          }
+
+          createInventario($producto, 1); //cambiar 1 a almacen de sesion
+          $inventarioId = $connection->lastInsertId();
+
+          createVenta($folioId, $inventarioId, $cobranzaId, $transactionId, $producto['porc_dcto'], "Venta");
+          $idVenta = $connection->lastInsertId();
+
+          if($transactionId2 > 0) {
+            createVenta($folioId, $inventarioId, $cobranzaId, $transactionId2, $producto['porc_dcto'], "Venta");
+          }
+
+          createInventario($producto, 200, +1);
+        }
       }
-
     } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
+      echo "<br>" . $error->getMessage();
     }
   }
 ?>

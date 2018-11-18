@@ -51,7 +51,7 @@
 
   if(isset($_POST['folio_index'])) {
     try {
-      $sql = "SELECT * FROM Folio where Codigo IS NOT NULL;";
+      $sql = "SELECT * FROM Folio where idEstadoDeFolio = 1 OR idEstadoDeFolio = 3;";
 
       $statement = $connection->prepare($sql);
       $folios = $statement->execute();
@@ -61,89 +61,93 @@
         while($row = $statement->fetch()){
           $data[$index] = [
             'idFolio' => $row['idFolio'],
-            'idAlmacen' => $row['idAlmacen'],
             'idPersona' => $row['idPersona'],
-            'estado' => $row['estado'],
+            'idEstadoDeFolio' => $row['idEstadoDeFolio'],
             'devuelto' => $row['devuelto'],
-            'codigo' => $row['codigo']
           ];
           $index++;
         }
+
         foreach($data as $key => $row) {
-          $sql = "SELECT * FROM Almacen WHERE idAlmacen = ".$row['idAlmacen'];
-
-          $statement = $connection->prepare($sql);
-          $almacen = $statement->execute();
-          $data[$key]['almacen'] = $statement->fetch();
-
           $sql = "SELECT * FROM Persona WHERE idPersona = ".$row['idPersona'];
 
           $statement = $connection->prepare($sql);
           $persona = $statement->execute();
           $data[$key]['persona'] = $statement->fetch();
 
-          $sql = "SELECT * FROM Inventario WHERE idFolio = ".$row['idFolio'];
+          $sql = "SELECT * FROM Venta WHERE idFolio = ?";
 
           $statement = $connection->prepare($sql);
-          $inventario = $statement->execute();
-          $inv_index = 0;
-          while($inv_row = $statement->fetch()){
-            $data[$key]['inventario'][$inv_index] = [
-              'idInventario' => $inv_row['idInventario'],
-              'idProducto' => $inv_row['idProducto'],
-              'tipo' => $inv_row['tipo'],
-              'idFolio' => $inv_row['idFolio'],
-              'fecha' => $inv_row['fecha']
+          $statement->execute(array($row['idFolio']));
+          $venta_index = 0;
+          $venta_rows = $statement->fetchAll();
+          foreach($venta_rows as $venta_row){
+            $data[$key]['venta'][$venta_index] = [
+              "idVenta" => $venta_row['idVenta'],
+              "idFolio" => $venta_row['idFolio'],
+              "idInventario" => $venta_row['idInventario'],
+              "idTransaccion" => $venta_row['idTransaccion'],
+              "descuento" => $venta_row['descuento'],
+              "idCobranza" => $venta_row['idCobranza'],
+              "estado" => $venta_row['estado']
             ];
-            $inv_index++;
-          }
 
-          $sql = "SELECT * FROM Transaccion WHERE idFolio = ".$row['idFolio'];
+            if($venta_row['idInventario']){
+              $sql = "SELECT * FROM Inventario WHERE idInventario = ".$venta_row['idInventario'];
+              $statement = $connection->prepare($sql);
+              $inventario = $statement->execute();
+              $inv_row = $statement->fetch();
+              $data[$key]['venta'][$venta_index]['inventario'] = [
+                'idInventario' => $inv_row['idInventario'],
+                'idProducto' => $inv_row['idProducto'],
+                'tipo' => $inv_row['tipo'],
+                'fecha' => $inv_row['fecha']
+              ];
+            }
 
-          $statement = $connection->prepare($sql);
-          $statement->execute();
-          $tra_index = 0;
-          while($tra_row = $statement->fetch()){
-            $data[$key]['transaccion'][$tra_index] = [
-              'idTransaccion' => $tra_row['idTransaccion'],
-              'monto' => $tra_row['monto'],
-              'concepto' => $tra_row['concepto'],
-              'idFolio' => $tra_row['idFolio'],
-              'tipoDePago' => $tra_row['tipoDePago'],
-              'fecha' => $tra_row['fecha']
+            if($venta_row['idTransaccion']){
+              $sql = "SELECT * FROM Transaccion WHERE idTransaccion = ".$venta_row['idTransaccion'];
+              $statement = $connection->prepare($sql);
+              $transaccion = $statement->execute();
+              $tra_row = $statement->fetch();
+              $data[$key]['venta'][$venta_index]['transaccion'] = [
+                'idTransaccion' => $tra_row['idTransaccion'],
+                'monto' => $tra_row['monto'],
+                'concepto' => $tra_row['concepto'],
+                'tipoDePago' => $tra_row['tipoDePago'],
+                'idAlmacen' => $tra_row['idAlmacen'],
+                'fecha' => $tra_row['fecha']
+              ];
+            }
+
+            $sql = "SELECT * FROM Almacen WHERE idAlmacen = ".$tra_row['idAlmacen'];
+            $statement = $connection->prepare($sql);
+            $transaccion = $statement->execute();
+            $alm_row = $statement->fetch();
+
+            $data[$key]['venta'][$venta_index]['almacen'] = [
+              'idAlmacen' => $alm_row['idAlmacen'],
+              'name' => $alm_row['name'],
+              'address' => $alm_row['address'],
+              'rfc' => $alm_row['rfc'],
+              'tel' => $alm_row['tel'],
+              'iva' => $alm_row['iva']
             ];
-            $tra_index++;
-          }
 
-          $sql = "SELECT * FROM Cobranza WHERE idFolio = ".$row['idFolio'];
-
-          $statement = $connection->prepare($sql);
-          $statement->execute();
-          $cob_index = 0;
-          while($cob_row = $statement->fetch()){
-            $data[$key]['cobranza'][$cob_index] = [
-              'idCobranza' => $cob_row['idCobranza'],
-              'monto' => $cob_row['monto'],
-              'idFolio' => $cob_row['idFolio'],
-              'fecha' => $cob_row['fecha']
-            ];
-            $cob_index++;
-          }
-
-          $sql = "SELECT * FROM Cobranza WHERE idFolio = ".$row['idFolio'];
-
-          $statement = $connection->prepare($sql);
-          $statement->execute();
-          $cob_index = 0;
-          while($cob_row = $statement->fetch()){
-            $data[$key]['cobranza'][$cob_index] = [
-              'idCobranza' => $cob_row['idCobranza'],
-              'monto' => $cob_row['monto'],
-              'idFolio' => $cob_row['idFolio'],
-              'fecha' => $cob_row['fecha']
-            ];
-            $cob_index++;
-          }
+            if ( $venta_row['idCobranza']){
+              $sql = "SELECT * FROM Cobranza WHERE idCobranza = ".$venta_row['idCobranza'];
+              $statement = $connection->prepare($sql);
+              $transaccion = $statement->execute();
+              $cob_row = $statement->fetch();
+              $data[$key]['venta'][$venta_index]['cobranza'] = [
+                'idCobranza' => $cob_row['idCobranza'],
+                'monto' => $cob_row['monto'],
+                'deudaTotal' => $cob_row['deudaTotal'],
+                'fecha' => $cob_row['fecha']
+              ];
+            }
+            $venta_index++;
+          };
         }
       }
       echo json_encode($data);

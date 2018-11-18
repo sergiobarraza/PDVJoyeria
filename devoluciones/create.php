@@ -11,18 +11,22 @@
       $data = $_POST['devolution'];
 
       function addProductToInv($folio, $products, $addToAlmId){
-        //create folio
-        $folioId = createFolio($addToAlmId, $folio['idPersona'], "Entrada Producto", $folio['codigo'], true);
         //create inventario +n
         foreach($products as $productId) {
-          createInventario($productId, 1, $folioId);
+          $idInventario = createInventario($addToAlmId, $productId, 1);
+          createVenta($folio['idFolio'], $idInventario, null, "Entrada de producto", null);
         }
       }
 
-      function retrieveProduct($folio, $products, $retrievedFromAlmId){
-        $folioId = createFolio($retrievedFromAlmId, $folio['idPersona'], "Salida Producto", $folio[ 'codigo' ], true);
+      function retrieveProduct($folio, $products, $retrievedFromAlmId, $transaction){
+        $idTransaccion = null;
+        if($transaction['payment_value'] > 0){
+          $idTransaccion = createTransaction($retrievedFromAlmId,$transaction['payment_value'], "Devolución", "efectivo");
+        }
+
         foreach($products as $productId) {
-          createInventario($productId, -1, $folioId);
+          $idInventario = createInventario($retrievedFromAlmId, $productId, -1);
+          createVenta($folio['idFolio'], $idInventario, null, "Salida de producto", $idTransaccion);
         }
       }
 
@@ -33,11 +37,10 @@
         $statement->execute();
       }
 
-      function createFolio($idAlmacen, $idPersona, $estado, $codigo, $devuelto){
+      function createFolio($idPersona, $estado, $codigo, $devuelto){
         global $connection, $data;
 
         $folio = array(
-          "idAlmacen" => $idAlmacen,
           "idPersona" => $idPersona,
           "estado" => $estado,
           "codigo" => $codigo,
@@ -56,14 +59,38 @@
         return $connection->lastInsertId();
       }
 
-      function createInventario($idProducto, $tipo, $idFolio){
+      function createVenta($idFolio, $idInventario, $idCobranza, $estado, $idTransaccion){
+        global $connection, $data;
+
+        $venta = array(
+          "idFolio" => $idFolio,
+          "idInventario" => $idInventario,
+          "idTransaccion" => $idTransaccion,
+          "idCobranza" => $idCobranza,
+          "descuento" => 0,
+          "estado" => $estado
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Venta",
+          implode(", ", array_keys($venta)),
+          ":" . implode(", :", array_keys($venta))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($venta);
+        return $connection->lastInsertId();
+      }
+
+      function createInventario($idAlmacen, $idProducto, $tipo){
         global $connection, $data;
 
         $inventario = array(
           "idProducto" => intval($idProducto),
+          "idAlmacen" => $idAlmacen,
           "tipo" => $tipo,
           "fecha" => date("Y-m-d"),
-          "idFolio" => $idFolio
         );
 
         $sql = sprintf(
@@ -75,17 +102,19 @@
 
         $statement = $connection->prepare($sql);
         $statement->execute($inventario);
+
+        return $connection->lastInsertId();
       }
 
-      function createTrasaction($monto, $concepto, $idFolio, $tipoDePago){
+      function createTransaction($idAlmacen, $monto, $concepto, $tipoDePago){
         global $connection, $data;
 
         $transaccion = array(
           "monto" => intval($monto),
+          "idAlmacen" => $idAlmacen,
           "concepto" => $concepto,
           "tipoDePago" => $tipoDePago,
-          "fecha" => date("Y-m-d"),
-          "idFolio" => $idFolio
+          "fecha" => date("Y-m-d")
         );
 
         $sql = sprintf(
@@ -97,6 +126,8 @@
 
         $statement = $connection->prepare($sql);
         $statement->execute($transaccion);
+
+        return $connection->lastInsertId();
       }
 
       // Si el folio esta en apartado:
@@ -105,23 +136,19 @@
       // Nuevos productos (reemplazo) salen del almacen y entran a almacen
       // apartado id: 200
       // Se necesitan 4 folios nuevos
-      if($data['folio']['devuelto'] < 0){
+      if($data['folio']['devuelto'] == 0){
         setFolioDevuelto($data['folio']['idFolio'], true);
-        if($data['folio']['estado'] == "Apartado"){
+        if($data['folio']['idEstadoDeFolio'] == 1){
           // Productos devueltos salen de 200 y entran a almacen central id: 1
-          retrieveProduct($data['folio'], $data['returned_products'], 200);
+          retrieveProduct($data['folio'], $data['returned_products'], 200, null);
           addProductToInv($data['folio'], $data['returned_products'], 1);
           // Nuevos productos (reemplazo) salen del almacen y entran a apartados
-          retrieveProduct($data['folio'], $data['new_products'], 1); // cambiar a almacen seleccionado
+          retrieveProduct($data['folio'], $data['new_products'], 1, $data['transaction']); // cambiar a almacen seleccionado
           addProductToInv($data['folio'], $data['new_products'], 200);
 
-        } elseif ($data['folio']['estado'] == "Venta") {
+        } elseif ($data['folio']['idEstadoDeFolio'] == 3) {
           addProductToInv($data['folio'], $data['returned_products'], 1);
-          retrieveProduct($data['folio'], $data['new_products'], 1);
-        }
-        //calcular transaccion
-        if ($data['transaction']['payment_value'] > 0){
-          createTrasaction($data['transaction']['payment_value'], "Diferencia de pago al devolver", $data['folio']['idFolio'], 'default' );
+          retrieveProduct($data['folio'], $data['new_products'], 1, $data['transaction']);
         }
       } else {
         echo "El folio ya ha sido devuelto";

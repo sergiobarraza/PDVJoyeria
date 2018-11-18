@@ -40,19 +40,19 @@
             </tr>
             <tr>
               <td class="cash_payment">Monto a recibir: </td>
-              <td style="padding-right: 15px;" class="cash_payment"><input type="text" name="cash_payment" id="cash_payment" class="form-control" style="width: 60px;"></td>
+              <td style="padding-right: 15px;" class="cash_payment"><input type="text" name="cash_payment" id="cash_payment" class="form-control" style="width: 70px;"></td>
               <td class="full_card_payment">Pago con Tarjeta: </td>
-              <td class="full_card_payment"><input type="text" name="card_payment" id="card_payment" class="form-control" style="width: 60px;" ></td>
+              <td class="full_card_payment"><input type="text" name="card_payment" id="card_payment" class="form-control" style="width: 70px;" ></td>
             </tr>
             <tr>
               <td class="cash_payment">Efectivo Recibido: </td>
-              <td class="cash_payment"><input type="text" name="cash_received" value="0" id="cash_received" class="form-control" style="width: 60px;" ></td>
+              <td class="cash_payment"><input type="text" name="cash_received" value="0" id="cash_received" class="form-control" style="width: 70px;" ></td>
               <td class="card_payment">Pago con tarjeta Recibido: </td>
-              <td class="card_payment"><input type="text" name="card_received" value="0" id="card_received" class="form-control" style="width: 60px;" ></td>
+              <td class="card_payment"><input type="text" name="card_received" value="0" id="card_received" class="form-control" style="width: 70px;" ></td>
             </tr>
             <tr>
               <td class="cash_payment">Su Cambio: </td>
-              <td class="cash_payment"><input type="text" name="change" id="change" class="form-control" style="width: 60px;"  readonly></td>
+              <td class="cash_payment"><input type="text" name="change" id="change" class="form-control" style="width: 90px;"  readonly></td>
             </tr>
           </tbody>
         </table>

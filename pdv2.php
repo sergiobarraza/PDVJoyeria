@@ -325,9 +325,9 @@
        obj["name"] = $(this).find(".prod-name").text();
        obj["price"] = $(this).find("#price-"+id).text();
        obj["porc_dcto"] = $(this).find("#discount-"+id).val();
-       obj["importe"] = $(this).find("#total-price-"+id).text();
+       obj["importe"] = $(this).find("#price-discount-"+id).text();
        obj["qty"] = $(this).find("#quantity-"+id).text();
-       obj["dcto"] = parseInt(obj["importe"] - $(this).find("#price-discount-"+id).text());
+       obj["dcto"] = parseInt($(this).find("#total-price-"+id).text() - obj["importe"]);
 
       return obj;
     });
@@ -424,7 +424,7 @@
           btn.removeClass("disabled");
         }
       } else {
-        if(!btn.hasClass("disabled")){
+        if(!btn.hasClass("disabled") && !is_separated){
           btn.addClass("disabled");
         }
       }
@@ -438,50 +438,56 @@
 
     $("#purchaseButton").click(function(e){
       togglePurchaseButton();
+      if(!$(this).hasClass('disabled')) {
+        let btn = $(this);
+        btn.attr("disabled", true);
+        btn.text("CARGANDO...");
+        e.preventDefault();
 
-      let btn = $(this);
-      btn.attr("disabled", true);
-      btn.text("CARGANDO...");
-      e.preventDefault();
+        let order_type = $("input[name='payment_type']:checked").attr('id');
 
-      let order_type = $("input[name='payment_type']:checked").attr('id');
+        var cash = parseInt($("#cash_received").val());
+        var card = parseInt($("#card_received").val());
+        var change = $("#change").val().replace(/\D/g,'');;
+        var deposit = $("#cash_payment").val();
 
-      var data = {
-        register_purchase: {
-          idPersona: $("#clientNumber").val(),
-          monto: prod_total,
-          fecha: new Date().toJSON().slice(0,10),
-          payment_type: {
-          },
-          order_type: order_type,
-          productos: products.toArray()
+        var data = {
+          register_purchase: {
+            idPersona: $("#clientNumber").val(),
+            monto_total: prod_total,
+            monto_tarjeta: card,
+            monto_efectivo: ($("#defaultCheck1").is(":checked") ? cash - change : cash),
+            fecha: new Date().toJSON().slice(0,10),
+            payment_type: {
+            },
+            order_type: order_type,
+            productos: products.toArray()
+          }
         }
-      }
-      if($("#checkCash").is(':checked')){
-        data['register_purchase']['payment_type']['efectivo'] = true;
-      }
-      if($("#checkCard").is(':checked')){
-        data['register_purchase']['payment_type']['tarjeta'] = true;
-      }
 
-      var cash = $("#cash_received").val();
-      var card = $("#card_received").val();
-      var deposit = parseFloat(card + cash);
-
-      if($("#defaultCheck2").is(":checked")){
-        data['register_purchase']['abono'] = deposit;
-      }
-
-      $.ajax({
-        type: "POST",
-        url: "pdv2/register_purchase.php",
-        data: data,
-        cache: false,
-        success: function(result) {
-          btn.text("OK!");
-          document.location.reload();
+        if($("#checkCash").is(':checked')){
+          data['register_purchase']['payment_type']['efectivo'] = true;
         }
-      })
+
+        if($("#checkCard").is(':checked')){
+          data['register_purchase']['payment_type']['tarjeta'] = true;
+        }
+
+        if($("#defaultCheck2").is(":checked")){
+          data['register_purchase']['abono'] = card + cash;
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "pdv2/register_purchase.php",
+          data: data,
+          cache: false,
+          success: function(result) {
+            btn.text("OK!");
+            document.location.reload();
+          }
+        })
+			}
     });
 
     function getDate(){
@@ -580,6 +586,4 @@
         }
       });
     }
-
-
 </script>

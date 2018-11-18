@@ -263,37 +263,45 @@
         var num_prods = 0;
         var deuda = 0;
 
-        if(selectedRowInfo.transaccion){
-          monto_pagado = selectedRowInfo.transaccion.reduce(function(a, b){ return a + parseInt(b.monto); }, 0);
+        if(selectedRowInfo.venta[0].transaccion){
+          monto_pagado = selectedRowInfo.venta.reduce(function(a, b){ return a + parseInt(b.transaccion.monto); }, 0);
         }
 
-        if(selectedRowInfo.inventario){
-          num_prods = selectedRowInfo.inventario.reduce((a,b) => {return a + parseInt(b.tipo)},0);
+        if(selectedRowInfo.venta[0].inventario){
+          lastIdInventario = 0;
+          num_prods = selectedRowInfo.venta.reduce((a,b) => {
+                        if(b.inventario.idInventario != lastIdInventario){
+                          lastIdInventario = b.inventario.idInventario;
+                          return a + parseInt(b.inventario.tipo)
+                        } else {
+                          return a;
+                        }
+                      },0);
 
           if(num_prods < 0){
             num_prods = num_prods * -1;
           }
         }
 
-        if(selectedRowInfo.cobranza) {
-          deuda = selectedRowInfo.cobranza.reduce((a,b) => {return a + parseInt(b.monto)},0);
+        if(selectedRowInfo.venta[0].cobranza) {
+          deuda = selectedRowInfo.venta[0].cobranza.deudaTotal;
         }
 
-        $("#info_codigo").text(selectedRowInfo.codigo);
+        $("#info_codigo").text(selectedRowInfo.idFolio);
         $("#info_nombre").text(selectedRowInfo.persona.nombre);
-        $("#info_almacen").text(selectedRowInfo.almacen.name);
+        $("#info_almacen").text(selectedRowInfo.venta[0].almacen.name);
         $("#info_num_productos").text(num_prods);
         $("#info_monto_total").text(deuda);
         $("#info_monto_debido").text(deuda - monto_pagado);
 
         // Agregar lista de productos del folio
-        if(selectedRowInfo.inventario){
-          selectedRowInfo.inventario.map(( obj ) => {
-            last_id_inventario = obj.idInventario;
+        if(selectedRowInfo.venta[0].inventario){
+          selectedRowInfo.venta.map(( obj ) => {
+            last_id_inventario = obj.inventario.idInventario;
 
-            var tipo = parseInt(obj.tipo) * -1;
+            var tipo = parseInt(obj.inventario.tipo) * -1;
             for(var i=0; i < tipo; i++){
-              addFolioProductElement(obj.idInventario, obj.idProducto)
+              addFolioProductElement(obj.inventario.idInventario, obj.inventario.idProducto)
             }
           });
         }
@@ -359,15 +367,26 @@
     function addRowElement(row){
       let str = "<tr id="+row['idFolio']+">"
         str += "<th class='hidden'>"+row['idFolio']+"</th>"
-        str += "<th class='hidden'>"+row['idAlmacen']+"</th>"
+        str += "<th class='hidden'>"+row['venta'][0]['almacen']['idAlmacen']+"</th>"
         str += "<th class='hidden'>"+row['idPersona']+"</th>"
-        str += "<th>"+row['codigo']+"</th>"
+        str += "<th>"+row['idFolio']+"</th>"
         str += "<th>"+row.persona.nombre + " " + row.persona.apellido+"</th>"
-        str += "<th>"+row['estado']+"</th>"
-        str += "<th>"+row['almacen']['name']+"</th>"
+        str += "<th>"+getIdEstadoDeFolio(row['idEstadoDeFolio'])+"</th>"
+        str += "<th>"+row['venta'][0]['almacen']['name']+"</th>"
         str += "</tr>"
       $("#folio_index").prepend(str);
       return str;
+    }
+
+    function getIdEstadoDeFolio(id){
+      switch(id) {
+        case "1":
+          return "Pendiente"
+        case "2":
+          return "Cancelado"
+        case "3":
+          return "Finalizado"
+      }
     }
 
     function addProductElement(row) {
@@ -443,8 +462,8 @@
         data: devolution,
         dataType: "json",
         success: function(res){
-          debugger;
           data = res;
+          document.location.reload();
         }
       });
     }
