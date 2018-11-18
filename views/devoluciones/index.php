@@ -292,7 +292,7 @@
         $("#info_almacen").text(selectedRowInfo.venta[0].almacen.name);
         $("#info_num_productos").text(num_prods);
         $("#info_monto_total").text(deuda);
-        $("#info_monto_debido").text(deuda - monto_pagado);
+        $("#info_monto_debido").text((deuda - monto_pagado) > 0 ? deuda - monto_pagado : 0);
 
         // Agregar lista de productos del folio
         if(selectedRowInfo.venta[0].inventario){

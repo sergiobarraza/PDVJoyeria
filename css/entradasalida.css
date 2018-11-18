@@ -1,0 +1,15 @@
+.display-inline {
+  display: inline-block;
+}
+
+.left {
+  float: left;
+}
+
+.pt6 {
+  padding-top: 20px;
+}
+
+.center {
+  text-align: center;
+}

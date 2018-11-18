@@ -30,14 +30,15 @@
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.php">Admin Panel</a>
+        <a href="/PDVJoyeria/pdv2.php">Punto de Venta</a>
         <a href="foliosventa.php">Folios Venta</a>
-        <a href="#">Abonos</a>
+        <a href="/PDVJoyeria/views/apartados/index.php">Abonos</a>
         <a href="Trabajos">Trabajos</a>
-        <a href="views/devoluciones/index.php">Devoluciones</a>
+        <a href="/PDVJoyeria/views/devoluciones/index.php">Devoluciones</a>
         <a href="cortedecaja.php">Corte de caja</a>
         <a href="#">Articulos</a>
         <a href="#">Corte de caja</a>
-        <a href="#">Entrada y Salida de dinero</a>
+        <a href="/PDVJoyeria/views/entradaSalidaDinero/index.php">Entrada y Salida de dinero</a>
       </div>
       <span class="collapsed-menu" onclick="openNav()">&#9776;</span>
     </nav>
