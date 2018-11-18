@@ -1,6 +1,8 @@
 <?php
+  $pageSecurity = array("venta", "admin", "supervisor");
+  require "config/security.php";
   require "config/database.php";
-  require "config/common.php";
+  //require "config/common.php";
 
   $connection = new PDO($dsn, $username, $password, $options);
 

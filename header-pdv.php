@@ -30,9 +30,11 @@
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.php">Admin Panel</a>
+        <a href="foliosventa.php">Folios Venta</a>
         <a href="#">Abonos</a>
-        <a href="#">Trabajos</a>
+        <a href="Trabajos">Trabajos</a>
         <a href="views/devoluciones/index.php">Devoluciones</a>
+        <a href="cortedecaja.php">Corte de caja</a>
         <a href="#">Articulos</a>
         <a href="#">Corte de caja</a>
         <a href="#">Entrada y Salida de dinero</a>

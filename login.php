@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    if (isset($_SESSION['username'])) {
+      echo $_SESSION['username'];
+      header("Refresh:0; url=index.php");
+
+    }
     require "config/database.php";
     $status="nada";
   if (isset($_GET['status'])) {
@@ -31,16 +37,16 @@
       <div class="card-body">
         <form method="Post" action="login_session.php">
           <div class="form-group">
-            <label for="exampleInputEmail1">Email</label>
-            <input class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Ingresar email">
+            <label for="exampleInputEmail1">Usuario</label>
+            <input class="form-control" id="exampleInputEmail1" type="text" aria-describedby="emailHelp" placeholder="Usuario" required name="username">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Contraseña</label>
-            <input class="form-control" id="exampleInputPassword1" type="password" placeholder="Contraseña">
+            <input class="form-control" id="exampleInputPassword1" type="password" placeholder="Contraseña" required name="password">
           </div>
           <div class="form-group">
             <label for="sucursal">Sucursal</label>
-            <select class="form-control" id="Sucursal" >
+            <select class="form-control" id="Sucursal" name="almacen">
             <?php
 
                     try {
