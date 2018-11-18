@@ -1,0 +1,478 @@
+/*Correcion de las Tablas */
+table.tableSection {
+  display: table;
+  width: 100%;
+    border-collapse: collapse;
+    width: 100%;
+    height: 192px;
+    max-height: 192px;
+    border-spacing: 0;
+}
+
+table.tableSection thead,
+table.tableSection tbody {
+  width: 100%;
+}
+
+table.tableSection thead {
+  overflow-y: scroll;
+  display: table;
+  table-layout: fixed;
+  width: calc(100%); /* assuming scrollbar width as 16px */
+}
+
+table.tableSection tbody {
+  overflow: auto;
+  height: 150px;
+  display: block;
+}
+
+table.tableSection tr {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Oswald";
+}
+
+body {
+    font-family: "Open Sans";
+}
+
+.w3-content{
+    max-width:1600px;
+}
+.colas{
+    padding: 25px;
+}
+.cola{
+    margin: 1% 1% 1% 1%;
+    position:relative;
+    float: left;
+    border-style: solid;
+    /*overflow:auto;*/
+    width: 48%;
+    text-align: center;
+}
+
+.panelControl input,select{
+    border-radius: 4px;
+}
+
+
+
+.button-agregar {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background: black; 
+    color: #FFF;
+    padding: 8px 8px;
+    text-decoration: none;
+    cursor:pointer;
+
+}
+
+.button-guardar {
+    margin-left: 30%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background:#3875d8;
+    color: white;
+    padding: 8px 8px;
+    text-decoration: none;
+    cursor:pointer;
+    width: 130px;
+
+}
+
+.button-cancelar {
+   
+   
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background: #b2252c; 
+    color: #FFF;
+    padding: 8px 8px;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+.button-quitar {
+   
+    margin-left: 42.5%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background: #b2252c; 
+    color: #FFF;
+    padding: 8px 8px;
+    text-decoration: none;
+    
+    cursor: pointer;
+    opacity: 1; 
+
+}
+.button-eliminar {
+   
+    margin-left: 25%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background: #b2252c; 
+    color: #FFF;
+    padding: 8px 8px;
+    text-decoration: none;
+    
+    cursor: pointer;
+    opacity: 1; 
+
+}
+
+
+
+.button-aceptar {
+
+    
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background:#49af59;
+    color: #FFF;
+    padding: 8px 8px;
+    text-decoration: none;
+    cursor:pointer;
+}
+.button-agregados {
+
+    margin-left: 45%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background:#3875d8;
+    color: white;
+    padding: 8px 8px;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+.button-editar {
+    
+    margin-left: 25%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background:#3875d8;
+    color: white;
+    padding: 8px 8px;
+    text-decoration: none;
+    cursor:pointer;
+    width: 130px;
+}
+
+
+.cola table{
+    font-size: 24px;
+    border-collapse: collapse;
+    width: 100%;
+    height: 192px;
+    max-height: 192px;
+    border-spacing: 0;
+
+}
+
+.cola tr:nth-child(even) {
+    background-color: #dbdbdb;
+}
+.cola tr:hover {
+    background-color: #6a6c6d;
+}
+.cola th{
+    color: white;
+    background-color: #050e51;
+    text-transform: uppercase;
+    font-size: 23px;
+    height: 30px;
+}
+
+
+.cola tbody{
+    height: 162px;
+    display: inline-block;
+    max-height: 162px ;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 100%;
+
+}
+.cola td{
+    min-width: 260px;
+    display: inline-block;
+    overflow-x: hidden;
+}
+.tablaAgregados table{
+  text-align: center;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
+.tablaAgregados th{
+    color: white;
+    background-color: #6bbbe0;
+    text-transform: uppercase;
+    font-size: 23px;
+
+}
+
+.tablaAgregados tr:nth-child(even) {
+    background-color: #dbdbdb;
+}
+.tablaAgragados tr:hover {
+    background-color: #6a6c6d;
+}
+
+/*CSS de la tabla del historial */
+.historial{
+    margin: 1% 1% 1% 1%;
+    width: 100%;
+    position:relative;
+    float: left;
+    text-align: center;
+}
+
+.historial table{
+    font-size: 24px;
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 0;
+}
+
+.historial tr:nth-child(even) {
+    background-color: #dbdbdb;
+}
+.historial tr:hover {
+    background-color: #6a6c6d;
+}
+.historial th{
+    color: white;
+    background-color: #050e51;
+    text-transform: uppercase;
+    font-size: 23px;
+    height: 30px;
+}
+
+.historial tbody{
+   width: 100%;
+
+}
+.historial td{
+    height: 30px;
+    max-height: 30px;
+}
+
+
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+  display: block;
+  width: 90%;
+  padding: 8% 0 0;
+  margin: 0 auto 0 auto;
+  max-width: 400px;
+}
+.form {
+  display: block;
+  background: #FFFFFF;
+  width:100%; 
+  height: 300px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form input[type=submit] {
+  text-transform: uppercase;
+  outline: 0;
+  background: black;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #050e51;
+}
+
+.selectpicker{
+  text-align: center;
+  margin-left: 12.5%;
+  width: 75%;
+  height: 110px;
+}
+
+/*Tabla de operador CSS */
+.operador table{
+    font-size: 24px;
+    border-collapse: collapse;
+    width: 100%;
+    height: 192px;
+    max-height: 192px;
+    border-spacing: 0;
+
+}
+
+.operador tr:nth-child(even) {
+    background-color: #fff !important;
+}
+.operador tr:hover {
+    background-color: #fff !important;
+}
+
+.operador ul {
+    list-style-type: none;
+}
+
+.button-terminar{
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background:#49af59; /* this is a light blue */
+    height: 30px;
+    font-size: 15px;
+    width: 100px;
+    cursor:pointer;
+}
+
+.final td{
+  border-bottom: solid 1px #000;
+}
+td.folio{
+  border-bottom: solid 1px #000;  
+}
+
+.colaOperador{
+    margin: 1% 0% 1% 1%;
+    width: 19%;
+    position:relative;
+    float: left;
+    border-style: solid;
+/*    overflow:auto;*/
+    text-align: center;
+}
+
+
+.colaOperador table{
+    font-size: 24px;
+    border-collapse: collapse;
+    width: 100%;
+    max-height: 192px;
+    border-spacing: 0;
+
+}
+
+.colaOperador th{
+    color: white;
+    background-color: #050e51;
+    text-transform: uppercase;
+    font-size: 23px;
+    height: 30px;
+}
+
+ #folio2{
+width: 100%;
+}
+/*
+
+.colaOperador tr:nth-child(even) {
+    background-color: #dbdbdb;
+}
+.colaOperador tr:hover {
+    background-color: #6a6c6d;
+}
+
+
+
+.colaOperador tbody{
+    height: 162px;
+    display: inline-block;
+    max-height: 162px ;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 100%;
+
+}
+.colaOperador td{
+    min-width: 260px;
+    display: inline-block;
+    overflow-x: hidden;
+}
+
+
+.boton{
+  margin: 0px auto;
+  height: auto;
+  overflow-y:hidden;
+}
+
+.oper tbody{
+  overflow-y: hidden;
+  height: 240px !important;
+  max-height: 220px;
+  display: inherit;
+}
+
+.oper tr{
+  background-color: #fff;
+}
+
+.descripcion tr td{
+  height:100px;
+}
+.oper table{
+  height: 240px;
+}
+
+tr.boton{
+  height: 43px;
+}*/
+
+::-webkit-scrollbar { 
+    display: none; 
+}

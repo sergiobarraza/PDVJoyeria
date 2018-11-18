@@ -16,13 +16,7 @@
         <div class="card-header"><i class="fa fa-area-chart"></i> Entrada de productos <span style="color:green; display: <?php if ($status== 'successentrada') { echo "inline-block";} else {echo "none";}?>"> - Entrada correcta</span><span style="color:red; display: <?php if ($status== 'errorentrada') { echo "inline-block";} else {echo "none";}?>"> - No existe producto</span></div>
         <div class="card-body">
         	<form method="Post" action="inventario_entrada.php">
-        		<div class="form-group row">
-			    	<label for="sku" class="col-sm-2 col-form-label">Código</label>
-			    	<div class="col-sm-9">
-			      		<input type="text" class="form-control" id="sku" name="sku"  required="true">			      		
-			    	</div>
-			    	<div class="col-sm-1"><i class="fa fa-search pt-2"></i></div>
-			  	</div>
+        		
 				<div class="form-group row">
 			    	<label for="almacen" class="col-sm-2 col-form-label">Almacen:</label>
 			    	<div class="col-sm-10">
@@ -31,7 +25,7 @@
 
 					      		try {
 								      $connection = new PDO($dsn, $username, $password, $options );
-								      $sql = "SELECT * From Almacen;";							   
+								      $sql = "SELECT * From Almacen where name <> 'apartado';";							   
 								      $query = $connection->query($sql);
 								      foreach($query->fetchAll() as $row) {
 										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"]."</option>";
@@ -48,7 +42,15 @@
 			      			
 			      		</select>			      		
 			    	</div>
-			  	</div>			  	<div class="form-group row">
+			  	</div>
+				<div class="form-group row">
+			    	<label for="sku" class="col-sm-2 col-form-label">Código</label>
+			    	<div class="col-sm-9">
+			      		<input type="text" class="form-control" id="sku" name="sku"  required="true">			      		
+			    	</div>
+			    	<div class="col-sm-1"><i class="fa fa-search pt-2"></i></div>
+			  	</div>
+			  	<div class="form-group row">
 			    	<label for="cantidad" class="col-sm-2 col-form-label">Cantidad</label>
 			    	<div class="col-sm-10">
 			      		<input type="text" name="cantidad" class="form-control input-number" value="1" min="1" max="999" id="cantidad">
@@ -158,8 +160,8 @@
 
 <?php
     try {
-		      $connection = new PDO($dsn, $username, $password, $options );
-			  $sql = "SELECT idAlmacen, name from Almacen;";
+		     
+			  $sql = "SELECT idAlmacen, name from Almacen where name <> 'apartado';";
 			  $sqlInventario = "SELECT Inventario.idProducto, Producto.codigo, Producto.nombre ";
 			  $query = $connection->query($sql);
 			  $almacenes = [];
@@ -168,7 +170,7 @@
 			  	  $almacenes[$i] = $row["name"];
 			  	  $i++;
 				  echo "<th>".$row["name"]."</th>";
-				  $sqlInventario = $sqlInventario . ", SUM(if(Folio.idAlmacen= ".$row["idAlmacen"].", Inventario.tipo, 0) ) as '".$row["name"]."'";
+				  $sqlInventario = $sqlInventario . ", SUM(if(Inventario.idAlmacen= ".$row["idAlmacen"].", Inventario.tipo, 0) ) as '".$row["name"]."'";
 				}
 
 	} catch (PDOException $error) {
@@ -181,7 +183,7 @@
 					</thead>
 					<tbody>
 	<?php
-	$sqlInventario = $sqlInventario . " from Inventario join Folio on Inventario.idFolio = Folio.idFolio join Producto on Inventario.idProducto = Producto.idProducto GROUP BY Inventario.idProducto;";
+	$sqlInventario = $sqlInventario . " from Inventario join Producto on Inventario.idProducto = Producto.idProducto GROUP BY Inventario.idProducto;";
 	try {
 
 		$query1 = $connection->query($sqlInventario);
@@ -362,7 +364,7 @@
 
 					      		try {
 								      
-								      $sql3 = "SELECT * From Almacen;";							   
+								      $sql3 = "SELECT * From Almacen where name <> 'apartado';";							   
 								      $query3 = $connection->query($sql3);
 								      foreach($query3->fetchAll() as $row3) {
 								      	echo "<tr>";
@@ -407,6 +409,12 @@
 			    	<label for="direccion" class="col-sm-2 col-form-label">Direccion:</label>
 			    	<div class="col-sm-10">
 			      		<input type="text" class="form-control" id="direccion" name="direccion" required >			      						      
+			    	</div>
+			  	</div>
+			  	<div class="form-group row">
+			    	<label for="razon" class="col-sm-2 col-form-label">Razon Social:</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" class="form-control" id="razon" name="razon" required>			      						      		
 			    	</div>
 			  	</div>
 			  	<div class="form-group row">

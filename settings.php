@@ -52,6 +52,12 @@
 			    	</div>
 			  	</div>
 			  	<div class="form-group row">
+			    	<label for="razon" class="col-sm-2 col-form-label">Razon Social</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" name="razon" class="form-control" id="razon" value="<?php echo $row["nombrefiscal"];?>" required>
+			    	</div>
+			  	</div>
+			  	<div class="form-group row">
 			    	<label for="RFC" class="col-sm-2 col-form-label">RFC</label>
 			    	<div class="col-sm-10">
 			      		<input type="text" name="RFC" class="form-control" id="RFC" value="<?php echo $row["rfc"];?>" required>

@@ -1,9 +1,7 @@
-<?php
+ <?php
 	$pageSecurity = array("admin");
   require "config/security.php";
-  //include 'conexion.php';
   require "config/database.php";
-  //require "config/common.php";
 
 	$linea = $_POST["linea"];
 	$sql = "INSERT INTO Linea(nombre) VALUES ('$linea');";
@@ -24,7 +22,6 @@
       exit;
     }
  
-	//$result = mysqli_query($con, $sql);
 	header("Refresh:0; url=articulos.php?status=successlinea#nuevaLinea");
 
 ?>

@@ -12,9 +12,10 @@
 	$Tel = $_POST["Tel"];
 	$IVA = $_POST["IVA"];
 	$percent = $_POST["percent"];
+	$razon = $_POST["razon"];
 	try {
 		      $connection = new PDO($dsn, $username, $password, $options );
-		      $sql1 = "UPDATE Almacen SET name = '$Nombre', address = '$Direccion', rfc='$RFC', tel=$Tel, iva=$IVA, modPrecio = $percent   where idAlmacen = $codigo;";
+		      $sql1 = "UPDATE Almacen SET name = '$Nombre', address = '$Direccion', rfc='$RFC', tel=$Tel, iva=$IVA, modPrecio = $percent, nombrefiscal = '$razon'   where idAlmacen = $codigo;";
   		      $query1 = $connection->query($sql1);
   		       echo $sql1;
 				

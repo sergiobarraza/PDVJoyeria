@@ -93,7 +93,7 @@
 			      		<?php
 
 					      		try {
-								      $sql2 = "SELECT * From Almacen;";							   
+								      $sql2 = "SELECT * From Almacen where name <> 'apartado';";							   
 								      $query2 = $connection->query($sql2);
 								      foreach($query2->fetchAll() as $row2) {
 										  echo "<option value='".$row2["idAlmacen"]."'>".$row2["name"]."</option>";
