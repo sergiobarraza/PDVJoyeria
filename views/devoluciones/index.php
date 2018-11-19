@@ -264,7 +264,7 @@
         var deuda = 0;
 
         if(selectedRowInfo.venta[0].transaccion){
-          monto_pagado = selectedRowInfo.venta.reduce(function(a, b){ return a + parseInt(b.transaccion.monto); }, 0);
+          monto_pagado = selectedRowInfo.venta.reduce(function(a, b){ return a + (b.transaccion ? parseInt(b.transaccion.monto) : 0); }, 0);;
         }
 
         if(selectedRowInfo.venta[0].inventario){
@@ -305,8 +305,10 @@
             }
           });
         }
+
         if (selectedRowInfo.devuelto == "1"){
           $("#folio_already_returned").show();
+          alert("Este folio ya ha sido devuelto anteriormente anteriormente!");
         }
       }
     });
@@ -456,11 +458,12 @@
     });
 
     function submitDevolution(devolution) {
+      $("#btn_accept_devolution").addClass("disabled");
+      $("#btn_accept_devolution").text("Cargando informacion...");
       $.ajax({
         type: "POST",
         url: "../../devoluciones/create.php",
         data: devolution,
-        dataType: "json",
         success: function(res){
           data = res;
           document.location.reload();
