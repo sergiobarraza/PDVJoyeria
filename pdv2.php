@@ -155,11 +155,11 @@
     var total = 0;
 
     $("#salestable").children().map(function(){
-      var totprice = parseInt($("#total-price-"+this.id).text());
-      var disc = parseInt($("#discount-"+this.id).val());
-      var iva = parseInt($("#iva-total").val());
-      var qty = parseInt($("#quantity-"+this.id).text());
-      var price = parseInt($("#price-"+this.id).text());
+      var totprice = parseFloat($("#total-price-"+this.id).text());
+      var disc = parseFloat($("#discount-"+this.id).val());
+      var iva = parseFloat($("#iva-total").val());
+      var qty = parseFloat($("#quantity-"+this.id).text());
+      var price = parseFloat($("#price-"+this.id).text());
       $("#price-discount-"+this.id).text(qty * (price - price * disc / 100));
       return total += (totprice - (totprice * disc / 100) - (totprice * iva / 100));
     });
@@ -167,9 +167,9 @@
   }
 
   function changeProdDiscountPrice(id){
-    var qty = parseInt($("#quantity-"+id).text());
-    var price = parseInt($("#price-"+id).text());
-    var dcto = parseInt($("#discount-"+id).val());
+    var qty = parseFloat($("#quantity-"+id).text());
+    var price = parseFloat($("#price-"+id).text());
+    var dcto = parseFloat($("#discount-"+id).val());
     if (dcto > 37){
       dcto = 37;
       $("#discount-"+id).val(37);
@@ -217,15 +217,15 @@
 
     function doAddProductQuantity(id) {
       var th = $("#quantity-"+id);
-      var Qty = parseInt(th.text());
+      var Qty = parseFloat(th.text());
       th.text( Qty + 1);
       changeProdTotalPrice(id);
       return true;
     }
 
     function changeProdTotalPrice(id) {
-      var qty = parseInt($("#quantity-"+id).text());
-      var price = parseInt($("#price-"+id).text());
+      var qty = parseFloat($("#quantity-"+id).text());
+      var price = parseFloat($("#price-"+id).text());
       var prodTotal = $("#total-price-"+id);
       return prodTotal.text(qty * price);
     }
@@ -233,13 +233,13 @@
     function changeGeneralSubotalPrice(){
       var total = 0;
       $("#salestable").children().map(function(){
-        return total += parseInt($("#total-price-"+this.id).text());
+        return total += parseFloat($("#total-price-"+this.id).text());
       });
       $("#prod-subtotal").val(parseFloat(total));
     }
 
     $("#total-dcto").on('change', function(){
-      if (parseInt(this.value) > 37){
+      if (parseFloat(this.value) > 37){
         $(this).val(37);
       }
       var newVal = $(this).val();
@@ -295,7 +295,7 @@
        obj["porc_dcto"] = $(this).find("#discount-"+id).val();
        obj["importe"] = $(this).find("#price-discount-"+id).text();
        obj["qty"] = $(this).find("#quantity-"+id).text();
-       obj["dcto"] = parseInt($(this).find("#total-price-"+id).text() - obj["importe"]);
+       obj["dcto"] = parseFloat($(this).find("#total-price-"+id).text() - obj["importe"]).toFixed(3);
 
       return obj;
     });
@@ -306,14 +306,14 @@
       $("#checkout-modal__products").append('<td>'+this['name']+'</td>')
       $("#checkout-modal__products").append('<td>'+this['price']+'</td>')
       $("#checkout-modal__products").append('<td>'+this['qty']+'</td>')
-      $("#checkout-modal__products").append('<td>'+this['porc_dcto']+'%</td>')
-      $("#checkout-modal__products").append('<td>'+this['dcto']+'</td>')
-      $("#checkout-modal__products").append('<td>'+this['importe']+'</td>')
+      $("#checkout-modal__products").append('<td>'+parseFloat(this['porc_dcto']).toFixed(2)+'%</td>')
+      $("#checkout-modal__products").append('<td>'+parseFloat(this['dcto']).toFixed(2)+'</td>')
+      $("#checkout-modal__products").append('<td>'+parseFloat(this['importe']).toFixed(2)+'</td>')
       $("#checkout-modal__products").append('</tr>');
       return true
     });
 
-    var nums = $(products).map(function(){ return parseInt(this['qty'])}).toArray();
+    var nums = $(products).map(function(){ return parseFloat(this['qty'])}).toArray();
     var subtotal = $("#prod-subtotal").val();
     var descuento = subtotal - $("#prod-total").val();
     var iva_total = $("#iva-total").val();
@@ -348,7 +348,7 @@
     $(".cash_payment").hide();
     if($("#checkCash").is(':checked')){
       $(".cash_payment").show();
-      $("#cash_payment").val(prod_total);
+      $("#cash_payment").val(parseFloat(prod_total).toFixed(2));
       if(!$("#checkCard").is(':checked')){
         $("#cash_payment").attr('readonly', true);
       }
@@ -368,12 +368,12 @@
     }
 
     $("#cash_received, #card_received, input[name='payment_type']").change(()=>{
-      var cash = parseInt($("#cash_payment").val());
-      var received = parseInt($("#cash_received").val());
-      var card_received = parseInt($("#card_received").val());
+      var cash = parseFloat($("#cash_payment").val());
+      var received = parseFloat($("#cash_received").val());
+      var card_received = parseFloat($("#card_received").val());
       togglePurchaseButton();
 
-      $("#change").val("$ " + (received + card_received - cash));
+      $("#change").val("$ " + (received + card_received - cash).toFixed(3));
     });
 
     $("#btnagregar").click(()=>{
@@ -414,15 +414,15 @@
 
         let order_type = $("input[name='payment_type']:checked").attr('id');
 
-        var cash = parseInt($("#cash_received").val());
-        var card = parseInt($("#card_received").val());
-        var change = $("#change").val().replace(/\D/g,'');;
-        var deposit = $("#cash_payment").val();
+        var cash = parseFloat($("#cash_received").val());
+        var card = parseFloat($("#card_received").val());
+        var change = $("#change").val().replace(/[^0-9.]/g,'');
+        var deposit = parseFloat($("#cash_payment").val()).toFixed(2);
 
         var data = {
           register_purchase: {
             idPersona: $("#clientNumber").val(),
-            monto_total: prod_total,
+            monto_total: parseFloat(prod_total).toFixed(3),
             monto_tarjeta: card,
             monto_efectivo: ($("#defaultCheck1").is(":checked") ? cash - change : cash),
             fecha: new Date().toJSON().slice(0,10),

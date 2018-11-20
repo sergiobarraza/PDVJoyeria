@@ -3,9 +3,13 @@
   require "../config/database.php";
   $connection = new PDO($dsn, $username, $password, $options);
 
+  $pageSecurity = array("venta", "admin", "supervisor");
+  require "../config/security.php";
+
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
+
   if(isset($_POST['devolution'])){
     try {
       $data = $_POST['devolution'];
@@ -143,12 +147,12 @@
           retrieveProduct($data['folio'], $data['returned_products'], 200, null);
           addProductToInv($data['folio'], $data['returned_products'], 1);
           // Nuevos productos (reemplazo) salen del almacen y entran a apartados
-          retrieveProduct($data['folio'], $data['new_products'], 1, $data['transaction']); // cambiar a almacen seleccionado
+          retrieveProduct($data['folio'], $data['new_products'], $_SESSION['almacen'], $data['transaction']);
           addProductToInv($data['folio'], $data['new_products'], 200);
 
         } elseif ($data['folio']['idEstadoDeFolio'] == 3) {
           addProductToInv($data['folio'], $data['returned_products'], 1);
-          retrieveProduct($data['folio'], $data['new_products'], 1, $data['transaction']);
+          retrieveProduct($data['folio'], $data['new_products'], $_SESSION['almacen'], $data['transaction']);
         }
       } else {
         echo "El folio ya ha sido devuelto";

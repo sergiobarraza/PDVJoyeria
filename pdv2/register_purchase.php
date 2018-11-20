@@ -81,7 +81,7 @@
 
       $transaccion = array(
         "idAlmacen" => $idAlmacen,
-        "monto" => $monto,
+        "monto" => round($monto, 2),
         "concepto" => $concepto,
         "fecha" => $data['fecha'],
         "tipoDePago" => $paymentType
@@ -164,7 +164,7 @@
             $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
           }
 
-          createInventario($producto, 1);
+          createInventario($producto, $_SESSION['almacen']);
           $inventarioId = $connection->lastInsertId();
 
           createVenta($folioId, $inventarioId, null, $transactionId, $producto['porc_dcto'], "Venta");
@@ -232,7 +232,7 @@
             $transactionId = $connection->lastInsertId();
           }
 
-          createInventario($producto, 1); //cambiar 1 a almacen de sesion
+          createInventario($producto, $_SESSION['almacen']);
           $inventarioId = $connection->lastInsertId();
 
           createVenta($folioId, $inventarioId, $cobranzaId, $transactionId, $producto['porc_dcto'], "Venta");
