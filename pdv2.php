@@ -450,8 +450,11 @@
           url: "pdv2/register_purchase.php",
           data: data,
           cache: false,
+          dataType: "json",
           success: function(result) {
             btn.text("OK!");
+            let idFolio = result.folio;
+            window.open("imprimirticket.php?folio="+idFolio, "_blank");
             document.location.reload();
           }
         })

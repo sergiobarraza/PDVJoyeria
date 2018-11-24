@@ -124,6 +124,7 @@
         //Mostrador
         createFolio($data['idPersona'], 3);
         $folioId = $connection->lastInsertId();
+        echo json_encode(['folio' => $folioId]);
 
         $cashAmountRemaining = 0;
         $cardAmountRemaining = 0;
@@ -225,7 +226,6 @@
               createTrasaction(1, $amountToPay, "Venta", "efectivo");
               $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
             } else {
-              echo "cash: ".$cashAmountRemaining;
               createTrasaction(1, $cashAmountRemaining, "Venta", "efectivo");
               $cashAmountRemaining = 0;
             }
