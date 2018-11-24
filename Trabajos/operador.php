@@ -74,9 +74,13 @@
                               echo '<div class="button-cancelar w3-center" onclick="Myclick('.$rowFila["idFila"].')">';
                               else
                               echo '<div class="button-aceptar w3-center" onclick="Myclick('.$rowFila["idFila"].')">';
+                            $Tiempo = $rowFila["tiempo_estimado"];
+                            $Horas = intval($Tiempo / 3600);
+                            $Minutos = intval(($Tiempo % 3600)/60);
+                            $Segundos = $Tiempo % 60;
                               echo "<span style='font-size: 20px;line-height:18px;display: block;'>Folio: ".$rowFila["idFolio"]."</span>
                               <span style='font-size: 18px;line-height:20px;display: block;'>Cliente: ".$rowFila["idCliente"]."</span>
-                              <span style='font-size: 18px;line-height:20px;display: block;'>".$rowFila["tiempo_estimado"]." Segs</span>
+                              <span style='font-size: 18px;line-height:20px;display: block;'>".$Horas."H ".$Minutos."M ".$Segundos."S</span>
                               <span style='font-size: 18px;line-height:20px;display: block;'>".$rowFila["nombre_prenda"]."</span>
                               <span style='font-size: 18px;line-height:20px;display: block;'>".$rowFila["nombre_proceso"]."</span>
                               </div>";

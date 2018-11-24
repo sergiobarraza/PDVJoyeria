@@ -59,11 +59,13 @@
 	$tiempo_estimado = $_POST["tiempoEstimado"];
 	$comentario = $_POST["comentario"];
 	$fecha = date("Y-m-d H:i:s");
-	$precio = 0;
+	$precio = $_POST["precioTotal"];
+	$anticipo = $_POST["preciopago"];
 	$cliente =1;
 	$prenda_proceso= explode(",",$pp);
 	$mod = count($prenda_proceso);
 	$mod= $mod/3;
+	$tipopago = $_POST["tipopago"];
 	
 	if ($mod<1) 
 	{
@@ -95,7 +97,7 @@
 			$prenda_procesoVar = $rowPrendaProceso["id"];
 			
 			$sqlFila = "INSERT into Fila (idFolio, prenda_proceso, urgencia, fecha, estado) values ($FolioTrabajoNuevo, $prenda_procesoVar, $urgencia, '$fecha', 0);";
-			echo $sqlFila;
+			//echo $sqlFila;
 			$resultFila = mysqli_query($con, $sqlFila);
 
 			//$sql = "INSERT INTO pedido (folio, nombre_cliente, operador, prenda, proceso, comentario, tiempoEstimado, urgencia, fecha, imagen) VALUES ($folio, '$nombreCliente', '$operador', $prenda, $proceso, '$comentario', $tiempo_estimado, $urgencia, '$fecha','$fileName');";
@@ -104,6 +106,16 @@
 			$x = $x+3;
 			$y = $y+3;
 		}
+		$sqlTransaccion = "INSERT INTO Transaccion ( monto, concepto, tipodePago, fecha, idAlmacen) values ($anticipo,'Trabajo','$tipopago', '$fecha', 1 );"; 
+		$resultTransaccion = mysqli_query($con, $sqlTransaccion);
+		$sqlTransaccion1 = "SELECT idTransaccion  from Transaccion  order by idTransaccion desc limit 1;";
+		$resultTransaccion1 = mysqli_query($con, $sqlTransaccion1);
+		$rowTransaccion = $resultTransaccion1 ->fetch_assoc();
+		$idTransaccion = $rowTransaccion["idTransaccion"];
+
+		$sqlTT = "INSERT INTO transaccion_trabajo (idTrabajo, idTransaccion) values($FolioTrabajoNuevo, $idTransaccion);";
+		$resultTT = mysqli_query($con, $sqlTT);
+
 	}	
 	header("Refresh:0; url=index.php?folio=$FolioTrabajoNuevo");
 ?>

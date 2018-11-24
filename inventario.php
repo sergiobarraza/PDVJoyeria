@@ -6,14 +6,37 @@
 		require "config/database.php";
     //require "config/common.php";
 	$status="nada";
+	$codigo = "";
+	$cantidad = 0;
 	if (isset($_GET['status'])) {
 		$status = $_GET['status'];
+	}
+	if (isset($_GET['articulo'])) {
+		$codigo = $_GET['articulo'];
+	}
+	if (isset($_GET['cantidad'])) {
+		$cantidad = $_GET['cantidad'];
+	}
+	if ($status == 'successentrada') {
+		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>¡Nuevo Prodocuto Ingresado!</strong> Código de producto = '.$codigo.' / Cantidad = '.$cantidad.' articulos 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'errorentrada') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error! Codigo no existente - </strong> Código de producto = '.$codigo.' 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
 	}
 ?>
 	
 	<!-- Form-->
 	<div class="card mb-3" id="nuevaEntrada">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Entrada de productos <span style="color:green; display: <?php if ($status== 'successentrada') { echo "inline-block";} else {echo "none";}?>"> - Entrada correcta</span><span style="color:red; display: <?php if ($status== 'errorentrada') { echo "inline-block";} else {echo "none";}?>"> - No existe producto</span></div>
+        <div class="card-header"><i class="fa fa-area-chart"></i> Entrada de productos </div>
         <div class="card-body">
         	<form method="Post" action="inventario_entrada.php">
         		

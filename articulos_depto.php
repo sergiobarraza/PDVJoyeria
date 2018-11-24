@@ -21,9 +21,9 @@ $pageSecurity = array("admin");
     } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
       header("Refresh:0; url=articulos.php?status=errordepto#nuevoDepto");
-
+      exit;
     }
 	//$result = mysqli_query($con, $sql);
-	header("Refresh:0; url=articulos.php?status=successdepto#nuevoDepto");
+	header("Refresh:0; url=articulos.php?status=successdepto&articulo=$depto#nuevoDepto");
 
 ?>

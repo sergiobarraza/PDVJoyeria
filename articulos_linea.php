@@ -22,6 +22,6 @@
       exit;
     }
  
-	header("Refresh:0; url=articulos.php?status=successlinea#nuevaLinea");
+	header("Refresh:0; url=articulos.php?status=successlinea&articulo=$linea#nuevaLinea");
 
 ?>

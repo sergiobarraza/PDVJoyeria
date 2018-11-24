@@ -11,7 +11,12 @@
 	$cantidad = $_POST["cantidad"];
 	$persona = $_SESSION['user'];
 	$fecha = date("Y-m-d H:i:s");
+	$Tipoprod = $_POST["Tipoprod"];
+	$Proveedor = $_POST["Proveedor"];
+	$subdepto = $_POST["subdepto"];
 	$almacen = $_POST["almacen"];
+	$Min = $_POST["Min"];
+	$Costo = $_POST["Costo"];
 
 	//Busca el ultimo codigo e incrementa uno para agregar uno nuevo
 	try 
@@ -63,6 +68,6 @@
 			
 			
 
-	header("Refresh:0; url=articulos.php?status=successarticulo#nuevoArticulo");
+	header("Refresh:0; url=articulos.php?status=successarticulo&articulo=$idProducto&cantidad=$codigo");
 
 ?>

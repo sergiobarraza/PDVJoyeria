@@ -1,5 +1,5 @@
 <?php
-  require('seguridad.php');
+  //require('seguridad.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,33 +39,49 @@
                       <th>Tiempo Esp</th>
                       <th>Tiempo total</th>
                       <th>Nombre Cliente</th>
-                      <th>Imagen<th>
+                      <!--th>Imagen<th-->
                     </tr>
                   </thead>
                   <tbody>
                      
                       <?php
                         include 'conexion.php';
-                        $sql = "SELECT h.folio, fecha, pa.nombre_prenda, po.nombre_proceso, operador, tiempo_esperado, tiempo_total, nombre_cliente, imagen FROM historial h JOIN prenda pa ON h.prenda = pa.id_prenda JOIN proceso po ON h.proceso = po.id_proceso ORDER BY h.folio ASC;";
+                        $sql = "SELECT Fila.idFolio, Fila.fecha, prenda.nombre_prenda, proceso.nombre_proceso, entregado.Operador, prenda_proceso.tiempo_estimado, entregado.fechaInicio, entregado.fechaFin, trabajo.idCliente
+                          from entregado
+                          join Fila on entregado.idFila = Fila.idFila
+                          join prenda_proceso on prenda_proceso.id = Fila.prenda_proceso
+                          join prenda on prenda_proceso.prenda = prenda.id_prenda
+                          join proceso on prenda_proceso.proceso = proceso.id_proceso
+                          join trabajo on Fila.idFolio = trabajo.idTrabajo
+                          ORDER BY Fila.idFolio desc;";
                         $result = mysqli_query($con, $sql);
                         $rows = $result->num_rows;
                         for ($i=0 ; $i < $rows ; $i++){
                           $row = $result->fetch_assoc();
                           echo "<tr>";
-                          echo "<td>".$row["folio"]."</td>";
+                          echo "<td>".$row["idFolio"]."</td>";
                           echo "<td>".$row["fecha"]."</td>";
                           echo "<td>".$row["nombre_prenda"]."</td>";
                           echo "<td>".$row["nombre_proceso"]."</td>";
-                          echo "<td>".$row["operador"]."</td>";
-                          echo "<td>".$row["tiempo_esperado"]."</td>";
-                          echo "<td>".$row["tiempo_total"]." Seg</td>";
-                          echo "<td>".$row["nombre_cliente"]."</td>";
-                          if ($row["imagen"]!="") {
+                          echo "<td>".$row["Operador"]."</td>";
+                          echo "<td>".$row["tiempo_estimado"]."</td>";
+                          $fechaInicio = $row["fechaInicio"];
+                          $fechaFin = $row["fechaFin"];
+                          $date1= DateTime::createFromFormat('Y-m-d H:i:s', $fechaInicio);
+                          $date2=  DateTime::createFromFormat('Y-m-d H:i:s', $fechaFin);
+                          $resultTime = $date1 ->diff($date2);
+                          $dias = $resultTime->format('%a');
+                          $hours = $resultTime->format('%H');
+                          $minutes = $resultTime->format('%I');
+                          $seconds = $resultTime->format('%s');
+                          echo "<td>".$dias."D ".$hours."H ".$minutes."M ".$seconds." S</td>";
+                          echo "<td>".$row["idCliente"]."</td>";
+                          /*if ($row["imagen"]!="") {
                             echo '<td><a href="'.$row["imagen"].'">IMG</a></td>';
 
                           }else{
                             echo '<td></td>';
-                          }
+                          }*/
                           echo "</tr>";
 
                         }

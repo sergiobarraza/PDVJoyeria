@@ -17,37 +17,42 @@
 	require "config/database.php";
 	try {
 	    $connection = new PDO($dsn, $username, $password, $options );
-	    $sql = "SELECT Venta.idInventario, Venta.descuento, Transaccion.monto, Inventario.Tipo, Producto.nombre, Almacen.nombrefiscal, Almacen.address,  Almacen.rfc, Almacen.tel, Folio.fechaDeCreacion, Almacen.idAlmacen 
-	    		from  Venta
-	    		join Transaccion on Transaccion.idTransaccion = Venta.idTransaccion
-	    		join Inventario on Inventario.idInventario = Venta.idInventario
-	    		join Folio on Folio.idFolio = Venta.idFolio
-	    		join Producto on Inventario.idProducto = Producto.idProducto
-	    		join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
-	    		where Venta.idFolio = $folio;";							   
-	    echo $sql;
-	    //$query = $connection->query($sql);
-	      
+	    $sql = "SELECT Venta.idFolio, Venta.idInventario, Inventario.idAlmacen, Almacen.name, Almacen.nombrefiscal, Almacen.rfc, Almacen.tel, Almacen.imagen, Almacen.address, Inventario.fecha,  Folio.idPersona, Almacen.codigoPostal
+			from Venta 
+			join Inventario on Venta.idInventario = Inventario.idInventario
+			join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
+			join Folio on Folio.idFolio = Venta.idFolio
+			where Venta.idFolio = $folio
+			limit 1";
+
+		    //echo $sql;
+		    $query = $connection->query($sql);
+		    $rows = $query->rowCount();
+		    $row0 = $query->fetch(PDO::FETCH_ASSOC);
+	    
 
 	    } 	catch(PDOException $error) {
 	      	echo $sql . "<br>" . $error->getMessage();
 
 	    }
+	       	
+	    	
 ?>
-<div id="printableArea" class="text-center" style="width: 4in; margin: auto;">
+<div id="printableArea" style="width: 4in; margin: auto; text-align: center;">
 	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 45%;">
-	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 3.png" style="display: inline-block; width: 45%;">
+	  <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 45%;">
       <h2 style="padding:0; margin: 0;">Joyeria Claros</h2>
-      <center style="padding:0; margin: 0;"> Sandra Luz Arellano Urrutia </center>
-      <h3 style="padding:0; margin: 0;"> Blanco Sur 316 Local 16 <br>Torreón, Coahuila </h3>
-      <h4 style="padding:0; margin: 0;"> RFC: BART090807</h4>
-      <p style="padding:0; margin: 0;"> C.P. 27900, Tel: 712-40-60 </p>
-      <p style="padding:0; margin: 0;"> Fecha: 24/Sept/208 </p>
-      <p style="padding:0; margin: 0;">Folio: <?php echo $folio;?></p>
-      <p style="padding:0; margin: 0;">Cliente: <?php echo $folio;?></p>
+      <h4 style="padding:0; margin: 0;"> <?php echo $row0["nombrefiscal"]; ?></h4>
+      <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
+      <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
+      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p>
+      <p style="padding:0; margin: 0;"> Fecha: <?php echo $row0["fecha"]; ?> </p>
+      <p style="padding:0; margin: 0;">Folio: <?php echo $row0["idFolio"]; ?></p>
+      <p style="padding:0; margin: 0;">Cliente: <?php echo $row0["idPersona"]; ?></p>
       <p style="padding:0; margin: 0;">Proceso: Venta</p>
       <table style="width: 100%;">
       	<thead >
+
 	      	<tr style="border-top: 1px dashed;">
 	      		<td># </td>
 	      		<td colspan="3">Nombre</td>
@@ -63,29 +68,143 @@
 	      	</tr>
       </thead>
       <tbody>
+      	<?php 
+	      	try 
+	      	{
+		    
+		    	$sqlProductos = "SELECT Venta.idFolio,  Venta.idInventario, Producto.codigo, Producto.nombre,Inventario.tipo, SUM(Transaccion.monto), Venta.descuento
+				from Venta
+				join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
+				join Inventario on Venta.idInventario = Inventario.idInventario 
+				join Producto on Inventario.idProducto = Producto.idProducto
+				group by Venta.idFolio,  Venta.idInventario,Venta.descuento,Producto.codigo,Producto.nombre,Inventario.tipo
+				having Venta.idFolio = $folio";							   
+		    
+
+			    $query2 = $connection->query($sqlProductos);
+			    $Subtotal = 0;
+			    $articulos = 0;	
+			    $Total = 0;		 
+			    foreach($query2->fetchAll() as $row) 
+			    {
+			    	$articulos++;
+			    	$totalpagado = $row["SUM(Transaccion.monto)"];
+			    	$totalpagadoR = floor($totalpagado*pow(10,2))/pow(10,2);
+			    	$Total = $Total + $totalpagadoR;
+			    	$descuento = $row["descuento"];
+			    	$cantidad = $row["tipo"] * (-1);
+			    	//echo "Cantidad= ".$cantidad;
+			    	$unitario= ($totalpagado / $cantidad)/(1 - $descuento/100);
+			    	$Subtotal += $unitario;
+			    	//echo "Unitairo= ".$unitario;
+			    //echo floor($totalpagado*pow(10,2))/pow(10,2);
+				  echo "<tr>
+      						<td class ='pr-3'>".$row["codigo"]."</td>
+      						<td colspan='3'>".$row["nombre"]."</td>
+      						<td>".$cantidad."</td>
+      					</tr>
+      					<tr>
+      						<td></td>
+      						<td>".$unitario."</td>
+      						<td></td>
+      						<td>".$descuento."%</td>
+      						<td>".$totalpagadoR."</td>
+      					</tr>
+      						";
+				}
+
+		    } 	catch(PDOException $error) {
+		      	echo $sql . "<br>" . $error->getMessage();
+
+		    }
+      		
+      	 ?>
+      	<tr style="border-top: 1px dashed;">
+      		<td colspan="2"><?php echo $articulos; ?> Art(s)</td>
+      		<td colspan="2">Subtotal</td>
+      		<td><?php echo floor($Subtotal*pow(10,2))/pow(10,2); ?></td>
+      	</tr>
       	<tr>
-      		<td class ="pr-3">1234</td>	
-      		<td colspan="3">Collar de persona</td>
-      		<td>2</td>
+      		<td colspan="2"></td>
+      		<td colspan="2">Dcto: </td>
+
+      		<td><?php $descuento= 100- $Total * 100 /$Subtotal; echo floor($descuento*pow(10,2))/pow(10,2); ?></td>
+      	</tr>
+      	<tr>
+      		<td colspan="2"></td>
+      		<td colspan="2">Total: </td>
+      		<td><?php echo $Total ?></td>
+      	</tr>
+      	<tr style="border-bottom: 1px dashed;">
+      		<td colspan="5">
+      			<?php include "numero_letras.php";echo numtowords($Total); ?>
+      		</td>
+      	</tr>
+      	<tr>
+      		<td colspan="2"> Total en efectivo: </td>
+      		<td></td>
+      		<td>115.00</td>
+      	</tr>
+      	<tr>
+      		<td colspan="2">Total con tarjeta: </td>
+      		<td></td>
+      		<td>134.00</td>
       	</tr>
       	<tr>
       		<td></td>
-      		<td>167.00</td>
+      		<td>Efectivo:</td>
       		<td></td>
-      		<td>0%</td>
-      		<td>334.00</td>
+      		<td>115.00</td>
       	</tr>
+      	<tr>
+      		<td></td>
+      		<td>Costo:</td>
+      		<td></td>
+      		<td>115.00</td>
+      	</tr>
+      	<tr style="border-top: 1px dashed;">
+      		<td colspan="5">Esta nota sera incluida en la Factura Global</td>
+      	</tr>
+
       </tbody>
       </table>
+      <BR>
+      <h5>NO HAY CAMBIO NI DEVOLUCIONES</h5>
 </div>
 <style>
 @page { size: auto;  margin: 0mm; }
 </style>
 
 <?php
-	include "footer-pdv.php";
+	//include "footer-pdv.php";
 ?>
-<script type="text/javascript">
+<!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <?php 
+    	 
+	    	if ($rows > 0) {	
+	    		echo '<script type="text/javascript">
+						window.onload = function(){
+							var divName = "printableArea";
+					    	var printContents = document.getElementById(divName).innerHTML;
+					    	var originalContents = document.body.innerHTML;
+						    document.body.innerHTML = printContents;
+					    	window.print();
+					    	document.body.innerHTML = originalContents;
+					    	window.close();
+						}
+					</script>';
+			}else{
+				echo '<script type="text/javascript">
+						window.onload = function(){
+							window.close();
+						}
+					</script>';
+		
+			}
+
+     ?>
+<!--script type="text/javascript">
 	window.onload = function(){
 		var divName = 'printableArea';
      var printContents = document.getElementById(divName).innerHTML;
@@ -97,4 +216,5 @@
 
      document.body.innerHTML = originalContents;
 }
-</script>
+</script-->
+

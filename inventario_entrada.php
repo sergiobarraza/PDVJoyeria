@@ -26,7 +26,7 @@
 	      $sql1 = "SELECT idProducto, codigo from Producto where codigo = $codigo limit 1;";
 		      $query1 = $connection->query($sql1);
 		      if ($query1->rowCount() == 0){
-		     		 header("Location: inventario.php?status=errorentrada#nuevoDepto");
+		     		 header("Location: inventario.php?status=errorentrada&articulo=$codigo#nuevoDepto");
 		     		exit;
 		     	}else {
 		     		$row1 = $query1->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@
 			
 	    } catch(PDOException $error) {
 	      echo $sql1 . "<br>" . $error->getMessage();
-			header("Location: inventario.php?status=errorentrada#nuevoDepto");
+			header("Location: inventario.php?status=errorconexion");
 		     		exit;
 	    }
 					
@@ -60,11 +60,11 @@
 		      $query4 = $connection->query($sql4);
 		    } catch(PDOException $error2) {
 		      echo $sql2 . "<br>" . $error2->getMessage();
-		      header("Location: inventario.php?status=errorentrada#nuevoDepto");
+		      header("Location: inventario.php?status=errorconexion");
   		     		exit;
 
 		    }
 			
-		header("Location: inventario.php?status=successentrada#nuevoDepto");
+		header("Location: inventario.php?status=successentrada&articulo=$codigo&cantidad=$cantidad");
 
 ?>

@@ -52,6 +52,12 @@
 			    	</div>
 			  	</div>
 			  	<div class="form-group row">
+			    	<label for="cp" class="col-sm-2 col-form-label">Codigo Postal</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" name="cp" class="form-control" id="cp" value="<?php echo $row["codigoPostal"];?>" required>
+			    	</div>
+			  	</div>
+			  	<div class="form-group row">
 			    	<label for="razon" class="col-sm-2 col-form-label">Razon Social</label>
 			    	<div class="col-sm-10">
 			      		<input type="text" name="razon" class="form-control" id="razon" value="<?php echo $row["nombrefiscal"];?>" required>
@@ -69,16 +75,11 @@
 			      		<input type="text" name="Tel" class="form-control" id="Tel" value="<?php echo $row["tel"];?>" required>
 			    	</div>
 			  	</div>
+			  	
 			  	<div class="form-group row">
-			    	<label for="IVA" class="col-sm-2 col-form-label">IVA</label>
+			    	<label for="imagen" class="col-sm-2 col-form-label">Imagen</label>
 			    	<div class="col-sm-10">
-			      		<input type="text" name="IVA" class="form-control" id="IVA" value="<?php echo $row["iva"];?>" required>
-			    	</div>
-			  	</div>
-			  	<div class="form-group row">
-			    	<label for="percent" class="col-sm-2 col-form-label">Precio (%)</label>
-			    	<div class="col-sm-10">
-			      		<input type="text" name="percent" class="form-control"  id="percent" value="<?php echo $row["modPrecio"];?>" required>
+			      		<input type="text" name="imagen" class="form-control"  id="imagen" value="<?php echo $row["imagen"];?>" required>
 			    	</div>
 			  	</div>
 			  	
