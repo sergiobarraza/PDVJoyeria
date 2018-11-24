@@ -17,8 +17,16 @@
 	require "config/database.php";
 	try {
 	    $connection = new PDO($dsn, $username, $password, $options );
-	    $sql = "SELECT * from  Folio where idFolio = $folio and estado = 'venta';";							   
-	    $query = $connection->query($sql);
+	    $sql = "SELECT Venta.idInventario, Venta.descuento, Transaccion.monto, Inventario.Tipo, Producto.nombre, Almacen.nombrefiscal, Almacen.address,  Almacen.rfc, Almacen.tel, Folio.fechaDeCreacion, Almacen.idAlmacen 
+	    		from  Venta
+	    		join Transaccion on Transaccion.idTransaccion = Venta.idTransaccion
+	    		join Inventario on Inventario.idInventario = Venta.idInventario
+	    		join Folio on Folio.idFolio = Venta.idFolio
+	    		join Producto on Inventario.idProducto = Producto.idProducto
+	    		join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
+	    		where Venta.idFolio = $folio;";							   
+	    echo $sql;
+	    //$query = $connection->query($sql);
 	      
 
 	    } 	catch(PDOException $error) {
@@ -27,6 +35,8 @@
 	    }
 ?>
 <div id="printableArea" class="text-center" style="width: 4in; margin: auto;">
+	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 45%;">
+	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 3.png" style="display: inline-block; width: 45%;">
       <h2 style="padding:0; margin: 0;">Joyeria Claros</h2>
       <center style="padding:0; margin: 0;"> Sandra Luz Arellano Urrutia </center>
       <h3 style="padding:0; margin: 0;"> Blanco Sur 316 Local 16 <br>Torreón, Coahuila </h3>
@@ -34,7 +44,8 @@
       <p style="padding:0; margin: 0;"> C.P. 27900, Tel: 712-40-60 </p>
       <p style="padding:0; margin: 0;"> Fecha: 24/Sept/208 </p>
       <p style="padding:0; margin: 0;">Folio: <?php echo $folio;?></p>
-      <p style="padding:0; margin: 0;">Proceso: Venta de Contado</p>
+      <p style="padding:0; margin: 0;">Cliente: <?php echo $folio;?></p>
+      <p style="padding:0; margin: 0;">Proceso: Venta</p>
       <table style="width: 100%;">
       	<thead >
 	      	<tr style="border-top: 1px dashed;">
