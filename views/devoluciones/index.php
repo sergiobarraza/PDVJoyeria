@@ -199,7 +199,7 @@
       let search = $("#folio_search-input").val();
       if(search){
         clearFolioElements();
-        displayRow = data.find(obj => obj.codigo == search);
+        displayRow = data.find(obj => obj.idFolio == search);
         if(displayRow){
           addRowElement(displayRow);
         }
@@ -259,6 +259,13 @@
         clearFolioProductElements();
         // agregar informacion del folio
         selectedRowInfo = data.find(obj => obj.idFolio == elementClicked.id);
+
+        if(!!parseInt(selectedRowInfo.devuelto)){
+          $("#btn_accept_devolution").addClass('disabled');
+        } else if($("#btn_accept_devolution").hasClass('disabled')){
+          $("#btn_accept_devolution").removeClass('disabled');
+        }
+
         var monto_pagado = 0;
         var num_prods = 0;
         var deuda = 0;
@@ -367,7 +374,8 @@
     }
 
     function addRowElement(row){
-      let str = "<tr id="+row['idFolio']+">"
+      let devuelto = !parseInt(row['devuelto']) || ("background-color: #D93846;");
+      let str = "<tr id="+row['idFolio']+" style='"+devuelto+"'>"
         str += "<th class='hidden'>"+row['idFolio']+"</th>"
         str += "<th class='hidden'>"+row['venta'][0]['almacen']['idAlmacen']+"</th>"
         str += "<th class='hidden'>"+row['idPersona']+"</th>"
