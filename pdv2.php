@@ -205,11 +205,11 @@
 
       if (ids.toArray().indexOf(candidateId) != -1){
         doAddProductQuantity(candidateId);
-        changeProdDiscountPrice(candidateId);
         // notify addition
       } else {
         doNewAddProduct(result);
       }
+      changeProdDiscountPrice(candidateId);
     }
 
     function doNewAddProduct(html) {

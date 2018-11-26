@@ -31,7 +31,7 @@
           echo "<th id='id-prod-".$row['idProducto']."' style='display: none;'>".$row['idProducto']."</th>";
           echo "<th class='prod-name'>".$row['nombre']."</th>";
           echo "<th class='prod-code'>".$row['codigo']."</th>";
-          echo "<th><input type='number' min='0' max='100' id='discount-prod-".$row['idProducto']."' class='form-control' value='".$row['descuento']."' onchange="."'changeProdDiscountPrice(".'"prod-'.$row['idProducto'].'"'.")'></th>";
+          echo "<th><input type='number' min='0' max='100' id='discount-prod-".$row['idProducto']."' class='form-control' value='30' onchange="."'changeProdDiscountPrice(".'"prod-'.$row['idProducto'].'"'.")'></th>";
           echo "<th id='quantity-prod-".$row['idProducto']."'>1</th>";
           echo "<th id='price-prod-".$row['idProducto']."'>".$row['precio']."</th>";
           echo "<th id='price-discount-prod-".$row['idProducto']."'>".$row['precio']."</th>";
