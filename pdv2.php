@@ -155,12 +155,13 @@
     var total = 0;
 
     $("#salestable").children().map(function(){
-      var totprice = parseFloat($("#total-price-"+this.id).text());
+      var totprice = parseFloat($("#total-price-"+this.id).text()).toFixed(2);
       var disc = parseFloat($("#discount-"+this.id).val());
       var iva = parseFloat($("#iva-total").val());
       var qty = parseFloat($("#quantity-"+this.id).text());
       var price = parseFloat($("#price-"+this.id).text());
-      $("#price-discount-"+this.id).text(qty * (price - price * disc / 100));
+      $("#price-discount-"+this.id).text(parseFloat(price - price * disc / 100).toFixed(2));
+      $("#total-price-"+this.id).text((parseFloat($("#price-discount-"+this.id).text() * qty).toFixed(2)));
       return total += (totprice - (totprice * disc / 100) - (totprice * iva / 100));
     });
     $("#prod-total").val(total);
