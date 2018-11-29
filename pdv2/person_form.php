@@ -43,6 +43,7 @@
       <label for="LastName" class="col-sm-3 col-form-label">Apellido</label>
       <div class="col-sm-9 row">
           <input type="text" class="form-control col-sm-10" minlength="4" id="LastName" name="apellido" placeholder="Mostrador" readonly required>
+          <div class="col-sm-2" onclick="search_person('name')" ><i class="fa fa-search clickable"></i></div>
       </div>
     </div>
     <span id="email-error" style="font-size: 16px;color: red;"></span>
@@ -111,6 +112,8 @@
         str = $("#Tel").val();
       } else if(opt == "email") {
         str = $("#Email").val();
+      } else if(opt == "name") {
+        str = {name: $("#Name").val(), last: $("#LastName").val()}
       }
 
       $.ajax({

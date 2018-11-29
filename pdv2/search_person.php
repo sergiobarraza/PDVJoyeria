@@ -27,6 +27,11 @@
     $searchq = preg_replace("/\s+/", '', $searchq);
 
     $sql = "SELECT * FROM Persona WHERE email = '$searchq' ";
+  } elseif (isset($_POST['name'])) {
+    $searchName = $_POST['name']['name'];
+    $searchLast = $_POST['name']['last'];
+    $searchq = $searchName;
+    $sql = "SELECT * FROM Persona WHERE nombre = '$searchName' && apellido = '$searchLast' ";
   }
 
   try {
