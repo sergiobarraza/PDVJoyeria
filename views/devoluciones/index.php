@@ -303,12 +303,19 @@
 
         // Agregar lista de productos del folio
         if(selectedRowInfo.venta[0].inventario){
-          selectedRowInfo.venta.map(( obj ) => {
-            last_id_inventario = obj.inventario.idInventario;
+          uniqueInvs = [];
+          selectedRowInfo.venta.filter(function(item) {
+            var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
+            if(i <= -1) {
+              uniqueInvs.push(item);
+            }
+          })
+          uniqueInvs.map(( obj ) => {
+            last_id_inventario = obj.idInventario;
 
             var tipo = parseInt(obj.inventario.tipo) * -1;
             for(var i=0; i < tipo; i++){
-              addFolioProductElement(obj.inventario.idInventario, obj.inventario.idProducto)
+              addFolioProductElement(obj.idInventario, obj.inventario.idProducto)
             }
           });
         }
