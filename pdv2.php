@@ -198,6 +198,9 @@
       return false;
     });
     function appendNewProduct(result) {
+      $("#productid").val("");
+      $("#productid").focus();
+
       var ids = $("#salestable").children().map(function(){
         return this.id;
       });
@@ -308,8 +311,8 @@
       $("#checkout-modal__products").append('<td>'+this['price']+'</td>')
       $("#checkout-modal__products").append('<td>'+this['qty']+'</td>')
       $("#checkout-modal__products").append('<td>'+parseFloat(this['porc_dcto']).toFixed(2)+'%</td>')
-      $("#checkout-modal__products").append('<td>'+parseFloat(this['dcto']).toFixed(2)+'</td>')
       $("#checkout-modal__products").append('<td>'+parseFloat(this['importe']).toFixed(2)+'</td>')
+      $("#checkout-modal__products").append('<td>'+parseFloat(this['importe'] * this['qty']).toFixed(2)+'</td>')
       $("#checkout-modal__products").append('</tr>');
       return true
     });
