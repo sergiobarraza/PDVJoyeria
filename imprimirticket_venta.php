@@ -11,6 +11,11 @@
 	}else{
 		header("Location: error.php");
 		exit;
+	}if (isset($_GET['cantidad'])) {
+		$cantidadPagada = $_GET['cantidad'];
+	}
+	if (isset($_GET['cambio'])) {
+		$cambio = $_GET['cambio'];
 	}
 	$pageSecurity = array("admin");
 	require "config/security.php";
@@ -46,7 +51,7 @@
       <h4 style="padding:0; margin: 0;"> <?php echo $row0["nombrefiscal"]; ?></h4>
       <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
       <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
-      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p>
+      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p><br><br>
       <p style="padding:0; margin: 0;"> Fecha: <?php echo $row0["fecha"]; ?> </p>
       <p style="padding:0; margin: 0;">Folio: <?php echo $row0["idFolio"]; ?></p>
       <p style="padding:0; margin: 0;">Cliente: <?php echo $row0["idPersona"]; ?></p>
@@ -198,7 +203,7 @@
 						    document.body.innerHTML = printContents;
 					    	window.print();
 					    	document.body.innerHTML = originalContents;
-					    	//window.close();
+					    	window.close();
 						}
 					</script>';
 			}else{

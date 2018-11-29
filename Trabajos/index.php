@@ -115,7 +115,7 @@
 			            					</td>
 											<td >
 												
-												<input type="text" name="preciopago" id="preciopago" style="width: 100%;" value="0" onchange="anticipo2();">
+												<input type="text" name="preciopago" id="preciopago" style="width: 100%;" value="0" onchange="anticipo2();" class="input-number2">
 											</td>
 			            				</tr>
 			            				<tr>
@@ -124,10 +124,28 @@
 			            					</td>
 											<td >
 												
-												<select  type="text" name="tipopago" id="tipopago" style="width: 100%;" value="0" >
+												<select  type="text" name="tipopago" id="tipopago" style="width: 100%;" value="0" onchange="anticipo2();">
 													<option>efectivo</option>
 													<option>tarjeta</option>
 												</select>
+											</td>
+			            				</tr>
+			            				<tr id="Efectivofield">
+			            					<td >
+			            						<label for="Efectivo" class="w3-padding-16 w3-large">Efectivo:</label>
+			            					</td>
+											<td >
+												
+												<input type="text" name="Efectivo" id="Efectivo" style="width: 100%;" value="0" onchange="anticipo2();" class="input-number2">
+											</td>
+			            				</tr>
+			            				<tr id="Cambiofield">
+			            					<td >
+			            						<label for="Cambio" class="w3-padding-16 w3-large">Cambio:</label>
+			            					</td>
+											<td >
+												
+												<input type="text" name="Cambio" id="Cambio" style="width: 100%;" value="0" onchange="anticipo2();" class="input-number2" readonly="true">
 											</td>
 			            				</tr>
 			            				<tr>
@@ -212,7 +230,7 @@
 											</td>
 						            	</tr>
 						            	<tr>
-						            		<tr>
+						            		
 						            		<td>
 						            			<label class="w3-padding-16 w3-large">Abonado:</label>
 						            		</td>
@@ -221,21 +239,21 @@
 											</td>
 						            	</tr>
 						            	<tr>
-						            		<tr>
+						            		
 						            		<td>
-						            			<label class="w3-padding-16 w3-large">Precio Restante:</label>
+						            			<label class="w3-padding-16 w3-large">Restante:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="precioRestante" id="precioRestante" style="width: 100%;" value="" readOnly>
 											</td>
 						            	</tr>
 						            	<tr>
-						            		<tr>
+						            		
 						            		<td>
 						            			<label class="w3-padding-16 w3-large">A pagar:</label>
 						            		</td>
 											<td colspan="2">
-												<input type="text" name="apagar" id="apagar" style="width: 100%;" value=""  onchange="abonarDinero();">
+												<input type="text" name="apagar" id="apagar" style="width: 100%;" value=""  class="input-number2" onchange="enable_abono();">
 											</td>
 						            	</tr>
 						            	<tr>
@@ -244,12 +262,30 @@
 			            					</td>
 											<td >
 												
-												<select  type="text" name="tipopago" id="tipopago" style="width: 100%;" value="0" >
+												<select  type="text" name="tipopago" id="tipopago2" style="width: 100%;" value="0" onchange="enable_abono();">
 													<option>efectivo</option>
 													<option>tarjeta</option>
 												</select>
 											</td>
 			            				</tr>
+			            				<tr id="Efectivo1field">
+						            	
+						            		<td>
+						            			<label for="Efectivo1" class="w3-padding-16 w3-large">Efectivo:</label>
+						            		</td>
+											<td colspan="2">
+												<input type="text" name="Efectivo1" id="Efectivo1" style="width: 100%;" value="" class="input-number2" onchange="enable_abono();">
+											</td>
+						            	</tr>
+						            	<tr id="Cambio1field">
+						            	
+						            		<td>
+						            			<label for="Cambio1" class="w3-padding-16 w3-large">Cambio:</label>
+						            		</td>
+											<td colspan="2">
+												<input type="text" name="Cambio1" id="Cambio1" style="width: 100%;" value="0" class="input-number2" readonly>
+											</td>
+						            	</tr>
 						            	<tr>
 
 						            		<td >
@@ -264,7 +300,7 @@
 						            			<a  class= "button-eliminar" onclick="eliminar();" >ELIMINAR</a>
 						            		</td>
 						            		<td id="botonCambiar">
-						            			<button class="button-editar">Abonar</button>
+						            			<button class="button-editar" disabled="true" id="buttonabonar" style="background-color:grey;">Abonar</button>
 						            		</td>
 											<td>
 												<a id="btn_agregados" class= "button-aceptar2" onclick="window.location.replace(location.pathname);">ACEPTAR</a>
@@ -471,7 +507,23 @@
 		</footer>
 	</body>
 </html>
-
+<script type="text/javascript">
+	$(".input-number2").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                     // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) || 
+                     // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                         // let it happen, don't do anything
+                         return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+</script>
 <script type="text/javascript">
 /* Inicialización de Variables 
 *	
@@ -1053,22 +1105,53 @@ function usuariohechura(usuariohech){
 			document.getElementById("precioanticipo").value = anticipo;
 			anticipo2();
 		}
-
+/* Funcion anticipo2. Calcula que el anticipo sea cubierto para poder habilitar el boton de aceptar trabajo
+*
+*/
 		function anticipo2(){
-			var anticipo = document.getElementById("precioanticipo").value;
-			var pago = document.getElementById("preciopago").value;
+			var pago = document.getElementById("preciopago").value;	// Cuanto quiero pagar		
+			var tipo = document.getElementById("tipopago").value; // Metodo de pago
+			var anticipo = document.getElementById("precioanticipo").value; // Cuanto es el minimo de anticipo que se calculo
 			anticipo = parseInt(anticipo);
 			pago = parseInt(pago);
-			if (pago < anticipo) {
-				
-				document.getElementById("aceptarbtn").disabled = true;
-				document.getElementById("aceptarbtn").style.background = "grey";
-				alert("El pago no puede ser menor a la cantidad minima de anticipo");
-			}else{
-				document.getElementById("aceptarbtn").style.background = "#49af59";
-				document.getElementById("aceptarbtn").disabled = false;
+			if (tipo == 'tarjeta' ) 
+			{
+				document.getElementById("Cambiofield").style.display = "none";
+				document.getElementById("Efectivofield").style.display = "none";
+				if (pago >= anticipo && tablaPrendaProcesos.length > 0) 
+				{
+					document.getElementById("aceptarbtn").style.background = "#49af59";
+					document.getElementById("aceptarbtn").disabled = false;
+					
+				}else{
+					
+					document.getElementById("aceptarbtn").disabled = true;
+					document.getElementById("aceptarbtn").style.background = "grey";
+					//alert("El pago no puede ser menor a la cantidad minima de anticipo");
+				}				
+			}
+			else
+			{
+				var efectivo = document.getElementById('Efectivo').value;
+				var cambio = efectivo - pago ; // Calcula el cambio
+				document.getElementById('Cambio').value = cambio; // Muestra el cambio calculado
+				document.getElementById("Cambiofield").style.display = "table-row";
+				document.getElementById("Efectivofield").style.display = "table-row";
+				if (pago >= anticipo && tablaPrendaProcesos.length > 0 && cambio >= 0) 
+				{
+					document.getElementById("aceptarbtn").style.background = "#49af59";
+					document.getElementById("aceptarbtn").disabled = false;
+					
+				}else{
+					
+					document.getElementById("aceptarbtn").disabled = true;
+					document.getElementById("aceptarbtn").style.background = "grey";
+					//alert("El pago no puede ser menor a la cantidad minima de anticipo");
+				}					
 				
 			}
+			
+			
 		}
 		function abonardinero(){
 			alert("abonar");
@@ -1083,6 +1166,65 @@ function usuariohechura(usuariohech){
 			document.getElementById("divEntrega").style.display = "block";
 			document.getElementById("folioUpdate2").innerHTML = folio;
 			document.getElementById("folioForm2").value = folio;
+		}
+
+		function calcular_cambio(totalfield,efectivofield,cambiofield){
+			
+			var total = document.getElementById(totalfield).value;
+			var efectivo = document.getElementById(efectivofield).value;
+			var cambio = efectivo - total ;
+			document.getElementById(cambiofield).value = cambio;
+			if (cambio < 0 || total <= 0){
+				document.getElementById("buttonabonar").disabled = true;
+				document.getElementById("buttonabonar").style.background = "grey";
+			}else{
+				document.getElementById("buttonabonar").disabled = false;
+				document.getElementById("buttonabonar").style.background = "blue";
+			}
+		}
+
+		function enable_abono(){
+			var total = document.getElementById('apagar').value;			
+			var tipo = document.getElementById("tipopago2").value;
+			if (tipo == 'tarjeta' ) 
+			{
+				document.getElementById("Cambio1field").style.display = "none";
+				document.getElementById("Efectivo1field").style.display = "none";
+				
+				if (total > 0) 
+				{
+					document.getElementById("buttonabonar").disabled = false;
+					document.getElementById("buttonabonar").style.background = "blue";
+				}
+				else
+				{
+					document.getElementById("buttonabonar").disabled = true;
+					document.getElementById("buttonabonar").style.background = "grey";
+				}
+				
+				
+			}
+			else
+			{
+				document.getElementById("Cambio1field").style.display = "table-row";
+				document.getElementById("Efectivo1field").style.display = "table-row";
+				var efectivo = document.getElementById('Efectivo1').value;
+				var cambio = efectivo - total ;
+				document.getElementById('Cambio1').value = cambio;
+				if (total>0 && cambio >=0) 
+				{
+					document.getElementById("buttonabonar").disabled = false;
+					document.getElementById("buttonabonar").style.background = "blue";
+				}
+				else
+				{
+					document.getElementById("buttonabonar").disabled = true;
+					document.getElementById("buttonabonar").style.background = "grey";
+				}
+				
+				
+			}
+			console.log(tipo);
 		}
 </script>
 

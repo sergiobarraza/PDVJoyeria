@@ -141,34 +141,7 @@
       			<?php include "numero_letras.php";echo numtowords($Total); ?>
       		</td>
       	</tr>
-      	<?php 
-      		$sqltipo = "SELECT Transaccion.tipoDePago, SUM(Transaccion.monto) as monto
-						from Venta join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
-						where Venta.idFolio = 334
-						group by Transaccion.tipoDePago;";
-			$querytipo = $connection->query($sqltipo);						
-			foreach($querytipo->fetchAll() as $rowtipo) 
-			    {
-			    	echo '<tr>
-					      		<td colspan="2"> Total en '.$rowtipo["tipoDePago"].': </td>
-					      		<td></td>
-					      		<td>'.$rowtipo["monto"].'</td>
-					      	</tr>';
-			    }
-      	 ?>
       	
-      	<tr>
-      		<td></td>
-      		<td>Dinero Entregado:</td>
-      		<td></td>
-      		<td><?php echo $cantidadPagada; ?> </td>
-      	</tr>
-      	<tr>
-      		<td></td>
-      		<td>Cambio:</td>
-      		<td></td>
-      		<td><?php echo $cambio; ?> </td>
-      	</tr>
       	<tr style="border-top: 1px dashed;">
       		<td colspan="5">Esta nota sera incluida en la Factura Global</td>
       	</tr>

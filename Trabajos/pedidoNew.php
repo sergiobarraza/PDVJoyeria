@@ -66,6 +66,8 @@
 	$mod = count($prenda_proceso);
 	$mod= $mod/3;
 	$tipopago = $_POST["tipopago"];
+	$Efectivo = $_POST["Efectivo"];
+	$Cambio = $_POST["Cambio"];
 	
 	if ($mod<1) 
 	{
@@ -116,6 +118,11 @@
 		$sqlTT = "INSERT INTO transaccion_trabajo (idTrabajo, idTransaccion) values($FolioTrabajoNuevo, $idTransaccion);";
 		$resultTT = mysqli_query($con, $sqlTT);
 
-	}	
-	header("Refresh:0; url=index.php?folio=$FolioTrabajoNuevo");
+	}
+	if ($tipopago == 'efectivo') {
+			header("Refresh:0; url=../imprimirticket_trabajos.php?folio=$FolioTrabajoNuevo&cantidad=$Efectivo&cambio=$Cambio");
+			exit;
+		}
+		
+	header("Refresh:0; url=../imprimirticket_trabajos.php?folio=$FolioTrabajoNuevo");
 ?>

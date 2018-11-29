@@ -9,7 +9,7 @@
 	$cantidad = $_POST["cantidad"];
 	$fecha = date("Y-m-d H:i:s");
 	$persona =$_SESSION['user'];
-	$almacen = $_POST["almacen"];
+	$almacen = $_POST["almacenEntrada"];
 	//$result1 = mysqli_query($con, $sql1);
 
 	if (isset($_POST['imprimir']) && $_POST['imprimir'] == 'Yes') 
@@ -36,7 +36,7 @@
 			
 	    } catch(PDOException $error) {
 	      echo $sql1 . "<br>" . $error->getMessage();
-			header("Location: inventario.php?status=errorconexion");
+			header("Location: inventario.php?status=errorconexion2");
 		     		exit;
 	    }
 					
@@ -56,11 +56,11 @@
     		  $row3 = $query3->fetch(PDO::FETCH_ASSOC);
   		      $folionuevo = $row3["idFolio"];*/
 
-		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idAlmacen) VALUES ($idProducto, $cantidad, '$fecha', $almacen);";
+		      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idAlmacen, comentario) VALUES ($idProducto, $cantidad, '$fecha', $almacen,'entrada');";
 		      $query4 = $connection->query($sql4);
 		    } catch(PDOException $error2) {
-		      echo $sql2 . "<br>" . $error2->getMessage();
-		      header("Location: inventario.php?status=errorconexion");
+		      echo $sql4 . "<br>" . $error2->getMessage();
+		      header("Location: inventario.php?status=errorconexion3");
   		     		exit;
 
 		    }

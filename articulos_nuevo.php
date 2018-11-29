@@ -17,7 +17,16 @@
 	$almacen = $_POST["almacen"];
 	$Min = $_POST["Min"];
 	$Costo = $_POST["Costo"];
+	$Procedencia = $_POST["Procedencia"];
 
+	if (isset($_POST['imprimir']) && $_POST['imprimir'] == 'Yes') 
+	{
+	    echo "Imprimiendo etiquetas";
+	}
+	else
+	{
+	    echo "No imprimir etiquetas";
+	}
 	//Busca el ultimo codigo e incrementa uno para agregar uno nuevo
 	try 
 	{
@@ -34,40 +43,48 @@
 //Da de alta el nuevo producto
 	try 
 	{
-      $sql = "INSERT INTO Producto (descuento, idDepartamento, idLinea, precio, imagenUrl, nombre, codigo) VALUES (0, $depto, $linea, $precio, 'img/no-image-placeholder.jpg','$nombre', $codigo);";							   
+      $sql = "INSERT INTO Producto (descuento, idDepartamento, idLinea, precio, imagenUrl, nombre, codigo, idProveedor, idTipoprod, idSubdepartamento, costo, preciomin, procedencia ) VALUES (0, $depto, $linea, $precio, 'img/no-image-placeholder.jpg','$nombre', $codigo, $Proveedor, $Tipoprod, $subdepto, $Costo, $Min, '$Procedencia');";
+      //echo $sql;							   
       $query = $connection->query($sql);
 		      
 
     } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
+      header("Refresh:0; url=articulos.php?status=errorarticulo");
+      exit;
     }
 
 //Revisa el id del producto recien agregado
     try 
     {
-  	  $sql1 = "SELECT idProducto from Producto order by idProducto desc limit 1;";
+  	  $sql1 = "SELECT idProducto, codigo from Producto order by idProducto desc limit 1;";
       $query1 = $connection->query($sql1);
       $row = $query1->fetch(PDO::FETCH_ASSOC);
       $idProducto = $row["idProducto"];
+      $codigo = $row["codigo"];
     	
     } catch (PDOException $error1) {
     	echo $sql1 . "<br>" . $error1->getMessage();
+    	header("Refresh:0; url=articulos.php?status=errorarticulo");
+      exit;
     }
 
 // Da entrada al nuevo producto
     try 
     {    		  
-      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idAlmacen) VALUES ($idProducto, $cantidad, '$fecha', $almacen);";	  
+      $sql4 = "INSERT INTO Inventario (idProducto, tipo, fecha, idAlmacen, comentario) VALUES ($idProducto, $cantidad, '$fecha', $almacen, 'entrada');";	  
 	  $query4 = $connection->query($sql4);
+	  //echo $sql4;
 				     	      
     } catch(PDOException $error2) {
       echo $sql4 . "<br>" . $error2->getMessage();
-
+      header("Refresh:0; url=articulos.php?status=errorarticulo");
+      exit;
     }
 	
 			
 			
 
-	header("Refresh:0; url=articulos.php?status=successarticulo&articulo=$idProducto&cantidad=$codigo");
+	header("Refresh:0; url=articulos.php?status=successarticulo&articulo=$codigo&cantidad=$cantidad");
 
 ?>

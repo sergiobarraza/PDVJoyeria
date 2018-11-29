@@ -190,32 +190,48 @@
 					    	<div class="col-sm-10">
 					      		<input type="text" class="form-control input-number" id="cantidad" min="1" max="99999" step=".01" name="cantidad" required value="1" data-oldValue="0">			      						      		
 					    	</div>
-					  	</div>					  	
+					  	</div>
+					  	<div class="form-group row">
+			    			<label for="Procedencia" class="col-sm-2 col-form-label">Procedencia:</label>
+			    			<div class="col-sm-10">
+			      				<select type="text" class="form-control" id="Procedencia" name="Procedencia" required >
+						      		<option>MEX</option>
+			      					<option>MEX4C</option>
+			      				</select>			      		
+			    			</div>
+			  			</div>					  	
 						<div class="form-group row">
-			    	<label for="almacen" class="col-sm-2 col-form-label">Almacen:</label>
-			    	<div class="col-sm-10">
-			      		<select type="text" class="form-control" id="almacen" name="almacen" required >
-			      		<?php
+			    			<label for="almacen" class="col-sm-2 col-form-label">Almacen:</label>
+			    			<div class="col-sm-10">
+			      				<select type="text" class="form-control" id="almacen" name="almacen" required >
+						      		<?php
 
-					      		try {
-								      $sql2 = "SELECT * From Almacen where name <> 'apartado';";							   
-								      $query2 = $connection->query($sql2);
-								      foreach($query2->fetchAll() as $row2) {
-										  echo "<option value='".$row2["idAlmacen"]."'>".$row2["name"]."</option>";
-										}
-								      
+								      		try {
+											      $sql2 = "SELECT * From Almacen where name <> 'apartado';";							   
+											      $query2 = $connection->query($sql2);
+											      foreach($query2->fetchAll() as $row2) {
+													  echo "<option value='".$row2["idAlmacen"]."'>".$row2["name"]."</option>";
+													}
+											      
 
-								    } catch(PDOException $error) {
-								      echo $sql . "<br>" . $error->getMessage();
+											    } catch(PDOException $error) {
+											      echo $sql . "<br>" . $error->getMessage();
 
-								    }
-								   
+											    }
+											   
 
-					      		?>	
+						      		?>	
 			      			
-			      		</select>			      		
-			    	</div>
-			  	</div>
+			      				</select>			      		
+			    			</div>
+			  			</div>
+			  			<div class="form-group row">
+						  	<div class="col-sm-3"></div>
+							<div class="form-check col-sm-5">	
+				 		 		<input class="form-check-input" type="checkbox" value="Yes" id="defaultCheck1" name="imprimir">
+				  				<label class="form-check-label" for="defaultCheck1">Imprimir etiquetas</label>
+							</div>
+						</div>
 					  	<div class="form-group row">
 						  	<div class="col-sm-2"></div>
 							<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</button>
@@ -238,10 +254,13 @@
             	<table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
               		<thead>
 		                <tr>	
-							<th>Código</th>
+							<th>#</th>
 							<th>name</th>
+							<th>Tipo</th>
 							<th>Linea</th>
 							<th>Departamento</th>
+							<th>Subdepartamento</th>
+							<th>Proveedor</th>
 							<th>Precio</th>	
 							<th>Editar</th>
 							<th>Imprimir</th>
@@ -249,7 +268,7 @@
 					</thead>
 					<tbody>
 	<?php
-	$sql1 = "SELECT Producto.idProducto, Producto.codigo, Producto.nombre as pname, Producto.precio, Linea.nombre as lname, Departamento.nombre as dname from Producto join Linea on Producto.idLinea = Linea.idLinea join Departamento on Producto.idDepartamento = Departamento.idDepartamento;";
+	$sql1 = "SELECT Producto.idProducto, Producto.codigo, Producto.nombre as pname, Producto.precio, Linea.nombre as lname, Departamento.nombre as dname, Subdepartamento.nombre as sname, Tipoprod.nombre as tname, Proveedor.nombre as provname from Producto join Linea on Producto.idLinea = Linea.idLinea join Departamento on Producto.idDepartamento = Departamento.idDepartamento join Subdepartamento on Subdepartamento.idSubdepartamento = Producto.idSubdepartamento join Tipoprod on Tipoprod.idTipoprod = Producto.idTipoprod join Proveedor on Proveedor.idProveedor = Producto.idProveedor;";
 	try {
 
 		$query1 = $connection->query($sql1);
@@ -257,8 +276,11 @@
 			echo "<tr>";
 				echo "<td>".$row1["codigo"]."</td>";
 				echo "<td>".$row1["pname"]."</td>";
+				echo "<td>".$row1["tname"]."</td>";
 				echo "<td>".$row1["lname"]."</td>";
 				echo "<td>".$row1["dname"]."</td>";
+				echo "<td>".$row1["sname"]."</td>";
+				echo "<td>".$row1["provname"]."</td>";
 				echo "<td>".$row1["precio"]."</td>";
 				
 			echo "<td><a class='btn btn-primary' href='articulos_editar.php?sku=".$row1["idProducto"]."'>Editar</a></td>";

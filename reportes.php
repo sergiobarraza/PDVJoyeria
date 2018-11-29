@@ -1,10 +1,10 @@
 <?php
 $pageSecurity = array("admin");
   	require "config/security.php";
-	include("header.php");
+	include("header-reportes.php");
 	require "config/database.php";
 ?>
-<script src="/js/datetime.js" type="text/javascript"></script>
+
   <!--Reportes-->
   	<div class="card mb-3">
         <div class="card-header"><i class="fa fa-area-chart"></i> Reporte</div>
@@ -90,15 +90,151 @@ $pageSecurity = array("admin");
 			  	<div class="form-group row">
         			<div class="col-sm-1"></div>
         			<div class="col-sm-2">
-						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">
-				    	<label for="linea" class="col-sm-11 col-form-labe pt-1 text-center">De:</label>
+
+				    	<label for="dedia" class="col-sm-11 col-form-labe pt-1 text-center">De:</label>
 			    	</div>
-			    	<div class="col-sm-9">
-			      		<input data-provide="datepicker" class="datepicker">			      		
+			    	<div class="col-sm-2">
+			      		<select type="text" class="form-control" id="dedia" placeholder="" name="dedia">
+			      			<option>1</option>
+			      			<option>2</option>
+			      			<option>3</option>
+			      			<option>4</option>
+			      			<option>5</option>
+			      			<option>6</option>
+			      			<option>7</option>
+			      			<option>8</option>
+			      			<option>9</option>
+			      			<option>10</option>
+			      			<option>11</option>
+			      			<option>12</option>
+			      			<option>13</option>
+			      			<option>14</option>
+			      			<option>15</option>
+			      			<option>16</option>
+			      			<option>17</option>
+			      			<option>18</option>
+			      			<option>19</option>
+			      			<option>20</option>
+			      			<option>21</option>
+			      			<option>22</option>
+			      			<option>23</option>
+			      			<option>24</option>
+			      			<option>25</option>
+			      			<option>26</option>
+			      			<option>27</option>
+			      			<option>28</option>
+			      			<option>29</option>
+			      			<option>30</option>
+			      			<option>31</option>			      			
+			      		</select>			      		
+			    	</div>
+			    	<div class="col-sm-4">
+			      		<select type="text" class="form-control" id="demes" placeholder="" name="demes">
+			      			<option value="1" >Enero</option>
+			      			<option value="2" >Febrero</option>
+			      			<option value="3" >Marzo</option>
+			      			<option value="4" >Abril</option>
+			      			<option value="5" >Mayo</option>
+			      			<option value="6" >Junio</option>
+			      			<option value="7" >Julio</option>
+			      			<option value="8" >Agosto</option>
+			      			<option value="9" >Septiembre</option>
+			      			<option value="10" >Octubre</option>
+			      			<option value="11" >Noviembre</option>
+			      			<option value="12" >Dic</option>			      					      			
+			      		</select>			      		
+			    	</div>
+			    	<div class="col-sm-3">
+			      		<select type="text" class="form-control" id="deano" placeholder="" name="deano">
+			    	<?php 
+			    		$year=date('Y');
+			    		//echo $year;
+			    		for ($i=2017; $i <= $year ; $i++) { 
+			    			echo "<option>".$i."</option>";
+			    		}
+			    	 ?>
+			    		</select>
 			    	</div>
 			  	</div>
+			  	<div class="form-group row">
+        			<div class="col-sm-1"></div>
+
+        			<div class="col-sm-2">
+        			<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">						
+				    	<label for="adia" class="col-sm-11 col-form-labe pt-1 text-center">A:</label>
+			    	</div>
+			    	<div class="col-sm-2">
+			      		<select type="text" class="form-control" id="adia" placeholder="" name="adia">
+			      			<option>1</option>
+			      			<option>2</option>
+			      			<option>3</option>
+			      			<option>4</option>
+			      			<option>5</option>
+			      			<option>6</option>
+			      			<option>7</option>
+			      			<option>8</option>
+			      			<option>9</option>
+			      			<option>10</option>
+			      			<option>11</option>
+			      			<option>12</option>
+			      			<option>13</option>
+			      			<option>14</option>
+			      			<option>15</option>
+			      			<option>16</option>
+			      			<option>17</option>
+			      			<option>18</option>
+			      			<option>19</option>
+			      			<option>20</option>
+			      			<option>21</option>
+			      			<option>22</option>
+			      			<option>23</option>
+			      			<option>24</option>
+			      			<option>25</option>
+			      			<option>26</option>
+			      			<option>27</option>
+			      			<option>28</option>
+			      			<option>29</option>
+			      			<option>30</option>
+			      			<option>31</option>			      			
+			      		</select>			      		
+			    	</div>
+			    	<div class="col-sm-4">
+			      		<select type="text" class="form-control" id="ames" placeholder="" name="ames">
+			      			<option value="1" >Enero</option>
+			      			<option value="2" >Febrero</option>
+			      			<option value="3" >Marzo</option>
+			      			<option value="4" >Abril</option>
+			      			<option value="5" >Mayo</option>
+			      			<option value="6" >Junio</option>
+			      			<option value="7" >Julio</option>
+			      			<option value="8" >Agosto</option>
+			      			<option value="9" >Septiembre</option>
+			      			<option value="10" >Octubre</option>
+			      			<option value="11" >Noviembre</option>
+			      			<option value="12" >Dic</option>			      					      			
+			      		</select>			      		
+			    	</div>
+			    	<div class="col-sm-3">
+			      		<select type="text" class="form-control" id="aano" value="2018" name="aano" >
+			    	<?php 
+			    		$year=date('Y');
+			    		//echo $year;
+			    		for ($i=2017; $i <= $year ; $i++) { 
+			    			echo "<option value='".$i."'";
+			    			if ($i == $year) {
+			    				echo " selected";
+			    			}
+			    			echo ">".$i."</option>";
+			    		}
+			    	 ?>
+			    		</select>
+			    	</div>
+			  	</div>
+			  
 			  	
-			  	
+
+
+	
 				<div class="form-group row">
 				  	<div class="col-sm-3"></div>
 					<button class="btn btn-secondary col-sm-12 col-md-3 ml-3"> Generar Reporte</button>
@@ -109,5 +245,5 @@ $pageSecurity = array("admin");
   	
        
 <?php
-	include "footer.php";
+	include "footer-reportes.php";
 ?>

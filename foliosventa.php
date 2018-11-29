@@ -82,12 +82,12 @@ require "config/database.php";
 	<?php 
 		if (isset($_GET['folioid'])) {
 			$folio = $_GET['folioid'];
-			echo 'window.open("imprimirticket.php?folio="+'.$folio.', "_blank");';
+			echo 'window.open("imprimirticket_reimpresion.php?folio="+'.$folio.', "_blank");';
 		}
 	 ?>
 	function myFunction(idfolio){
 		//locaition.href="mprimirticket.php?folio="+idfolio;
 		//var url = 
-		window.open("imprimirticket.php?folio="+idfolio, "_blank"); // will open new tab on window.onload
+		window.open("imprimirticket_reimpresion.php?folio="+idfolio, "_blank"); // will open new tab on window.onload
 	}
 </script>

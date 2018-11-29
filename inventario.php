@@ -8,6 +8,8 @@
 	$status="nada";
 	$codigo = "";
 	$cantidad = 0;
+	$entrada= 0;
+	$salida=0;
 	if (isset($_GET['status'])) {
 		$status = $_GET['status'];
 	}
@@ -16,6 +18,13 @@
 	}
 	if (isset($_GET['cantidad'])) {
 		$cantidad = $_GET['cantidad'];
+	}
+	if (isset($_GET['entrada'])) {
+		$entrada = $_GET['entrada'];
+
+	}
+	if (isset($_GET['salida'])) {
+		$salida = $_GET['salida'];
 	}
 	if ($status == 'successentrada') {
 		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -36,14 +45,14 @@
 	
 	<!-- Form-->
 	<div class="card mb-3" id="nuevaEntrada">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Entrada de productos </div>
+        <div class="card-header"><i class="fa fa-area-chart"></i> Entrada de productos <a class="btn btn-primary float-right p-1" onclick="ticketentradas();">Ticket Entradas</a></div>
         <div class="card-body">
         	<form method="Post" action="inventario_entrada.php">
         		
 				<div class="form-group row">
-			    	<label for="almacen" class="col-sm-2 col-form-label">Almacen:</label>
+			    	<label for="almacenEntrada" class="col-sm-2 col-form-label">Almacen:</label>
 			    	<div class="col-sm-10">
-			      		<select type="text" class="form-control" id="almacen" name="almacen" required >
+			      		<select type="text" class="form-control" id="almacenEntrada" name="almacenEntrada" required >
 			      		<?php
 
 					      		try {
@@ -93,8 +102,52 @@
         	</form>
         </div>
   	</div>
+  	<?php 
+  	if ($status == 'successmovimiento') {
+		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>¡Traspaso Correcto!</strong> Código de producto = '.$codigo.' / Cantidad = '.$cantidad.' articulos';
+			if($entrada > 0 and $salida >0){
+				$sqlout= "SELECT name from Almacen where idAlmacen = $salida;";
+				$queryout = $connection->query($sqlout);
+				$rowout = $queryout->fetch(PDO::FETCH_ASSOC);
+		     	echo '/ De '. $rowout["name"];
+
+				$sqlin= "SELECT name from Almacen where idAlmacen = $entrada;";
+				$queryin = $connection->query($sqlin);
+				$rowin = $queryin->fetch(PDO::FETCH_ASSOC);
+		     	echo ' Hacia '. $rowin["name"];
+
+		     	
+			}		 
+		echo 		'<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'errorAlm') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error! No se puede mover entre mismos almacenes  </strong>  
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'errorSKU') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error! Producto no valido  </strong>  
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'errorcantidad') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error! No hay suficientes productos para realizar este movimiento  </strong>  
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}
+	 ?>
   	<div class="card mb-3" id="nuevoMovimiento">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Movimiento entre inventarios <span style="color:green; display: <?php if ($status== 'successmovimiento') { echo "inline-block";} else {echo "none";}?>"> - Movimiento correcto</span><span style="color:red; display: <?php if ($status== 'errorSKU') { echo "inline-block";} else {echo "none";}?>"> - Producto no válido</span><span style="color:red; display: <?php if ($status== 'errorAlm') { echo "inline-block";} else {echo "none";}?>"> - No se puede mover entre mismo almacen</span></div>
+        <div class="card-header"><i class="fa fa-area-chart"></i> Movimiento entre inventarios</div>
         <div class="card-body">
         	<form method="Post" action="inventario_movimiento.php">
         		<div class="form-group row">
@@ -233,128 +286,7 @@
 		</div>
 	</div>
 
-  	<!--Reportes-->
-  	<div class="card mb-3">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Reporte</div>
-        <div class="card-body">
-        	<form method="Post" action="inventario_reporte.php">
-        		<div class="row">
-        			<span class="col-sm-12">Filtros:</span>
-        		</div>
-        		<div class="form-group row">
-        			<div class="col-sm-1"></div>
-        			<div class="col-sm-2">
-						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">
-				    	<label for="from" class="col-sm-11 col-form-labe pt-1 text-center">Sucursal:</label>
-			    	</div>
-			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="from" name="from" >
-			      		<?php
- 										$query = $connection->query($sql);
-								      foreach($query->fetchAll() as $row) {
-										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"];
-										}
-								   
-
-					      		?>	
-			      			
-			      		</select>			      		
-			    	</div>
-			  	</div>
-			  	<div class="form-group row">
-        			<div class="col-sm-1"></div>
-        			<div class="col-sm-2">
-						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">
-				    	<label for="linea" class="col-sm-11 col-form-labe pt-1 text-center">Linea:</label>
-			    	</div>
-			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="linea" placeholder="" >
-			      		<?php
-
-					      		try {
-								      
-								      $sql1 = "SELECT * From Linea;";							   
-								      $query1 = $connection->query($sql1);
-								      foreach($query1->fetchAll() as $row1) {
-										  echo "<option value='".$row1["idLinea"]."'>".$row1["nombre"];
-										}
-								      
-
-								    } catch(PDOException $error) {
-								      echo $sql1 . "<br>" . $error->getMessage();
-
-								    }
-								   
-
-					      		?>	
-			      			
-			      		</select>			      		
-			    	</div>
-			  	</div>
-			  	<div class="form-group row">
-        			<div class="col-sm-1"></div>
-        			<div class="col-sm-2">
-						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">
-				    	<label for="depto" class="col-sm-11 col-form-labe pt-1 text-center">Depto:</label>
-			    	</div>
-			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="depto" placeholder="" >
-			      		<?php
-
-					      		try {
-								      $sql2 = "SELECT * From Departamento;";							   
-								      $query2 = $connection->query($sql2);
-								      foreach($query2->fetchAll() as $row2) {
-										  echo "<option value='".$row2["idDepartamento"]."'>".$row2["nombre"];
-										}
-								      
-
-								    } catch(PDOException $error) {
-								      echo $sql2 . "<br>" . $error->getMessage();
-
-								    }
-								   
-
-					      		?>	
-			      			
-			      		</select>			      		
-			    	</div>
-			  	</div>
-			  	<div class="form-group row">
-        			<div class="col-sm-1"></div>
-        			<div class="col-sm-2">						
-				    	<label for="tipo" class="col-sm-11 col-form-labe pt-1 text-center">Tipo:</label>
-			    	</div>
-			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="tipo" placeholder="" >
-			      			<option>Entradas</option>
-			      			<option selected>Ventas</option>
-			      			<option>Apartados</option>
-		      				<option>Movimientos</option>
-		      				<option>Inventario</option>
-			      		</select>			      		
-			    	</div>
-			  	</div>
-			  	<div class="form-group row">
-        			<div class="col-sm-1"></div>
-        			<div class="col-sm-2">						
-				    	<label for="tipo" class="col-sm-11 col-form-labe pt-1 text-center">Salida:</label>
-			    	</div>
-			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="tipo" placeholder="" >
-			      			<option>Ticket</option>
-			      			<option>PDF</option>
-			      			<option>Excel</option>
-			      		</select>			      		
-			    	</div>
-			  	</div>
-				<div class="form-group row">
-				  	<div class="col-sm-3"></div>
-					<a class="btn btn-secondary col-sm-12 col-md-3 ml-3"> Generar Reporte</a>
-				</div>
-        	</form>
-        </div>
-  	</div>
+  	
   	<!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
@@ -463,3 +395,10 @@
 <?php
 	include "footer.php";
 ?>
+<script type="text/javascript">
+	function ticketentradas(){
+		var almacen = document.getElementById("almacenEntrada").value;
+
+		window.open("imprimirticket_entrada.php?folio="+almacen, "_blank");
+	}
+</script>
