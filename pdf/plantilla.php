@@ -8,10 +8,10 @@
 		function Header()
 		{
 
-			$this->image('images/logo.png', 5, 5, 30 );
+			$this->Image('images/logo.png', 10, 10, -300 );
 			$this->SetFont('Arial', 'B', 15);
 			$this->Cell(40);
-			$this->Cell(120,10, 'Detalle de articulos vendidos en una fecha especifica', 0, 0, 'C');
+			$this->Cell(100,10, 'Detalle de articulos vendidos en una fecha especifica', 0, 0, 'C');
 
 			$this->Ln(30);
 		}

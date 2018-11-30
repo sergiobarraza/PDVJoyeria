@@ -23,7 +23,7 @@
 			join Inventario on Venta.idInventario = Inventario.idInventario
 			join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
 			join Folio on Folio.idFolio = Venta.idFolio
-			where Venta.idFolio = $folio
+			where Venta.idFolio = $folio 
 			limit 1";
 
 		    //echo $sql;
@@ -73,13 +73,14 @@
 	      	try 
 	      	{
 		    
-		    	$sqlProductos = "SELECT Venta.idFolio,  Venta.idInventario, Producto.codigo, Producto.nombre,Inventario.tipo, SUM(Transaccion.monto), Venta.descuento
-				from Venta
-				join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
-				join Inventario on Venta.idInventario = Inventario.idInventario 
-				join Producto on Inventario.idProducto = Producto.idProducto
-				group by Venta.idFolio,  Venta.idInventario,Venta.descuento,Producto.codigo,Producto.nombre,Inventario.tipo
-				having Venta.idFolio = $folio";							   
+		    	$sqlProductos = "SELECT sum(b.monto) as monto, b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo  from (
+select Transaccion.monto, Venta.descuento, Venta.idFolio,  Venta.idInventario, Producto.codigo, Producto.nombre,Inventario.tipo from Venta
+join Inventario on Inventario.idInventario = Venta.idInventario
+join Producto on Inventario.idProducto = Producto.idProducto
+join Folio on Folio.idFolio = Venta.idFolio
+join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
+where Venta.idFolio = $folio and estado = 'Venta') as b
+group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";							   
 		    
 
 			    $query2 = $connection->query($sqlProductos);
@@ -88,12 +89,13 @@
 			    $Total = 0;		 
 			    foreach($query2->fetchAll() as $row) 
 			    {
-			    	$articulos++;
-			    	$totalpagado = $row["SUM(Transaccion.monto)"];
+			    	
+			    	$totalpagado = $row["monto"];
 			    	$totalpagadoR = floor($totalpagado*pow(10,2))/pow(10,2);
 			    	$Total = $Total + $totalpagadoR;
 			    	$descuento = $row["descuento"];
 			    	$cantidad = $row["tipo"] * (-1);
+			    	$articulos= $articulos + $cantidad;
 			    	//echo "Cantidad= ".$cantidad;
 			    	$unitario= ($totalpagado / $cantidad)/(1 - $descuento/100);
 			    	$Subtotal += $unitario;
@@ -171,7 +173,7 @@
 						    document.body.innerHTML = printContents;
 					    	window.print();
 					    	document.body.innerHTML = originalContents;
-					    	//window.close();
+					    	window.close();
 						}
 					</script>';
 			}else{

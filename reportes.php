@@ -16,27 +16,24 @@ $pageSecurity = array("admin");
 				    	<label for="tipo" class="col-sm-11 col-form-labe pt-1 text-center">Tipo:</label>
 			    	</div>
 			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="tipo" placeholder="" >
-			      			<option>Entradas</option>
+			      		<select type="text" class="form-control" id="tipo" name="tipo" >
+			      			<option>Conteo por linea</option>
 			      			<option selected>Ventas</option>
-			      			<option>Apartados</option>
+			      			<option>Reporte para surtir</option>
 		      				<option>Movimientos</option>
 		      				<option>Inventario</option>
 			      		</select>			      		
 			    	</div>
 			  	</div>
-        		<div class="row">
-        			<div class="col-sm-1"></div>
-        			<span class="col-sm-10 mb-4">Filtros:</span>
-        		</div>
+        		
         		<div class="form-group row">
         			<div class="col-sm-1"></div>
         			<div class="col-sm-2">
-						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">
+						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" name="sucursalcheck" id="sucursalcheck" value="Yes">
 				    	<label for="from" class="col-sm-11 col-form-labe pt-1 text-center">Sucursal:</label>
 			    	</div>
 			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="from" name="from" >
+			      		<select type="text" class="form-control" id="sucursal" name="sucursal" >
 			      		<?php
 			      			try{
 			      				$connection = new PDO($dsn, $username, $password, $options );
@@ -60,11 +57,11 @@ $pageSecurity = array("admin");
 			  	<div class="form-group row">
         			<div class="col-sm-1"></div>
         			<div class="col-sm-2">
-						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">
+						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" name="lineacheck" id="lineacheck" value="Yes">
 				    	<label for="linea" class="col-sm-11 col-form-labe pt-1 text-center">Linea:</label>
 			    	</div>
 			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="linea" placeholder="" >
+			      		<select type="text" class="form-control" id="linea" name="linea" >
 			      		<?php
 
 					      		try {
@@ -123,25 +120,42 @@ $pageSecurity = array("admin");
 			      			<option>26</option>
 			      			<option>27</option>
 			      			<option>28</option>
-			      			<option>29</option>
-			      			<option>30</option>
-			      			<option>31</option>			      			
+			      			<option id="feb11">29</option>
+			      			<option id="feb21">30</option>
+			      			<option id="half1">31</option>			      			
 			      		</select>			      		
 			    	</div>
 			    	<div class="col-sm-4">
-			      		<select type="text" class="form-control" id="demes" placeholder="" name="demes">
-			      			<option value="1" >Enero</option>
-			      			<option value="2" >Febrero</option>
-			      			<option value="3" >Marzo</option>
-			      			<option value="4" >Abril</option>
-			      			<option value="5" >Mayo</option>
-			      			<option value="6" >Junio</option>
-			      			<option value="7" >Julio</option>
-			      			<option value="8" >Agosto</option>
-			      			<option value="9" >Septiembre</option>
-			      			<option value="10" >Octubre</option>
-			      			<option value="11" >Noviembre</option>
-			      			<option value="12" >Dic</option>			      					      			
+			      		<select type="text" class="form-control" id="mes1" placeholder="" name="demes" onchange="hidedays(1);">
+			      			<?php 
+			      			$meses = array(
+								0 => "", 
+								1 => "Enero", 
+								2 => "Febrero", 
+								3 => "Marzo", 
+								4 => "Abril", 
+								5 => "Mayo", 
+								6 => "Junio", 
+								7 => "Julio", 
+								8 => "Agosto", 
+								9 => "Septiembre", 
+								10 => "Octubre", 
+								11 => "Noviembre", 
+								12 => "Diciembre", 
+								
+
+							);  
+			      				$month = date('m');
+			      				for ($i=1; $i <=12 ; $i++) { 
+			      					
+			      					echo '<option value="'.$i.'"';
+			      					if ($month == $i) 
+			      						echo "selected";
+			      					echo '>'. $meses[$i].'</option>';
+			      				}
+			      				
+							?>
+			      				      					      			
 			      		</select>			      		
 			    	</div>
 			    	<div class="col-sm-3">
@@ -149,9 +163,15 @@ $pageSecurity = array("admin");
 			    	<?php 
 			    		$year=date('Y');
 			    		//echo $year;
+			    		
 			    		for ($i=2017; $i <= $year ; $i++) { 
-			    			echo "<option>".$i."</option>";
+			    			echo "<option value='".$i."'";
+			    			if ($i == $year) {
+			    				echo " selected";
+			    			}
+			    			echo ">".$i."</option>";
 			    		}
+			    	
 			    	 ?>
 			    		</select>
 			    	</div>
@@ -160,7 +180,7 @@ $pageSecurity = array("admin");
         			<div class="col-sm-1"></div>
 
         			<div class="col-sm-2">
-        			<input class="form-check-input col-sm-1 mt-2 " type="checkbox" value="" id="defaultCheck1">						
+        			<input class="form-check-input col-sm-1 mt-2 " type="checkbox" name="checkhasta" id="checkhasta" value="Yes">						
 				    	<label for="adia" class="col-sm-11 col-form-labe pt-1 text-center">A:</label>
 			    	</div>
 			    	<div class="col-sm-2">
@@ -192,26 +212,42 @@ $pageSecurity = array("admin");
 			      			<option>25</option>
 			      			<option>26</option>
 			      			<option>27</option>
-			      			<option>28</option>
-			      			<option>29</option>
-			      			<option>30</option>
-			      			<option>31</option>			      			
+			      			<option >28</option>
+			      			<option id="feb12">29</option>
+			      			<option id="feb22">30</option>
+			      			<option id="half2">31</option>			      			
 			      		</select>			      		
 			    	</div>
 			    	<div class="col-sm-4">
-			      		<select type="text" class="form-control" id="ames" placeholder="" name="ames">
-			      			<option value="1" >Enero</option>
-			      			<option value="2" >Febrero</option>
-			      			<option value="3" >Marzo</option>
-			      			<option value="4" >Abril</option>
-			      			<option value="5" >Mayo</option>
-			      			<option value="6" >Junio</option>
-			      			<option value="7" >Julio</option>
-			      			<option value="8" >Agosto</option>
-			      			<option value="9" >Septiembre</option>
-			      			<option value="10" >Octubre</option>
-			      			<option value="11" >Noviembre</option>
-			      			<option value="12" >Dic</option>			      					      			
+			      		<select type="text" class="form-control" id="mes2" placeholder="" name="ames" onchange="hidedays(2);">
+			      			<?php 
+			      			$meses = array(
+								0 => "", 
+								1 => "Enero", 
+								2 => "Febrero", 
+								3 => "Marzo", 
+								4 => "Abril", 
+								5 => "Mayo", 
+								6 => "Junio", 
+								7 => "Julio", 
+								8 => "Agosto", 
+								9 => "Septiembre", 
+								10 => "Octubre", 
+								11 => "Noviembre", 
+								12 => "Diciembre", 
+								
+
+							);  
+			      				$month = date('m');
+			      				for ($i=1; $i <=12 ; $i++) { 
+			      					
+			      					echo '<option value="'.$i.'"';
+			      					if ($month == $i) 
+			      						echo "selected";
+			      					echo '>'. $meses[$i].'</option>';
+			      				}
+			      				
+							?>			      					      			
 			      		</select>			      		
 			    	</div>
 			    	<div class="col-sm-3">
@@ -247,3 +283,29 @@ $pageSecurity = array("admin");
 <?php
 	include "footer-reportes.php";
 ?>
+
+<script type="text/javascript">
+	 window.onload = function(){
+         hidedays(1);
+         hidedays(2);
+    }
+
+    function hidedays(number){
+    	var mes = document.getElementById("mes"+number).value;
+    	//alert(mes);
+    	if (mes == 2) {
+    		document.getElementById("feb1"+number).style.display = "none";
+    		document.getElementById("feb2"+number).style.display = "none";
+    		document.getElementById("half"+number).style.display = "none";
+    	}else if (mes == 1 || mes == 3 || mes == 5 || mes ==7 || mes ==8 ||mes ==10||mes ==12){
+    		document.getElementById("feb1"+number).style.display = "block";
+    		document.getElementById("feb2"+number).style.display = "block";
+    		document.getElementById("half"+number).style.display = "block";
+    	}else{
+    		document.getElementById("feb1"+number).style.display = "block";
+    		document.getElementById("feb2"+number).style.display = "block";
+    		document.getElementById("half"+number).style.display = "none";
+    	}
+    }
+
+</script>

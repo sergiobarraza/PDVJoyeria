@@ -93,12 +93,13 @@
 			    $Total = 0;		 
 			    foreach($query2->fetchAll() as $row) 
 			    {
-			    	$articulos++;
+			    	
 			    	$totalpagado = $row["SUM(Transaccion.monto)"];
 			    	$totalpagadoR = floor($totalpagado*pow(10,2))/pow(10,2);
 			    	$Total = $Total + $totalpagadoR;
 			    	$descuento = $row["descuento"];
 			    	$cantidad = $row["tipo"] * (-1);
+			    	$articulos= $articulos + $cantidad;
 			    	//echo "Cantidad= ".$cantidad;
 			    	$unitario= ($totalpagado / $cantidad)/(1 - $descuento/100);
 			    	$Subtotal += $unitario;

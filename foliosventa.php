@@ -21,10 +21,11 @@ require "config/database.php";
 	  try 
 	  {
         $connection = new PDO($dsn, $username, $password, $options );
-        $sql0= "SELECT Folio.idFolio, Folio.idPersona, Folio.fechaDeCreacion, EstadoDeFolio.nombre  
+        $sql0= "SELECT Folio.idFolio, Folio.idPersona, Folio.fechaDeCreacion, EstadoDeFolio.nombre, Persona.nombre as cliente, Persona.apellido  
 		from Venta 
 		join Folio on Venta.idFolio = Folio.idFolio
 		join EstadoDeFolio on EstadoDeFolio.idEstadosDeFolio = Folio.idEstadoDeFolio
+		join Persona on Folio.idPersona = Persona.idPersona
 		group by Folio.idFolio
 		limit 10000;";
         $query0 = $connection->query($sql0);
@@ -60,7 +61,7 @@ require "config/database.php";
 							  echo "<tr>
 							  			<td>".$row["idFolio"]."</td>
 										<td>".$row["idPersona"]."</td>
-										<td>".$row["idPersona"]."</td>
+										<td>".$row["cliente"]." ".$row["apellido"]."</td>
 										<td>".$row["fechaDeCreacion"]."</td>
 										<td>".$row["nombre"]."</td>
 										<td><input href='foliosventa.php?folio=".$row["idFolio"]."' class='btn btn-success' value='Seleccionar' onclick='myFunction(".$row["idFolio"].")'></td>
