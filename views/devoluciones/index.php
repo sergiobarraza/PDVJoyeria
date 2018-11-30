@@ -310,9 +310,24 @@
               uniqueInvs.push(item);
             }
           })
+          invList = [];
           uniqueInvs.map(( obj ) => {
             last_id_inventario = obj.idInventario;
 
+            if (obj.inventario.tipo < 0){
+              invList.push(obj);
+            } else {
+              let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
+              if ((item.inventario.tipo) == -1){
+                invList.splice($.inArray(item, invList), 1)
+              } else {
+                let itemQty = invList[$.inArray(item, invList)].inventario.tipo;
+                invList[$.inArray(item, invList)].inventario.tipo = parseInt(itemQty) +1;
+              }
+            }
+          });
+
+          invList.map((obj) => {
             var tipo = parseInt(obj.inventario.tipo) * -1;
             for(var i=0; i < tipo; i++){
               addFolioProductElement(obj.idInventario, obj.inventario.idProducto)

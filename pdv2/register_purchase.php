@@ -105,6 +105,7 @@
           "idAlmacen" => $idAlmacen,
           "idProducto" => intval($producto["id"]),
           "tipo" => $multiplier * $producto["qty"],
+          "comentario" => "venta",
           "fecha" => $data['fecha']
         );
 

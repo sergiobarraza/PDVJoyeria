@@ -94,6 +94,7 @@
           "idProducto" => intval($idProducto),
           "idAlmacen" => $idAlmacen,
           "tipo" => $tipo,
+          "comentario" => "venta",
           "fecha" => date("Y-m-d"),
         );
 
