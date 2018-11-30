@@ -140,12 +140,29 @@
             disabled>
         </div>
         <div>
-          Valor restante a pagar
+          Valor restante a cobrar
           <input
             placeholder="$$$"
             id="missing_payment"
             class="form-control"
             disabled>
+        </div>
+        <div style="padding-top: 10px;">
+          <span style="display: inline-block;width: 49%;">
+            <input
+              placeholder="Efectivo"
+              id="paidCash"
+              class="form-control"
+              disabled>
+          </span>
+          <span style="display: inline-block;width: 49%;">
+            <input
+              placeholder="A devolver"
+              id="returnCash"
+              class="form-control"
+              style=""
+              disabled>
+          </span>
         </div>
         <div>
           <button id="btn_accept_devolution" class="button_devolucion btn btn-primary">Aceptar devolucion</button>
@@ -257,6 +274,7 @@
       if(elementClicked){
         folio_selected = true;
         clearFolioProductElements();
+        $("#paidCash").prop("disabled", false);
         // agregar informacion del folio
         selectedRowInfo = data.find(obj => obj.idFolio == elementClicked.id);
 
@@ -342,6 +360,14 @@
       }
     });
 
+    $("#paidCash").change((e) => {
+      let toCharge = parseFloat($("#missing_payment").val());
+      let toPay = parseFloat($("#paidCash").val());
+      let toReturn = toPay - toCharge;
+      $("#returnCash").val(toReturn);
+
+    });
+
     $("#removeFolioBtn").click(function(e){
       if(elementClicked && folio_selected){
         clearFolioProductElements();
@@ -393,6 +419,8 @@
       $("#returned_products_value").val("");
       $("#missing_payment").val("");
       $("#folio_already_returned").hide();
+      $("#paidCash, #returnCash").val("");
+      $("#paidCash").prop("disabled", true);
     }
 
     function addRowElement(row){
