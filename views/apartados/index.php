@@ -238,11 +238,12 @@
       let precio = prod.precio * (100 - obj.descuento) / 100;
       let qty = obj.inventario.tipo;
       let paid = obj.transaccion ? obj.transaccion.monto : 0;
+      let dcto = (100 - obj.descuento) / 100;
       let str = "<tr class='venta-body__tr'>"
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>$"+((precio * qty) - parseFloat(paid)).toFixed(3)+"</td>"
+           str += "<td>$"+((precio * qty * dcto) - parseFloat(paid)).toFixed(3)+"</td>"
            str += "<td><input type='checkbox' class='form-control venta-body__chkbx' id='prod-"+obj.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)
