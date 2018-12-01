@@ -229,9 +229,17 @@
         current_debt = "Liquidado";
       }
       $("#ventInfo-folioDebt").text(current_debt);
-
-
     }
+
+    $("#cash_payment, #cash_received, #card_payment, #card_received").change(function(e) {
+      let cash_payment = parseFloat($("#cash_payment").val() || 0);
+      let card_payment = parseFloat($("#card_payment").val() || 0);
+      let cash_received = parseFloat($("#cash_received").val() || 0);
+      let card_received = parseFloat($("#card_received").val() || 0);
+      let change = $("#change");
+      change.val((cash_payment + card_payment) - (cash_received + card_received));
+    });
+
 
     function addProductToVentaInfo(obj) {
       let prod = products.find(e => e.idProducto == obj.inventario.idProducto);
