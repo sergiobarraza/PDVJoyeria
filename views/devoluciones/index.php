@@ -308,20 +308,8 @@
           }
         }
 
-        if(selectedRowInfo.venta[0].cobranza) {
-          deuda = selectedRowInfo.venta[0].cobranza.deudaTotal;
-        }
-
-        $("#info_codigo").text(selectedRowInfo.idFolio);
-        $("#info_nombre").text(selectedRowInfo.persona.nombre);
-        $("#info_almacen").text(selectedRowInfo.venta[0].almacen.name);
-        $("#info_num_productos").text(num_prods);
-        $("#info_monto_total").text(deuda);
-        $("#info_monto_debido").text((deuda - monto_pagado) > 0 ? deuda - monto_pagado : 0);
-
-        // Agregar lista de productos del folio
+        let uniqueInvs = [];
         if(selectedRowInfo.venta[0].inventario){
-          uniqueInvs = [];
           selectedRowInfo.venta.filter(function(item) {
             var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
             if(i <= -1) {
@@ -329,6 +317,19 @@
             }
           })
 
+        uniqueInvs.map(obj => {
+          selectedProductInfo = products.find(prod => prod.idProducto == obj.inventario.idProducto);
+          deuda += selectedProductInfo.precio * (100 - obj.descuento) / 100;
+        });
+
+        $("#info_codigo").text(selectedRowInfo.idFolio);
+        $("#info_nombre").text(selectedRowInfo.persona.nombre);
+        $("#info_almacen").text(selectedRowInfo.venta[0].almacen.name);
+        $("#info_num_productos").text(num_prods);
+        $("#info_monto_total").text("$ "+deuda);
+        $("#info_monto_debido").text("$" + ((deuda - monto_pagado) > 3 ? deuda - monto_pagado : 0));
+
+        // Agregar lista de productos del folio
           invList = [];
           uniqueInvs.map(( obj ) => {
             last_id_inventario = obj.idInventario;
