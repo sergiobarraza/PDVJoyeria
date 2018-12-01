@@ -186,7 +186,7 @@
     $.ajax({
       type: "POST",
       url: "../../devoluciones/index.php",
-      data: {folio_index: true},
+      data: {folio_index: { idEstadoDeFolio: 3}},
       dataType: "json",
       success: function(res){
         $("#folio-loader-parent").hide();

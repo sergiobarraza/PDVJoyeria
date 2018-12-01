@@ -51,7 +51,7 @@
 
   if(isset($_POST['folio_index'])) {
     try {
-      $sql = "SELECT * FROM Folio where idEstadoDeFolio = 3;";
+      $sql = "SELECT * FROM Folio where idEstadoDeFolio = ".$_POST['folio_index']['idEstadoDeFolio'].";";
 
       $statement = $connection->prepare($sql);
       $folios = $statement->execute();
