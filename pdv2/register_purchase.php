@@ -14,7 +14,7 @@
       global $connection, $data;
 
       $cobranza = array(
-        "monto" => $data['monto_total'] - $data['abono'],
+        "monto" => (($data['monto_total'] - $data['abono']) < 0 ? 0 : $data['monto_total'] - $data['abono']),
         "deudaTotal" => $data['monto_total'],
         "fecha" => $data['fecha']
       );
