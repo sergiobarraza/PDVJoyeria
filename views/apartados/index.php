@@ -167,30 +167,63 @@
       let prodCount = uniqueInvs.map((obj) => {return parseInt(obj.tipo)}).reduce((a, b) => a + b, 0);
       $("#ventaInfo-prodCount").text(prodCount * -1);
 
-         // lista de prods
-      let uniqueProds = uniqueInvs.map((obj) => {return addProductToVentaInfo(obj)});
-
          // lista de pagos
-      let payments = folio.venta.map((obj) => {return obj.transaccion});
       let uniqueTransaction = [];
       let paid_amount = 0;
-      payments.filter(function(item) {
-        var i = uniqueTransaction.findIndex(x => x.idTransaccion == item.idTransaccion);
-        if(i <= -1) {
-          let transaction = {idTransaccion: item.idTransaccion, concepto: item.concepto, tipoDePago: item.tipoDePago, monto: item.monto, fecha: item.fecha}
-          paid_amount += parseFloat(transaction.monto);
-          uniqueTransaction.push(transaction);
-          addPaymentHistoryElement(transaction);
-        }
-      });
+      if(folio.venta[0].transaccion) {
+        let payments = folio.venta.map((obj) => {return obj.transaccion});
+        payments.filter(function(item){
+          if(item){
+            var i = uniqueTransaction.findIndex(x => x.idTransaccion == item.idTransaccion);
+            if(i <= -1) {
+              uniqueTransaction.push(item);
+            }
+          }
+        });
+      }
 
+
+      if(folio.venta[0].inventario){
+        uniqueInvs = [];
+        folio.venta.filter(function(item) {
+          var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
+          if(i <= -1) {
+            uniqueInvs.push(item);
+          }
+        })
+
+        invList = [];
+        uniqueInvs.map(( obj ) => {
+          last_id_inventario = obj.idInventario;
+          if (obj.inventario.idAlmacen == 200) {
+            if (obj.inventario.tipo > 0){
+              invList.push(obj);
+            } else {
+              let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
+              if ((item.inventario.tipo) == -1){
+                invList.splice($.inArray(item, invList), 1)
+              } else {
+                let itemQty = invList[$.inArray(item, invList)].inventario.tipo;
+                invList[$.inArray(item, invList)].inventario.tipo = parseInt(itemQty) -1;
+              }
+            }
+          }
+        });
+
+        invList.map((obj) => {
+          addProductToVentaInfo(obj)
+          if(obj.transaccion && obj.transaccion.monto > 0) {
+            addPaymentHistoryElement(obj.transaccion);
+          }
+        });
+      }
 
       // deuda actual
       let current_debt;
       if (folio.idEstadoDeFolio == "1") {
-        let debt_amount = uniqueProds.reduce((a, b) => a + (b.price * b.qty * (100 - b.discount) / 100), 0);
-        current_debt = "$ "+ (debt_amount - paid_amount).toFixed(3);
-        debugger;
+        let last_cobranza = folio.venta.map((obj) => {return obj.cobranza}).filter(n => n).slice(-1)[0];
+        let paid_amount = uniqueTransaction.reduce((a, b) => a + parseFloat(b.monto), 0);
+        current_debt = "$ "+ last_cobranza.monto;
       } else {
         current_debt = "Liquidado";
       }
@@ -200,14 +233,15 @@
     }
 
     function addProductToVentaInfo(obj) {
-      let prod = products.find(e => e.idProducto == obj.idProducto);
+      let prod = products.find(e => e.idProducto == obj.inventario.idProducto);
       let precio = prod.precio * (100 - obj.descuento) / 100;
-      let qty = obj.tipo * -1;
+      let qty = obj.inventario.tipo;
+      let paid = obj.transaccion ? obj.transaccion.monto : 0;
       let str = "<tr class='venta-body__tr'>"
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>$"+precio * qty+"</td>"
+           str += "<td>$"+((precio * qty) - parseFloat(paid))+"</td>"
            str += "<td><input type='checkbox' class='form-control venta-body__chkbx' id='prod-"+obj.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)
