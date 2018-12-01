@@ -415,6 +415,12 @@
       }
     }
 
+    $('#checkoutModal').on('hidden.bs.modal', function () {
+      //parche para bug que genera varios folios al cerrar el modal y volver
+      //a abrirlo
+      document.location.reload();
+    })
+
     $("#purchaseButton").click(function(e){
       togglePurchaseButton();
       if(!$(this).hasClass('disabled')) {
