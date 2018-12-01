@@ -153,19 +153,20 @@
       let uniqueInvs = [];
       folio.venta.filter(function(item) {
         var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
-        if(i <= -1) {
+        if(i <= -1 && item.inventario.idAlmacen == 200) {
           uniqueInvs.push({
             idInventario: item.idInventario,
             idProducto: item.inventario.idProducto,
             tipo: item.inventario.tipo,
+            idAlmacen: item.inventario.idAlmacen,
             descuento: item.descuento
           });
         }
       });
 
         //num de productos
-      let prodCount = uniqueInvs.map((obj) => {return parseInt(obj.tipo)}).reduce((a, b) => a + b, 0);
-      $("#ventaInfo-prodCount").text(prodCount * -1);
+      let prodCount = uniqueInvs.reduce((a, b) => a + parseInt(b.tipo), 0);
+      $("#ventaInfo-prodCount").text(prodCount);
 
          // lista de pagos
       let uniqueTransaction = [];
@@ -241,7 +242,7 @@
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>$"+((precio * qty) - parseFloat(paid))+"</td>"
+           str += "<td>$"+((precio * qty) - parseFloat(paid)).toFixed(3)+"</td>"
            str += "<td><input type='checkbox' class='form-control venta-body__chkbx' id='prod-"+obj.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)

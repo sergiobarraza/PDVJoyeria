@@ -128,7 +128,9 @@
                       <td>
                         <input type="text" name="dcto" id="prod-total" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly="">
                       </td>
-                      <td><button class="btn btn-success" data-toggle="modal" data-target="#checkoutModal" onclick="fillCheckoutModal()">Checkout</button></td>
+                      <td>
+                        <button type ="button" class="btn btn-success" data-toggle="modal" data-target="#checkoutModal" onclick="fillCheckoutModal()">Checkout</button>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -180,7 +182,6 @@
   }
 
   $(document).ready(function(){
-
     $("#search_form").on('submit', function (e){
       e.preventDefault();
       var searchstr = $("#productid").val();
@@ -407,6 +408,10 @@
         if(btn.hasClass("disabled")){
           btn.removeClass("disabled");
         }
+      } else if(is_separated){
+        if(!btn.hasClass("disabled")){
+          btn.addClass("disabled");
+        }
       }
     }
 
@@ -456,6 +461,7 @@
           url: "pdv2/register_purchase.php",
           data: data,
           cache: false,
+          dataType: "json",
           success: function(result) {
             btn.text("OK!");
             let idFolio = result.folio;

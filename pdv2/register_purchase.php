@@ -180,6 +180,7 @@
         //Apartado
         createFolio($data['idPersona'], 1);
         $folioId = $connection->lastInsertId();
+        echo json_encode(['folio' => $folioId]);
 
         createCobranza();
         $cobranzaId = $connection->lastInsertId();

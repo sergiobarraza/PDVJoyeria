@@ -328,6 +328,7 @@
               uniqueInvs.push(item);
             }
           })
+
           invList = [];
           uniqueInvs.map(( obj ) => {
             last_id_inventario = obj.idInventario;
