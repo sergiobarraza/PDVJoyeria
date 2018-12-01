@@ -101,6 +101,7 @@
                 'idInventario' => $inv_row['idInventario'],
                 'idProducto' => $inv_row['idProducto'],
                 'tipo' => $inv_row['tipo'],
+                'idAlmacen' => $inv_row['idAlmacen'],
                 'fecha' => $inv_row['fecha']
               ];
             }
@@ -122,7 +123,7 @@
 
             $sql = "SELECT * FROM Almacen WHERE idAlmacen = ".$tra_row['idAlmacen'];
             $statement = $connection->prepare($sql);
-            $transaccion = $statement->execute();
+            $almacen = $statement->execute();
             $alm_row = $statement->fetch();
 
             $data[$key]['venta'][$venta_index]['almacen'] = [

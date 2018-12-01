@@ -118,7 +118,7 @@
                       </td>
                       <td class="pt-2">Dct</td>
                       <td>
-                        <input type="number" min="0" max="37" name="dcto" id="total-dcto" placeholder="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 80px;">
+                        <input type="number" value="30" min="0" max="37" name="dcto" id="total-dcto" placeholder="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 80px;">
                       </td>
                       <td class="pt-2">IVA</td>
                       <td>
@@ -162,7 +162,7 @@
       var price = parseFloat($("#price-"+this.id).text());
       $("#price-discount-"+this.id).text(parseFloat(price - price * disc / 100).toFixed(2));
       $("#total-price-"+this.id).text((parseFloat($("#price-discount-"+this.id).text() * qty).toFixed(2)));
-      return total += (totprice - (totprice * disc / 100) - (totprice * iva / 100));
+      return total += (price - (price * disc / 100) - (price * iva / 100)) * qty;
     });
     $("#prod-total").val(total);
   }
@@ -197,6 +197,7 @@
       })
       return false;
     });
+
     function appendNewProduct(result) {
       $("#productid").val("");
       $("#productid").focus();
@@ -205,7 +206,6 @@
         return this.id;
       });
       var candidateId = $(result).find('tr').prevObject.attr('id');
-
       if (ids.toArray().indexOf(candidateId) != -1){
         doAddProductQuantity(candidateId);
         // notify addition
@@ -237,7 +237,7 @@
     function changeGeneralSubotalPrice(){
       var total = 0;
       $("#salestable").children().map(function(){
-        return total += parseFloat($("#total-price-"+this.id).text());
+        return total += parseFloat($("#price-"+this.id).text() * $("#quantity-"+this.id).text() );
       });
       $("#prod-subtotal").val(parseFloat(total));
     }
@@ -319,15 +319,17 @@
 
     var nums = $(products).map(function(){ return parseFloat(this['qty'])}).toArray();
     var subtotal = $("#prod-subtotal").val();
-    var descuento = subtotal - $("#prod-total").val();
     var iva_total = $("#iva-total").val();
     var prod_total = $("#prod-total").val();
+    var descuento = subtotal - prod_total;
+
     $("#checkout-modal__products").append('<tr>');
     $("#checkout-modal__products").append('<td>'+nums.reduce((a,b)=> a + b, 0) + " Art(s)"+'</td>');
     $("#checkout-modal__products").append('<td></td>');
-    $("#checkout-modal__products").append('<td></td>');
-    $("#checkout-modal__products").append('<td>Subtotal: </td>');
-    $("#checkout-modal__products").append('<td>'+parseFloat(subtotal).toFixed(2)+'</td>');
+    $("#checkout-modal__products").append('<td style="border-top: 1px dashed black;"></td>');
+    $("#checkout-modal__products").append('<td style="border-top: 1px dashed black;">Subtotal: </td>');
+    $("#checkout-modal__products").append('<td style="border-top: 1px dashed black;">'+parseFloat(subtotal).toFixed(2)+'</td>');
+    $("#checkout-modal__products").append('<td style="border-top: 1px dashed black;"></td>');
     $("#checkout-modal__products").append('</tr>');
 
     $("#checkout-modal__products").append('<tr>');
@@ -454,7 +456,6 @@
           url: "pdv2/register_purchase.php",
           data: data,
           cache: false,
-          dataType: "json",
           success: function(result) {
             btn.text("OK!");
             let idFolio = result.folio;

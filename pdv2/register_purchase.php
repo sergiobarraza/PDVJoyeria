@@ -239,11 +239,13 @@
           createVenta($folioId, $inventarioId, $cobranzaId, $transactionId, $producto['porc_dcto'], "Venta");
           $idVenta = $connection->lastInsertId();
 
+          createInventario($producto, 200, +1);
+          $inventarioId = $connection->lastInsertId();
+
           if($transactionId2 > 0) {
             createVenta($folioId, $inventarioId, $cobranzaId, $transactionId2, $producto['porc_dcto'], "Venta");
           }
 
-          createInventario($producto, 200, +1);
         }
       }
     } catch(PDOException $error) {

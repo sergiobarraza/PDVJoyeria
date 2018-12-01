@@ -331,22 +331,23 @@
           invList = [];
           uniqueInvs.map(( obj ) => {
             last_id_inventario = obj.idInventario;
-
-            if (obj.inventario.tipo < 0){
-              invList.push(obj);
-            } else {
-              let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
-              if ((item.inventario.tipo) == -1){
-                invList.splice($.inArray(item, invList), 1)
+            if (obj.inventario.idAlmacen == 200) {
+              if (obj.inventario.tipo > 0){
+                invList.push(obj);
               } else {
-                let itemQty = invList[$.inArray(item, invList)].inventario.tipo;
-                invList[$.inArray(item, invList)].inventario.tipo = parseInt(itemQty) +1;
+                let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
+                if ((item.inventario.tipo) == -1){
+                  invList.splice($.inArray(item, invList), 1)
+                } else {
+                  let itemQty = invList[$.inArray(item, invList)].inventario.tipo;
+                  invList[$.inArray(item, invList)].inventario.tipo = parseInt(itemQty) -1;
+                }
               }
             }
           });
 
           invList.map((obj) => {
-            var tipo = parseInt(obj.inventario.tipo) * -1;
+            var tipo = parseInt(obj.inventario.tipo);
             for(var i=0; i < tipo; i++){
               addFolioProductElement(obj.idInventario, obj.inventario.idProducto)
             }
