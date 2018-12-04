@@ -114,7 +114,7 @@
               </select>
             </div>
             <div class="col-sm-1">
-            <input type="success" class="btn-success btn" value="Buscar">
+            <input type="success" class="btn-success btn" value="Buscar" onclick="goday();">
           </div>
 
           </div>
@@ -131,7 +131,7 @@
       <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p>
       <p style="padding:0; margin: 0;"> Fecha: <?php echo $fecha; ?> Hora: <?php echo $hora; ?> </p>
 
-      <p style="padding:0; margin: 0;">Proceso: Corte de caja</p>
+      <p style="padding:0; margin: 0;">Proceso: Corte de caja del dia</p>
       <?php 
       	$sql1 = "SELECT * from Transaccion where fecha = '$fecha' and idAlmacen = $almacen order by tipoDePago asc;";
         //echo $sql1;
@@ -234,5 +234,30 @@
      window.print();
 
      document.body.innerHTML = originalContents;
+}
+
+function hidedays(number){
+      var mes = document.getElementById("mes"+number).value;
+      //alert(mes);
+      if (mes == 2) {
+        document.getElementById("feb1"+number).style.display = "none";
+        document.getElementById("feb2"+number).style.display = "none";
+        document.getElementById("half"+number).style.display = "none";
+      }else if (mes == 1 || mes == 3 || mes == 5 || mes ==7 || mes ==8 ||mes ==10||mes ==12){
+        document.getElementById("feb1"+number).style.display = "block";
+        document.getElementById("feb2"+number).style.display = "block";
+        document.getElementById("half"+number).style.display = "block";
+      }else{
+        document.getElementById("feb1"+number).style.display = "block";
+        document.getElementById("feb2"+number).style.display = "block";
+        document.getElementById("half"+number).style.display = "none";
+      }
+    }
+function goday(){
+  var dia =document.getElementById("dedia").value;
+  var mes = document.getElementById("mes1").value;
+  var ano = document.getElementById("deano").value;
+  var fecha = ""+ano+"-"+mes+
+  location.href= "cortedecaja.php?fecha=";
 }
 </script>
