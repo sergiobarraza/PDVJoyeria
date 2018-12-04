@@ -74,6 +74,7 @@
           $("#withdraw-concepto").val("");
           $("#withdraw-qty").val("");
 
+          window.open("imprimirticket.php?idTransaccion="+res, "_blank");
           alert(res);
           if(confirm) {
             document.location.reload();
