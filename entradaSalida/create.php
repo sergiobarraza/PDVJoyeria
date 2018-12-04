@@ -38,7 +38,10 @@
   if(isset($_POST['deposit'])){
     try{
       $data = $_POST['deposit'];
-      echo createTransaction($_SESSION['almacen'], $data['monto'], $data['concepto'], "efectivo");
+      $res = [];
+      $res['idTransaccion'] = createTransaction($_SESSION['almacen'], $data['monto'], $data['concepto'], "efectivo");
+      $res['message'] = "La cantidad de $".$data['monto']." ha sido depositada exitosamente.";
+      echo json_encode($res);
     } catch(PDOException $error) {
       echo $error->getMessage();
     }
@@ -47,7 +50,10 @@
   if(isset($_POST['withdraw'])){
     try{
       $data = $_POST['withdraw'];
-      echo createTransaction($_SESSION['almacen'], -$data['monto'], $data['concepto'], "efectivo");
+      $res['idTransaccion'] = createTransaction($_SESSION['almacen'], -$data['monto'], $data['concepto'], "efectivo");
+      $res['message'] = "La cantidad de $".$data['monto']." ha sido retirada exitosamente.";
+      echo json_encode($res);
+
     } catch(PDOException $error) {
       echo $error->getMessage();
     }

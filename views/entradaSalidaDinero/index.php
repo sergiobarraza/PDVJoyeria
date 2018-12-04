@@ -67,6 +67,8 @@
         type: "POST",
         url: "../../entradaSalida/create.php",
         data: obj,
+        cache: false,
+        dataType: "json",
         success: function(res){
           $("#deposit-concepto").val("");
           $("#deposit-qty").val("");
@@ -74,8 +76,8 @@
           $("#withdraw-concepto").val("");
           $("#withdraw-qty").val("");
 
-          window.open("imprimirticket.php?idTransaccion="+res, "_blank");
-          alert(res);
+          window.open("imprimirticket.php?idTransaccion="+res.idTransaccion, "_blank");
+          alert(res.message);
           if(confirm) {
             document.location.reload();
           }
