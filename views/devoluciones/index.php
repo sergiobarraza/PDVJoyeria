@@ -321,6 +321,7 @@
           selectedProductInfo = products.find(prod => prod.idProducto == obj.inventario.idProducto);
           deuda += selectedProductInfo.precio * (100 - obj.descuento) / 100;
         });
+        deuda = deuda.toFixed(2);
 
         $("#info_codigo").text(selectedRowInfo.idFolio);
         $("#info_nombre").text(selectedRowInfo.persona.nombre);
@@ -333,23 +334,16 @@
           invList = [];
           uniqueInvs.map(( obj ) => {
             last_id_inventario = obj.idInventario;
-            if (obj.inventario.idAlmacen == 200) {
-              if (obj.inventario.tipo > 0){
-                invList.push(obj);
-              } else {
-                let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
-                if ((item.inventario.tipo) == -1){
-                  invList.splice($.inArray(item, invList), 1)
-                } else {
-                  let itemQty = invList[$.inArray(item, invList)].inventario.tipo;
-                  invList[$.inArray(item, invList)].inventario.tipo = parseInt(itemQty) -1;
-                }
-              }
+            let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
+            if (item && item.inventario.tipo == -1){
+              invList.splice($.inArray(item, invList), 1)
+            } else {
+              invList.push(obj);
             }
           });
 
           invList.map((obj) => {
-            var tipo = parseInt(obj.inventario.tipo);
+            var tipo = parseInt(obj.inventario.tipo)*-1;
             for(var i=0; i < tipo; i++){
               addFolioProductElement(obj.idInventario, obj.inventario.idProducto)
             }

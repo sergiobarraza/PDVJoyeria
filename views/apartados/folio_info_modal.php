@@ -73,7 +73,7 @@
                     Cantidad
                   </td>
                   <td>
-                    Deuda
+                    Saldo
                   </td>
                   <td>
                     Seleccionar
@@ -205,7 +205,4 @@
   .venta-body__chkbx {
     height: 19px;
   }
-
-
-
 </style>
