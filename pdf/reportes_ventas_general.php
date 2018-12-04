@@ -6,7 +6,7 @@
   $dsn      = "mysql:host=$host;dbname=$dbname";
   $options  = array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
   
-		$sucursal = $_GET['sucursal'];
+		//$sucursal = $_GET['sucursal'];
 		$ano = $_GET['ano'];
 		$mes = $_GET['mes'];
 		$dia = $_GET['dia'];
@@ -24,7 +24,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		join Linea on Producto.idLinea = Linea.idLinea
 		join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
         join EstadoDeFolio on Folio.idEstadoDeFolio = EstadoDeFolio.idEstadosDeFolio
-        where Inventario.tipo < 0 and Inventario.fecha = '$fecha' and Inventario.idAlmacen = $sucursal) as a
+        where Inventario.tipo < 0 and Inventario.fecha = '$fecha' ) as a
         group by a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  a.comentario, a.idAlmacen,  a.fecha
         order by a.idLinea asc
         ;";
@@ -49,10 +49,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
         
 	
 	$connection = new PDO($dsn, $username, $password, $options );
-	$sql2 = "SELECT name from Almacen where idAlmacen =$sucursal;";
-        $query2 = $connection->query($sql2);
-        $row2 = $query2->fetch(PDO::FETCH_ASSOC);
-        $name = $row2["name"];
+	
 	require 'C:/xampp/htdocs/PDVJoyeria/pdf/fpdf/fpdf.php';
 	class PDF Extends FPDF
 	{
@@ -92,7 +89,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		$pdf->Cell(200,5, 'Detalle de articulos vendidos en una fecha especifica', 0, 1, 'C');
 		$pdf->SetFont('Arial', '', 12);
 		$pdf->Cell(200,5, 'Fecha de venta: '.$dia.' de '.$meses[$mes].' del '.$ano ,0,1,'C');
-		$pdf->Cell(200,5, 'Sucursal: '.$name,0,0,'C');
+		$pdf->Cell(200,5, 'Sucursal: General',0,0,'C');
 		$pdf->Ln(10);
 
 		$pdf->Setfillcolor(232,232,232);

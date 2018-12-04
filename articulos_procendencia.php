@@ -4,8 +4,8 @@
   require "config/database.php";
 
 	$linea = $_POST["linea"];
-	$sql = "INSERT INTO Linea(nombre) VALUES ('$linea');";
-	echo $sql;
+	$sql = "INSERT INTO Procedencia(nombre) VALUES ('$linea');";
+	//echo $sql;
 	try {
       $connection = new PDO($dsn, $username, $password, $options );
 
@@ -18,9 +18,10 @@
       $statement->execute($new_user);
     } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
+      header("Refresh:0; url=articulos.php?status=errorprocendencia#nuevaLinea");
       
     }
  
-	header("Refresh:0; url=articulos.php?status=successlinea&articulo=$linea#nuevaLinea");
+	header("Refresh:0; url=articulos.php?status=successprocendencia&articulo=$linea#nuevaLinea");
 
 ?>

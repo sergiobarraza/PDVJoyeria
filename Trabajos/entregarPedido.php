@@ -36,5 +36,5 @@
 		}
 		
 	}
-	header("Refresh:0; url=index.php");
+	header("Refresh:0; url=../imprimirticket_entrega_trabajo.php");
 ?>

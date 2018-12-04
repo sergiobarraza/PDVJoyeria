@@ -1,3 +1,22 @@
+<?php  
+	$idProd = $_GET['idProd'];
+	$host     = "167.99.172.182";
+	  $username = "sergio";
+	  $password = "";
+	  $dbname   = "PDVJoyeria";
+	  $dsn      = "mysql:host=$host;dbname=$dbname";
+	  $options  = array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+	  $connection = new PDO($dsn, $username, $password, $options );
+	  $sql = "SELECT PRoducto.codigo, Producto.precio, Producto.procedencia, Tipoprod.nombre from Producto  join Tipoprod on Tipoprod.idTipoprod = Producto.idTipoprod
+	  where idProducto= $idProd";
+      $query = $connection->query($sql);
+      $row = $query2->fetch(PDO::FETCH_ASSOC);
+      $codigo = $row["codigo"];
+      $precio = $row["precio"];
+      $procedencia = $row["procedencia"];
+      $tipo = $row["nombre"];		
+?>
+
 <!DOCTYPE html>
 <html>
 <head>

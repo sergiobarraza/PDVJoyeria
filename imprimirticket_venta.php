@@ -204,7 +204,7 @@
 						    document.body.innerHTML = printContents;
 					    	window.print();
 					    	document.body.innerHTML = originalContents;
-					    	window.close();
+					    	//window.close();
 						}
 					</script>';
 			}else{

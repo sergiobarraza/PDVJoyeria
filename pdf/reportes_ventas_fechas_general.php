@@ -6,11 +6,15 @@
   $dsn      = "mysql:host=$host;dbname=$dbname";
   $options  = array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
   
-		$sucursal = $_GET['sucursal'];
+		//$sucursal = $_GET['sucursal'];
 		$ano = $_GET['ano'];
 		$mes = $_GET['mes'];
 		$dia = $_GET['dia'];
 		$fecha = "".$ano."-".$mes."-".$dia;
+		$Hano = $_GET['Hano'];
+		$Hmes = $_GET['Hmes'];
+		$Hdia = $_GET['Hdia'];
+		$fechafin = "".$Hano."-".$Hmes."-".$Hdia;
 
 	//include 'plantilla.php';
 	//require 'conexion.php';
@@ -24,7 +28,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		join Linea on Producto.idLinea = Linea.idLinea
 		join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
         join EstadoDeFolio on Folio.idEstadoDeFolio = EstadoDeFolio.idEstadosDeFolio
-        where Inventario.tipo < 0 and Inventario.fecha = '$fecha' and Inventario.idAlmacen = $sucursal) as a
+        where Inventario.tipo < 0 and Inventario.fecha >= '$fecha' and Inventario.fecha <= '$fechafin' ) as a
         group by a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  a.comentario, a.idAlmacen,  a.fecha
         order by a.idLinea asc
         ;";
@@ -49,10 +53,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
         
 	
 	$connection = new PDO($dsn, $username, $password, $options );
-	$sql2 = "SELECT name from Almacen where idAlmacen =$sucursal;";
-        $query2 = $connection->query($sql2);
-        $row2 = $query2->fetch(PDO::FETCH_ASSOC);
-        $name = $row2["name"];
+	
 	require 'C:/xampp/htdocs/PDVJoyeria/pdf/fpdf/fpdf.php';
 	class PDF Extends FPDF
 	{
@@ -91,18 +92,21 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		
 		$pdf->Cell(200,5, 'Detalle de articulos vendidos en una fecha especifica', 0, 1, 'C');
 		$pdf->SetFont('Arial', '', 12);
-		$pdf->Cell(200,5, 'Fecha de venta: '.$dia.' de '.$meses[$mes].' del '.$ano ,0,1,'C');
-		$pdf->Cell(200,5, 'Sucursal: '.$name,0,0,'C');
+		$pdf->Cell(200,5, 'Fecha de venta: ',0,1,'C');
+		$pdf->Cell(200,5, 'Del: '.$dia.' de '.$meses[$mes].' del '.$ano ,0,1,'C');
+		$pdf->Cell(200,5, 'Al : '.$Hdia.' de '.$meses[$Hmes].' del '.$Hano ,0,1,'C');
+		$pdf->Cell(200,5, 'Sucursal: General',0,0,'C');
 		$pdf->Ln(10);
 
 		$pdf->Setfillcolor(232,232,232);
 		$pdf->SetFont('Arial','B', 12);
-		$pdf->Cell(15, 6, '#', 1, 0, 'C', 1);
-		$pdf->Cell(35, 6, 'Linea', 1, 0, 'C', 1);
+		
+		$pdf->Cell(30, 6, 'Linea', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Codigo', 1, 0, 'C', 1);
 		$pdf->Cell(65, 6, 'Descripcion', 1, 0, 'C', 1);
 		$pdf->Cell(17, 6, 'Unidad', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Precio', 1, 0, 'C', 1);
+		$pdf->Cell(20, 6, 'Fecha', 1, 0, 'C', 1);
 		$pdf->Ln();
 
 		
@@ -119,13 +123,14 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 					$lineaShow = '';
 					$idLineaShow = '';
 				}
-				$monto = floor($row['monto']*pow(10,2))/pow(10,2);
-				$pdf->Cell(15, 6, $idLineaShow, 1, 0, 'C');
-				$pdf->Cell(35, 6, $lineaShow, 1, 0, 'C');
+				$monto = floor($row['monto']*pow(10,2))/pow(10	,2);
+				//$pdf->Cell(15, 6, $idLineaShow, 1, 0, 'C');
+				$pdf->Cell(30, 6, $lineaShow, 1, 0, 'C');
 				$pdf->Cell(30, 6, $row['codigo'], 1, 0, 'C');
 				$pdf->Cell(65, 6, $row['Descripcion'], 1, 0, 'C');
 				$pdf->Cell(17, 6, ($row['tipo'])*-1, 1, 0, 'C');
 				$pdf->Cell(30, 6, $monto, 1, 0, 'c');
+				$pdf->Cell(20, 6, $row['fecha'], 1, 0, 'C');
 				$pdf->Ln();
 
 			}

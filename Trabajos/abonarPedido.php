@@ -5,6 +5,8 @@
 	$folio = $_POST["folioName"];
 	$tipopago = $_POST["tipopago"];
 	$restante = $_POST["precioRestante"];
+	$Efectivo = $_POST["Efectivo1"];
+	$Cambio = $_POST["Cambio1"];
 	//echo $pago ." ". $folio. " ".$tipopago;
 	$fecha = date("Y-m-d H:i:s");
 	$sqlTransaccion = "INSERT INTO Transaccion ( monto, concepto, tipodePago, fecha, idAlmacen) values ($pago,'Trabajo','$tipopago', '$fecha', 1 );"; 
@@ -25,8 +27,8 @@
 	$rowResult = $estadoResult ->fetch_assoc();
 	if ($rowResult["estado"] < 2) {
 		echo "Aun no lo cambies";
-		header("Refresh:0; url=index.php");
-		exit;
+		//header("Refresh:0; url=index.php");
+		//exit;
 	}else{
 		$sql4 = "SELECT  SUM(Transaccion.monto), Trabajo.precio FROM transaccion_trabajo join Transaccion on transaccion_trabajo.idTransaccion =Transaccion.idTransaccion join Trabajo on transaccion_trabajo.idTrabajo = Trabajo.idTrabajo where transaccion_trabajo.idTrabajo = $folio";
 			$Result4 = mysqli_query($con, $sql4);
@@ -35,17 +37,20 @@
 			$TotalTrabajo = $row4["precio"];
 		if ($TotalTrabajo > $TotalabonadoBD){
 			echo "Aun no cambies";
-			header("Refresh:0; url=index.php");
-			exit;
+			//header("Refresh:0; url=index.php");
+			//exit;
 		}else{
 			$SQLupdate = "UPDATE Fila set estado = 3 where idFolio = $folio;";
 			$ResultUPDATE = mysqli_query($con, $SQLupdate);
 			echo $SQLupdate;
-			header("Refresh:0; url=index.php");
-			exit;
+			//header("Refresh:0; url=index.php");
+			//exit;
 		}
 		
 	}
-
-	header("Refresh:0; url=index.php");
-?>
+	if ($tipopago == 'efectivo') {
+			header("Refresh:0; url=../imprimirticket_abono_trabajo.php?folio=$folio&cantidad=$Efectivo&cambio=$Cambio");
+			exit;
+		}
+		
+	header("Refresh:0; url=../imprimirticket_abono_trabajo.php?folio=$folio");

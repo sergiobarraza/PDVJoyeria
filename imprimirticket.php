@@ -1,17 +1,20 @@
 <?php
 	$cantidadPagada=0;
 	$cambio =0;
+	$tarjeta=0;
 	if (isset($_GET['folio'])) {
 		$folio = $_GET['folio'];
-		if ($folio == "") {
-			echo "fallo";
-			header("Location: error.php");
-			exit;
-		}
-	}else{
-		header("Location: error.php");
-		exit;
 	}
+	if (isset($_GET['cambio'])) {
+		$cambio = $_GET['cambio'];
+	}
+	if (isset($_GET['cantidad_efectivo'])) {
+		$cantidadPagada = $_GET['cantidad_efectivo'];
+	}
+	if (isset($_GET['cantidad'])) {
+		$tarjeta = $_GET['cantidad_tarjeta'];
+	}
+	
 	$pageSecurity = array("admin");
 	require "config/security.php";
 	include("header-pdv.php");
@@ -85,18 +88,22 @@
 			    $query2 = $connection->query($sqlProductos);
 			    $Subtotal = 0;
 			    $articulos = 0;	
-			    $Total = 0;		 
+			    $Total = 0;	
+			    $descuentopesos=0;	 
 			    foreach($query2->fetchAll() as $row) 
 			    {
-			    	$articulos++;
+			    	
 			    	$totalpagado = $row["SUM(Transaccion.monto)"];
 			    	$totalpagadoR = floor($totalpagado*pow(10,2))/pow(10,2);
 			    	$Total = $Total + $totalpagadoR;
 			    	$descuento = $row["descuento"];
+
 			    	$cantidad = $row["tipo"] * (-1);
+			    	$articulos= $articulos + $cantidad;
 			    	//echo "Cantidad= ".$cantidad;
-			    	$unitario= ($totalpagado / $cantidad)/(1 - $descuento/100);
-			    	$Subtotal += $unitario;
+			    	$unitario= (($totalpagadoR / (1-$descuento/100)))/$cantidad;
+			    	$descuentopesos= $descuentopesos - $totalpagadoR + $unitario * $cantidad;
+			    	$Subtotal = $Subtotal + $unitario*$cantidad;
 			    	//echo "Unitairo= ".$unitario;
 			    //echo floor($totalpagado*pow(10,2))/pow(10,2);
 				  echo "<tr>
@@ -129,7 +136,7 @@
       		<td colspan="2"></td>
       		<td colspan="2">Dcto: </td>
 
-      		<td><?php $descuento= 100- $Total * 100 /$Subtotal; echo floor($descuento*pow(10,2))/pow(10,2); ?></td>
+      		<td><?php  echo floor($descuentopesos*pow(10,2))/pow(10,2); ?></td>
       	</tr>
       	<tr>
       		<td colspan="2"></td>
@@ -141,25 +148,15 @@
       			<?php include "numero_letras.php";echo numtowords($Total); ?>
       		</td>
       	</tr>
-      	<?php 
-      		$sqltipo = "SELECT Transaccion.tipoDePago, SUM(Transaccion.monto) as monto
-						from Venta join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
-						where Venta.idFolio = 334
-						group by Transaccion.tipoDePago;";
-			$querytipo = $connection->query($sqltipo);						
-			foreach($querytipo->fetchAll() as $rowtipo) 
-			    {
-			    	echo '<tr>
-					      		<td colspan="2"> Total en '.$rowtipo["tipoDePago"].': </td>
-					      		<td></td>
-					      		<td>'.$rowtipo["monto"].'</td>
-					      	</tr>';
-			    }
-      	 ?>
-      	
       	<tr>
       		<td></td>
-      		<td>Dinero Entregado:</td>
+      		<td>Pago Tarjeta:</td>
+      		<td></td>
+      		<td><?php echo $tarjeta; ?> </td>
+      	</tr>
+      	<tr>
+      		<td></td>
+      		<td>Efectivo Entregado:</td>
       		<td></td>
       		<td><?php echo $cantidadPagada; ?> </td>
       	</tr>
@@ -189,7 +186,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <?php 
     	 
-	    	if ($rows > 0) {	
+	    		
 	    		echo '<script type="text/javascript">
 						window.onload = function(){
 							var divName = "printableArea";
@@ -201,14 +198,9 @@
 					    	//window.close();
 						}
 					</script>';
-			}else{
-				echo '<script type="text/javascript">
-						window.onload = function(){
-						window.close();
-						}
-					</script>';
 		
-			}
+		
+		
 
      ?>
 <!--script type="text/javascript">

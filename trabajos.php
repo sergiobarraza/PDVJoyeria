@@ -16,7 +16,7 @@
     		<div class="col-sm-12 col-md-12">    	
 			    <!--Nuevo Linea-->
 			    <div class="card mb-3" id="nuevaLinea">
-			        <div class="card-header"><i class="fa fa-area-chart"></i> Nueva Prenda <span style="color:green; display: <?php if ($status== 'successlinea') { echo "inline-block";} else {echo "none";}?>"> - Linea nueva agregada</span><span style="color:red; display: <?php if ($status== 'errorlinea') { echo "inline-block";} else {echo "none";}?>"> - Error al agregar</span>
+			        <div class="card-header"><i class="fa fa-area-chart"></i> Nueva Prenda 
 			        </div>
 			        <div class="card-body">
 			        	<div class="row">
@@ -24,9 +24,9 @@
 					        	<form method="Post" action="trabajos_prenda.php">
 					        		
 					        		<div class="form-group row">
-								    	<label for="lineanew" class="col-sm-3 col-form-label">Nombre:</label>
+								    	<label for="prenda" class="col-sm-3 col-form-label">Nombre:</label>
 								    	<div class="col-sm-9">
-								      		<input type="text" class="form-control" id="lineanew" name="linea"  required>			      						      		
+								      		<input type="text" class="form-control" id="prenda" name="prenda"  required>			      						      		
 								    	</div>
 								  	</div>
 								  	

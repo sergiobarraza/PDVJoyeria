@@ -221,6 +221,86 @@
         	</form>
         </div>
   	</div>
+  	<?php 
+  		if ($status == 'successesalida') {
+		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>¡Nuevo Prodocuto Ingresado!</strong> Código de producto = '.$codigo.' / Cantidad = '.$cantidad.' articulos 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'errorsalidasku') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error! Codigo no existente - </strong> Código de producto = '.$codigo.' 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'errorsalidacantidad') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error! El producto no tiene suficientes unidades - </strong> Código de producto = '.$codigo.' 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}
+  	 ?>
+  	<div class="card mb-3" id="nuevaSalida">
+        <div class="card-header"><i class="fa fa-area-chart"></i> Salida inventarios</div>
+        <div class="card-body">
+        	<form method="Post" action="inventario_salida.php">
+        		<div class="form-group row">
+			    	<label for="from" class="col-sm-2 col-form-label">De:</label>
+			    	<div class="col-sm-10">
+			      		<select type="text" class="form-control" id="sucursal" name="sucursal" required >
+			      		<?php
+
+					      		try {
+								    							   
+								      $query = $connection->query($sql);
+								      foreach($query->fetchAll() as $row) {
+										  echo "<option value='".$row["idAlmacen"]."'>".$row["name"]."</option>";
+										}
+								      
+
+								    } catch(PDOException $error) {
+								      echo $sql . "<br>" . $error->getMessage();
+
+								    }
+								   
+
+					      		?>	
+			      			
+			      		</select>			      		
+			    	</div>
+			  	</div>			  
+        		<div class="form-group row">
+			    	<label for="sku3" class="col-sm-2 col-form-label">Código</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" class="form-control" id="sku3" name="sku"  onchange="buscarporSKU();" required>			      		
+			    	</div>
+			    	
+			  	</div>
+			  	<!--div class="form-group row">
+			    	<label for="desc2" class="col-sm-2 col-form-label">Descripcion</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" class="form-control" id="desc2" name="desc2" readonly="true">			      		
+			    	</div>			    
+			  	</div-->	
+			  	
+			  	<div class="form-group row">
+			    	<label for="cantidad1" class="col-sm-2 col-form-label">Cantidad</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" name="cantidad1" class="form-control input-number" value="1" min="1	" max="999" id="cantidad1" required>
+			    	</div>
+			  	</div>
+				<div class="form-group row">
+				  	<div class="col-sm-2"></div>
+					<button class="btn btn-primary col-sm-12 col-md-3 ml-3"> Salida</button>
+				</div>
+        	</form>
+        </div>
+  	</div>
   	<!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">

@@ -195,8 +195,20 @@
 			    			<label for="Procedencia" class="col-sm-2 col-form-label">Procedencia:</label>
 			    			<div class="col-sm-10">
 			      				<select type="text" class="form-control" id="Procedencia" name="Procedencia" required >
-						      		<option>MEX</option>
-			      					<option>MEX4C</option>
+						      		<?php 
+						      		try {
+											      $sqlProc = "SELECT * From Procedencia;";							   
+											      $queryProc = $connection->query($sqlProc);
+											      foreach($queryProc->fetchAll() as $rowProc) {
+													  echo "<option>".$rowProc["nombre"]."</option>";
+													}
+											      
+
+											    } catch(PDOException $error) {
+											      echo $sql . "<br>" . $error->getMessage();
+
+											    }
+											     ?>
 			      				</select>			      		
 			    			</div>
 			  			</div>					  	
@@ -470,7 +482,7 @@ if ($status == 'successlinea') {
 			</div>';
 		}elseif ($status == 'successtipo') {
 				echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id= "nuevotipo">
-							<strong>¡Nuevo Departamento Creado!</strong> Departamento: '.$codigo.'
+							<strong>¡Nuevo Departamento Creado!</strong> Tipo: '.$codigo.'
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 							    <span aria-hidden="true">&times;</span>
 							</button>
@@ -545,7 +557,47 @@ if ($status == 'successlinea') {
 			        </div>
 			  	</div>
 		  	</div>
-  		</div>	
+  		</div>
+  		<?php 
+  		if ($status == 'successprocendencia') {
+		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>¡Nueva Procedencia Creada!</strong> Procedencia: '.$codigo.' 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+		}elseif ($status == 'errorprocendencia') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error!</strong> 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+}
+  		 ?>
+  		<div class="card mb-3" id="nuevaLinea">
+			        <div class="card-header"><i class="fa fa-area-chart"></i> Nueva Procedencia </div>
+			        <div class="card-body">
+			        	<div class="row">
+			        		<div class="col-sm-12">
+					        	<form method="Post" action="articulos_procendencia.php">
+					        		
+					        		<div class="form-group row">
+								    	<label for="lineanew" class="col-sm-3 col-form-label">Nombre:</label>
+								    	<div class="col-sm-9">
+								      		<input type="text" class="form-control" id="lineanew" name="linea"  required>			      						      		
+								    	</div>
+								  	</div>
+								  	
+								  	<div class="form-group row">
+									  	<div class="col-sm-3"></div>
+										<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Agregar</button>
+									</div>
+					        	</form>
+					        </div>		        		       
+					    </div>
+			        </div>
+			  	</div>	
   		
 <?php
 	include "footer.php";

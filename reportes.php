@@ -16,17 +16,16 @@ $pageSecurity = array("admin");
 				    	<label for="tipo" class="col-sm-11 col-form-labe pt-1 text-center">Tipo:</label>
 			    	</div>
 			    	<div class="col-sm-9">
-			      		<select type="text" class="form-control" id="tipo" name="tipo" >
-			      			<option>Conteo por linea</option>
-			      			<option selected>Ventas</option>
-			      			<option>Reporte para surtir</option>
-		      				<option>Movimientos</option>
-		      				<option>Inventario</option>
+			      		<select type="text" class="form-control" id="tipo" name="tipo" onchange="hidefields();">
+			      			<option value="1">Conteo por linea</option>
+			      			<option selected value="2">Ventas</option>
+			      			<option value="3">Inventario</option>
+		      				
 			      		</select>			      		
 			    	</div>
 			  	</div>
         		
-        		<div class="form-group row">
+        		<div class="form-group row" id="divsuc">
         			<div class="col-sm-1"></div>
         			<div class="col-sm-2">
 						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" name="sucursalcheck" id="sucursalcheck" value="Yes">
@@ -37,7 +36,7 @@ $pageSecurity = array("admin");
 			      		<?php
 			      			try{
 			      				$connection = new PDO($dsn, $username, $password, $options );
-			      				$sql = "SELECT idAlmacen, name from Almacen;";
+			      				$sql = "SELECT idAlmacen, name from Almacen where name <> 'apartado';";
 			      				$query = $connection->query($sql);
 								
 								foreach($query->fetchAll() as $row) {
@@ -54,7 +53,7 @@ $pageSecurity = array("admin");
 			      		</select>			      		
 			    	</div>
 			  	</div>
-			  	<div class="form-group row">
+			  	<div class="form-group row" id="divlinea">
         			<div class="col-sm-1"></div>
         			<div class="col-sm-2">
 						<input class="form-check-input col-sm-1 mt-2 " type="checkbox" name="lineacheck" id="lineacheck" value="Yes">
@@ -84,7 +83,7 @@ $pageSecurity = array("admin");
 			      		</select>			      		
 			    	</div>
 			  	</div>
-			  	<div class="form-group row">
+			  	<div class="form-group row" id="divdesde">
         			<div class="col-sm-1"></div>
         			<div class="col-sm-2">
 
@@ -176,7 +175,7 @@ $pageSecurity = array("admin");
 			    		</select>
 			    	</div>
 			  	</div>
-			  	<div class="form-group row">
+			  	<div class="form-group row" id="divhasta">
         			<div class="col-sm-1"></div>
 
         			<div class="col-sm-2">
@@ -288,6 +287,7 @@ $pageSecurity = array("admin");
 	 window.onload = function(){
          hidedays(1);
          hidedays(2);
+         hidefields();
     }
 
     function hidedays(number){
@@ -307,5 +307,23 @@ $pageSecurity = array("admin");
     		document.getElementById("half"+number).style.display = "none";
     	}
     }
-
+    function hidefields(){
+    	var tipo =document.getElementById("tipo").value;
+    	if (tipo == 1) { //Conteo por linea
+    		document.getElementById("divhasta").style.display= "none";
+    		document.getElementById("divdesde").style.display= "none";
+    		document.getElementById("divlinea").style.display= "none";
+    		document.getElementById("divsuc").style.display= "flex";
+    	}else if(tipo == 2){ // Venta
+    		document.getElementById("divhasta").style.display= "flex";
+    		document.getElementById("divdesde").style.display= "flex";
+    		document.getElementById("divlinea").style.display= "none";
+    		document.getElementById("divsuc").style.display= "flex";
+    	}else if(tipo == 3){ //Inventario
+    		document.getElementById("divhasta").style.display= "none";
+    		document.getElementById("divdesde").style.display= "none";
+    		document.getElementById("divlinea").style.display= "flex";
+    		document.getElementById("divsuc").style.display= "flex";
+    	}
+    }
 </script>

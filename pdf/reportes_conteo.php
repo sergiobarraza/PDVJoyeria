@@ -7,26 +7,20 @@
   $options  = array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
   
 		$sucursal = $_GET['sucursal'];
-		$ano = $_GET['ano'];
-		$mes = $_GET['mes'];
-		$dia = $_GET['dia'];
-		$fecha = "".$ano."-".$mes."-".$dia;
+		//$ano = $_GET['ano'];
+		//$mes = $_GET['mes'];
+		//$dia = $_GET['dia'];
+		//$fecha = "".$ano."-".$mes."-".$dia;
+		$fecha = date("d - M - Y");
 
 	//include 'plantilla.php';
 	//require 'conexion.php';
 
-	$sql = "SELECT a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  SUM(a.monto) as monto,  a.comentario, a.idAlmacen,  a.fecha
-from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, Producto.codigo, Producto.nombre as Descripcion, Inventario.tipo,  Transaccion.monto,  Inventario.comentario, Inventario.idAlmacen,  Inventario.fecha
-		from Venta
-        join Inventario on Venta.idInventario = Inventario.idInventario
-		join Producto on Inventario.idProducto = Producto.idProducto
-		join Folio on Venta.idFolio = Folio.idFolio
-		join Linea on Producto.idLinea = Linea.idLinea
-		join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
-        join EstadoDeFolio on Folio.idEstadoDeFolio = EstadoDeFolio.idEstadosDeFolio
-        where Inventario.tipo < 0 and Inventario.fecha = '$fecha' and Inventario.idAlmacen = $sucursal) as a
-        group by a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  a.comentario, a.idAlmacen,  a.fecha
-        order by a.idLinea asc
+	$sql = "SELECT sum(Inventario.tipo) as total,Inventario.idAlmacen, Producto.idLinea, Linea.nombre as linea from Inventario
+join Producto on Inventario.idProducto = Producto.idProducto
+join Linea on Producto.idLinea = Linea.idLinea
+group by Producto.idLinea,Linea.nombre,Inventario.idAlmacen
+having idAlmacen = $sucursal
         ;";
         $meses = array(
 								0 => "", 
@@ -91,7 +85,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		
 		$pdf->Cell(200,5, 'Detalle de articulos vendidos en una fecha especifica', 0, 1, 'C');
 		$pdf->SetFont('Arial', '', 12);
-		$pdf->Cell(200,5, 'Fecha de venta: '.$dia.' de '.$meses[$mes].' del '.$ano ,0,1,'C');
+		$pdf->Cell(200,5, 'Fecha: '.$fecha ,0,1,'C');
 		$pdf->Cell(200,5, 'Sucursal: '.$name,0,0,'C');
 		$pdf->Ln(10);
 
@@ -99,10 +93,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		$pdf->SetFont('Arial','B', 12);
 		$pdf->Cell(15, 6, '#', 1, 0, 'C', 1);
 		$pdf->Cell(35, 6, 'Linea', 1, 0, 'C', 1);
-		$pdf->Cell(30, 6, 'Codigo', 1, 0, 'C', 1);
-		$pdf->Cell(65, 6, 'Descripcion', 1, 0, 'C', 1);
-		$pdf->Cell(17, 6, 'Unidad', 1, 0, 'C', 1);
-		$pdf->Cell(30, 6, 'Precio', 1, 0, 'C', 1);
+		$pdf->Cell(30, 6, 'Cantidad', 1, 0, 'C', 1);
 		$pdf->Ln();
 
 		
@@ -111,21 +102,10 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		$query = $connection->query($sql);
 			foreach($query->fetchAll() as $row)
 			{
-				if ($idLineaAnterior != $row['idLinea']) {
-					$idLineaAnterior = $row['idLinea'];
-					$lineaShow = $row['Linea'];
-					$idLineaShow = $row['idLinea'];
-				}else{
-					$lineaShow = '';
-					$idLineaShow = '';
-				}
-				$monto = floor($row['monto']*pow(10,2))/pow(10,2);
-				$pdf->Cell(15, 6, $idLineaShow, 1, 0, 'C');
-				$pdf->Cell(35, 6, $lineaShow, 1, 0, 'C');
-				$pdf->Cell(30, 6, $row['codigo'], 1, 0, 'C');
-				$pdf->Cell(65, 6, $row['Descripcion'], 1, 0, 'C');
-				$pdf->Cell(17, 6, ($row['tipo'])*-1, 1, 0, 'C');
-				$pdf->Cell(30, 6, $monto, 1, 0, 'c');
+				
+				$pdf->Cell(15, 6, $row['idLinea'], 1, 0, 'C');
+				$pdf->Cell(35, 6, $row['linea'], 1, 0, 'C');
+				$pdf->Cell(30, 6, $row['total'], 1, 0, 'C');
 				$pdf->Ln();
 
 			}
