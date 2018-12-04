@@ -162,9 +162,9 @@
       var iva = parseFloat($("#iva-total").val());
       var qty = parseFloat($("#quantity-"+this.id).text());
       var price = parseFloat($("#price-"+this.id).text());
-      $("#price-discount-"+this.id).text(parseFloat(price - price * disc / 100).toFixed(2));
-      $("#total-price-"+this.id).text((parseFloat($("#price-discount-"+this.id).text() * qty).toFixed(2)));
-      return total += (price - (price * disc / 100) - (price * iva / 100)) * qty;
+      $("#price-discount-"+this.id).text(parseFloat(qty * price * disc / 100).toFixed(2));
+      $("#total-price-"+this.id).text((parseFloat((price * qty) - $("#price-discount-"+this.id).text()).toFixed(2)));
+      return total += (price + (price * iva / 100)) * qty * (100 - disc)/100;
     });
     $("#prod-total").val(total);
   }
@@ -298,9 +298,9 @@
        obj["name"] = $(this).find(".prod-name").text();
        obj["price"] = $(this).find("#price-"+id).text();
        obj["porc_dcto"] = $(this).find("#discount-"+id).val();
-       obj["importe"] = $(this).find("#price-discount-"+id).text();
+       obj["dcto_total"] = $(this).find("#price-discount-"+id).text();
        obj["qty"] = $(this).find("#quantity-"+id).text();
-       obj["dcto"] = parseFloat($(this).find("#total-price-"+id).text() - obj["importe"]).toFixed(3);
+       obj["importe"] = $(this).find("#total-price-"+id).text();
 
       return obj;
     });
@@ -312,8 +312,8 @@
       $("#checkout-modal__products").append('<td>'+this['price']+'</td>')
       $("#checkout-modal__products").append('<td>'+this['qty']+'</td>')
       $("#checkout-modal__products").append('<td>'+parseFloat(this['porc_dcto']).toFixed(2)+'%</td>')
+      $("#checkout-modal__products").append('<td>'+parseFloat(this['dcto_total']).toFixed(2)+'</td>')
       $("#checkout-modal__products").append('<td>'+parseFloat(this['importe']).toFixed(2)+'</td>')
-      $("#checkout-modal__products").append('<td>'+parseFloat(this['importe'] * this['qty']).toFixed(2)+'</td>')
       $("#checkout-modal__products").append('</tr>');
       return true
     });
@@ -322,7 +322,7 @@
     var subtotal = $("#prod-subtotal").val();
     var iva_total = $("#iva-total").val();
     var prod_total = $("#prod-total").val();
-    var descuento = subtotal - prod_total;
+    var descuento = subtotal - (prod_total / (iva_total / 100 + 1));
 
     $("#checkout-modal__products").append('<tr>');
     $("#checkout-modal__products").append('<td>'+nums.reduce((a,b)=> a + b, 0) + " Art(s)"+'</td>');
@@ -471,7 +471,7 @@
           success: function(result) {
             btn.text("OK!");
             let idFolio = result.folio;
-            window.open("imprimirticket.php?folio="+idFolio, "_blank");
+            window.open("imprimirticket.php?folio="+idFolio+"&cambio="+(change || 0)+"&cantidad_efectivo="+cash+"&cantidad_tarjeta="+card, "_blank");
             document.location.reload();
           }
         })
