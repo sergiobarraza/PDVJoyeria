@@ -1,17 +1,9 @@
 <?php
 	$cantidadPagada=0;
 	$cambio =0;
-	if (isset($_GET['folio'])) {
-		$folio = $_GET['folio'];
-		if ($folio == "") {
-			echo "fallo";
-			header("Location: error.php");
-			exit;
+	if (isset($_GET['idTransaccion'])) {
+		$folio = $_GET['idTransaccion'];
 		}
-	}else{
-		header("Location: error.php");
-		exit;
-	}
 	$pageSecurity = array("admin");
 	require "config/security.php";
 	include("header-pdv.php");

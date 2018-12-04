@@ -20,7 +20,107 @@
 
   
 
-?>
+?><div class="container">
+  <form class="m-5">
+    <div class="form-group row" id="divdesde">
+              
+              <div class="col-sm-1">
+
+              <label for="dedia" class="col-sm-11 col-form-labe pt-1 text-center">Fecha:</label>
+            </div>
+            <div class="col-sm-2">
+                <select type="text" class="form-control" id="dedia" placeholder="" name="dedia">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                  <option>13</option>
+                  <option>14</option>
+                  <option>15</option>
+                  <option>16</option>
+                  <option>17</option>
+                  <option>18</option>
+                  <option>19</option>
+                  <option>20</option>
+                  <option>21</option>
+                  <option>22</option>
+                  <option>23</option>
+                  <option>24</option>
+                  <option>25</option>
+                  <option>26</option>
+                  <option>27</option>
+                  <option>28</option>
+                  <option id="feb11">29</option>
+                  <option id="feb21">30</option>
+                  <option id="half1">31</option>                  
+                </select>               
+            </div>
+            <div class="col-sm-4">
+                <select type="text" class="form-control" id="mes1" placeholder="" name="demes" onchange="hidedays(1);">
+                  <?php 
+                  $meses = array(
+                0 => "", 
+                1 => "Enero", 
+                2 => "Febrero", 
+                3 => "Marzo", 
+                4 => "Abril", 
+                5 => "Mayo", 
+                6 => "Junio", 
+                7 => "Julio", 
+                8 => "Agosto", 
+                9 => "Septiembre", 
+                10 => "Octubre", 
+                11 => "Noviembre", 
+                12 => "Diciembre", 
+                
+
+              );  
+                    $month = date('m');
+                    for ($i=1; $i <=12 ; $i++) { 
+                      
+                      echo '<option value="'.$i.'"';
+                      if ($month == $i) 
+                        echo "selected";
+                      echo '>'. $meses[$i].'</option>';
+                    }
+                    
+              ?>
+                                                
+                </select>               
+            </div>
+            <div class="col-sm-3">
+                <select type="text" class="form-control" id="deano" placeholder="" name="deano">
+            <?php 
+              $year=date('Y');
+              //echo $year;
+              
+              for ($i=2017; $i <= $year ; $i++) { 
+                echo "<option value='".$i."'";
+                if ($i == $year) {
+                  echo " selected";
+                }
+                echo ">".$i."</option>";
+              }
+            
+             ?>
+              </select>
+            </div>
+            <div class="col-sm-1">
+            <input type="success" class="btn-success btn" value="Buscar">
+          </div>
+
+          </div>
+          
+  </form>
+</div>
 <div id="printableArea" class="text-center" style="width: 4in; ">
       <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 45%;">
       <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 45%;">
