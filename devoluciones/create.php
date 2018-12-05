@@ -146,13 +146,13 @@
         if($data['folio']['idEstadoDeFolio'] == 1){
           // Productos devueltos salen de 200 y entran a almacen central id: 1
           retrieveProduct($data['folio'], $data['returned_products'], 200, null);
-          addProductToInv($data['folio'], $data['returned_products'], 1);
+          addProductToInv($data['folio'], $data['returned_products'], $_SESSION['almacen']);
           // Nuevos productos (reemplazo) salen del almacen y entran a apartados
           retrieveProduct($data['folio'], $data['new_products'], $_SESSION['almacen'], $data['transaction']);
           addProductToInv($data['folio'], $data['new_products'], 200);
 
         } elseif ($data['folio']['idEstadoDeFolio'] == 3) {
-          addProductToInv($data['folio'], $data['returned_products'], 1);
+          addProductToInv($data['folio'], $data['returned_products'], $_SESSION['almacen']);
           retrieveProduct($data['folio'], $data['new_products'], $_SESSION['almacen'], $data['transaction']);
         }
       } else {
