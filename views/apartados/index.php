@@ -142,12 +142,14 @@
     function fillModalInfo(folio) {
       // Informacion del cliente
       $(".modal-folioInfo_h3").text("Folio: "+folio.idFolio);
-      $(".folioState").text(folio.idEstadoDeFolio);
+      $(".folioState").text("Pendiente");
       $(".folioReturned").text(parseInt(folio.devuelto) ? "Si" : "No");
       $("#clientInfo_name").text(folio.persona.nombre +" "+folio.persona.apellido);
       $("#clientInfo_email").text(folio.persona.email);
       $("#clientInfo_rfc").text(folio.persona.rfc);
       $("#clientInfo_tel").text(folio.persona.tel);
+
+      $(".cancel-order").data("id", folio.idFolio);
 
       //informacion de la venta
       let uniqueInvs = [];
@@ -222,9 +224,10 @@
       // deuda actual
       let current_debt;
       if (folio.idEstadoDeFolio == "1") {
-        let last_cobranza = folio.venta.map((obj) => {return obj.cobranza}).filter(n => n).slice(-1)[0];
+        let folio_ventas = folio.venta.map((obj) => {return obj})
+        let last_venta = folio_ventas.filter(n => n.cobranza).slice(-1)[0];
         let paid_amount = uniqueTransaction.reduce((a, b) => a + parseFloat(b.monto), 0);
-        current_debt = "$ "+ last_cobranza.monto;
+        current_debt = "$ "+ parseFloat(last_venta.cobranza.deudaTotal * ((100 - parseFloat(last_venta.descuento))/100) - paid_amount).toFixed(3);
       } else {
         current_debt = "Liquidado";
       }

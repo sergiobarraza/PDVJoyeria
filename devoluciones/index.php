@@ -6,6 +6,19 @@
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
+
+  if(isset($_POST['cancel_folio'])) {
+    try {
+      $data = $_POST['cancel_folio'];
+      $sql = "UPDATE Folio SET idEstadoDeFolio = 2 WHERE idFolio =".$data['idFolio'].";";
+      $statement = $connection->prepare($sql);
+      $folios = $statement->execute();
+    } catch(PDOException $error) {
+      echo $sql . "<br>" . $error->getMessage();
+    }
+
+  }
+
   if(isset($_POST['folio_products_list'])) {
     try {
       $data = [];

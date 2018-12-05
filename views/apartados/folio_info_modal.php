@@ -134,12 +134,31 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" data-id="" class="btn btn-danger cancel-order" style="float: left;">Cancelar Orden</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary disabled" id="purchaseButton">Registrar</button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  $(".cancel-order").click((e) => {
+      $(".cancel-order").data();
+      if(confirm("Confirmas la cancelación del folio?")) {
+        $.ajax({
+          type: "POST",
+          url: "../../devoluciones/index.php",
+          data: {cancel_folio: { idFolio: $(".cancel-order").data("id")}},
+          success: function(res){
+            document.location.reload();
+          }
+         });
+
+      }
+  });
+</script>
+
 <style type="text/css">
   .modal-backdrop.in {
     opacity: 0.7;
@@ -204,5 +223,10 @@
 
   .venta-body__chkbx {
     height: 19px;
+  }
+
+  .modal-footer {
+    display: block;
+    text-align: right;
   }
 </style>
