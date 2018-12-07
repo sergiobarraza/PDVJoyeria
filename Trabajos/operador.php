@@ -39,7 +39,7 @@
   </head>
   <body class="w3-light-grey">
     <div class="w3-bar w3-black w3-hide-small">
-      <a href="logout.php" class="w3-bar-item w3-button">Cerrar sesión</a>
+      <a href="../logout.php" class="w3-bar-item w3-button">Cerrar sesión</a>
       <a href="#" class="w3-bar-item w3-button w3-right"><i class="fa fa-info-circle"></i></a>
     </div>
 

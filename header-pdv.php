@@ -1,3 +1,16 @@
+ <?php 
+  if ($_SESSION['tipo'] == "admin"  ) {
+        $showfullmenu = "block";
+        $showhalhmenu = "block";
+        
+      }elseif ($_SESSION['tipo'] == "supervisor") {
+        $showfullmenu = "none";
+        $showhalhmenu = "block";
+      }else{
+        $showfullmenu = "none";
+        $showhalhmenu = "none";
+      }
+  ?>
  <!DOCTYPE html>
 <html lang="en">
 
@@ -29,15 +42,15 @@
       </div>
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="/PDVJoyeria/index.php">Admin Panel</a>
-        <a href="/PDVJoyeria/pdv2.php">Punto de Venta</a>
-        <a href="/PDVJoyeria/foliosventa.php">Folios Venta</a>
-        <a href="/PDVJoyeria/views/apartados/index.php">Abonos</a>
-        <a href="/PDVJoyeria/Trabajos">Trabajos</a>
-        <a href="/PDVJoyeria/views/devoluciones/index.php">Devoluciones</a>
-        <a href="/PDVJoyeria/cortedecaja.php">Corte de caja</a>
-  
-        <a href="/PDVJoyeria/views/entradaSalidaDinero/index.php">Entrada y Salida de dinero</a>
+        <a href="/PDVJoyeria/index.php" style="display: <?php echo $showfullmenu; ?>">Admin Panel</a>
+        <a href="/PDVJoyeria/pdv2.php" style="display: block">Punto de Venta</a>
+        <a href="/PDVJoyeria/foliosventa.php" style="display: block">Folios Venta</a> 
+        <a href="/PDVJoyeria/views/apartados/index.php" style="display: block">Abonos</a>
+        <a href="/PDVJoyeria/Trabajos" style="display: block">Trabajos</a>
+        <a href="/PDVJoyeria/views/devoluciones/index.php" style="display: block">Devoluciones</a>
+        <a href="/PDVJoyeria/cortedecaja.php" style="display: <?php echo $showhalhmenu; ?>">Corte de caja</a>  
+        <a href="/PDVJoyeria/views/entradaSalidaDinero/index.php" style="display: <?php echo $showhalhmenu; ?>">Entrada y Salida de dinero</a>
+        <a href="/PDVJoyeria/logout.php" >Salir</a>
       </div>
       <span class="collapsed-menu" onclick="openNav()">&#9776;</span>
     </nav>

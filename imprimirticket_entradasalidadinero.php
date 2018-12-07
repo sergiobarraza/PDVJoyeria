@@ -4,7 +4,7 @@
 	if (isset($_GET['idTransaccion'])) {
 		$folio = $_GET['idTransaccion'];
 		}
-	$pageSecurity = array("admin");
+	$pageSecurity = array("admin", "supervisor","venta");
 	require "config/security.php";
 	include("header-pdv.php");
 	require "config/database.php";

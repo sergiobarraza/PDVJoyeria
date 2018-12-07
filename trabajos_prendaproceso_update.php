@@ -1,6 +1,7 @@
 <?php
 	include('Trabajos/conexion.php');
-
+	$pageSecurity = array("admin");
+require "config/security.php";
 	$id = $_POST["idproceso"];
 	$nombre = $_POST["nombre"];
 	$tiempoH = $_POST["tiempoH"];

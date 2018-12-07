@@ -1,5 +1,7 @@
 <?php
 	//include 'conexion.php';
+//$pageSecurity = array("admin");
+  //require "config/security.php";
 	require "config/database.php";
     require "config/common.php";
 
@@ -19,14 +21,7 @@
 	$Costo = $_POST["Costo"];
 	$Procedencia = $_POST["Procedencia"];
 
-	if (isset($_POST['imprimir']) && $_POST['imprimir'] == 'Yes') 
-	{
-	    echo "Imprimiendo etiquetas";
-	}
-	else
-	{
-	    echo "No imprimir etiquetas";
-	}
+	
 	//Busca el ultimo codigo e incrementa uno para agregar uno nuevo
 	try 
 	{
@@ -82,9 +77,17 @@
       exit;
     }
 	
+	if (isset($_POST['imprimir']) && $_POST['imprimir'] == 'Yes') 
+	{
+	    header("Refresh:0; url=etiquetas.php?producto=$idProducto&cantidad=$cantidad");
+	}
+	else
+	{
+	    header("Refresh:0; url=articulos.php?status=successarticulo&articulo=$codigo&cantidad=$cantidad");
+	}
 			
 			
 
-	header("Refresh:0; url=articulos.php?status=successarticulo&articulo=$codigo&cantidad=$cantidad");
+	//header("Refresh:0; url=articulos.php?status=successarticulo&articulo=$codigo&cantidad=$cantidad");
 
 ?>

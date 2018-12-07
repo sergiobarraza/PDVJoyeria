@@ -1,4 +1,6 @@
 <?php 
+$pageSecurity = array("admin");
+require "config/security.php";
 	$fecha = date("Y-m-d");
 	$tipo = $_POST["tipo"];
 	//echo $tipo;

@@ -15,17 +15,18 @@
 		$tarjeta = $_GET['cantidad_tarjeta'];
 	}
 	
-	$pageSecurity = array("admin");
+	$pageSecurity = array("admin", "supervisor","venta");
 	require "config/security.php";
 	include("header-pdv.php");
 	require "config/database.php";
 	try {
 	    $connection = new PDO($dsn, $username, $password, $options );
-	    $sql = "SELECT Venta.idFolio, Venta.idInventario, Inventario.idAlmacen, Almacen.name, Almacen.nombrefiscal, Almacen.rfc, Almacen.tel, Almacen.imagen, Almacen.address, Inventario.fecha,  Folio.idPersona, Almacen.codigoPostal
+	    $sql = "SELECT Venta.idFolio, Venta.idInventario, Inventario.idAlmacen, Almacen.name, Almacen.nombrefiscal, Almacen.rfc, Almacen.tel, Almacen.imagen, Almacen.address, Inventario.fecha,  Folio.idPersona, Almacen.codigoPostal, Persona.nombre, Persona.apellido
 			from Venta 
 			join Inventario on Venta.idInventario = Inventario.idInventario
 			join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
 			join Folio on Folio.idFolio = Venta.idFolio
+			join Persona on Folio.idPersona = Persona.idPersona
 			where Venta.idFolio = $folio
 			limit 1";
 
@@ -42,18 +43,18 @@
 	       	
 	    	
 ?>
-<div id="printableArea" style="width: 4in; margin: auto; text-align: center;">
-	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 45%;">
-	  <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 45%;">
-      <h2 style="padding:0; margin: 0;">Joyeria Claros</h2>
-      <h4 style="padding:0; margin: 0;"> <?php echo $row0["nombrefiscal"]; ?></h4>
-      <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
-      <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
-      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p>
-      <p style="padding:0; margin: 0;"> Fecha: <?php echo $row0["fecha"]; ?> </p>
-      <p style="padding:0; margin: 0;">Folio: <?php echo $row0["idFolio"]; ?></p>
-      <p style="padding:0; margin: 0;">Cliente: <?php echo $row0["idPersona"]; ?></p>
-      <p style="padding:0; margin: 0;">Proceso: Venta</p>
+<div id="printableArea" style="width: 4in; margin: 0; text-align: center;">
+	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 60%;">
+	  <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 38%;">
+      <h2 style="padding:0; margin: 0;text-transform: uppercase;">Joyeria Claros</h2>
+      <h4 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["nombrefiscal"]; ?></h4>
+      <h5 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["address"]; ?> </h5>
+      <p style="padding:0; margin: 0;text-transform: uppercase;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
+      <p style="padding:0; margin: 0;text-transform: uppercase;"> Tel: <?php echo $row0["tel"]; ?></p><br><br>
+      <p style="padding:0; margin: 0; font-weight: bold;text-align: left;"> Fecha: <?php echo $row0["fecha"]; ?> </p>
+      <p style="padding:0; margin: 0;text-align: left;">Folio: <?php echo $row0["idFolio"]; ?></p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;">Cliente: <?php echo $row0["nombre"]." ".$row0["apellido"]; ?></p>
+      <p style="padding:0; margin: 0;text-align: left;">Proceso: Venta</p>
       <table style="width: 100%;">
       	<thead >
 
@@ -63,10 +64,10 @@
 	      		<td>Cantidad</td>
 	      	</tr>
 	      	<tr style="border-bottom: 1px dashed;">
-	      		<td></td>
 	      		<td>P.Unit</td>
+	      		<td>$DCTO</td>
 	      		<td></td>
-	      		<td>Dcto</td>
+	      		<td>DCTO</td>
 	      		
 	      		<td>Importe</td>
 	      	</tr>
@@ -104,6 +105,7 @@
 			    	$unitario= (($totalpagadoR / (1-$descuento/100)))/$cantidad;
 			    	$descuentopesos= $descuentopesos - $totalpagadoR + $unitario * $cantidad;
 			    	$Subtotal = $Subtotal + $unitario*$cantidad;
+			    	$descuentopesos= $unitario - $totalpagadoR;
 			    	//echo "Unitairo= ".$unitario;
 			    //echo floor($totalpagado*pow(10,2))/pow(10,2);
 				  echo "<tr>
@@ -112,10 +114,10 @@
       						<td>".$cantidad."</td>
       					</tr>
       					<tr>
-      						<td></td>
       						<td>".$unitario."</td>
-      						<td></td>
       						<td>".$descuento."%</td>
+      						<td></td>
+      						<td>".$descuentopesos."</td>
       						<td>".$totalpagadoR."</td>
       					</tr>
       						";
@@ -173,7 +175,7 @@
       </tbody>
       </table>
       <BR>
-      <h5>NO HAY CAMBIO NI DEVOLUCIONES</h5>
+      <h5>NO HAY CAMBIO NI DEVOLUCIONES</h5><br><br>
 </div>
 <style>
 @page { size: auto;  margin: 0mm; }

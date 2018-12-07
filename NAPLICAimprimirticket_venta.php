@@ -17,7 +17,7 @@
 	if (isset($_GET['cambio'])) {
 		$cambio = $_GET['cambio'];
 	}
-	$pageSecurity = array("admin");
+	$pageSecurity = array("admin", "supervisor","venta");
 	require "config/security.php";
 	include("header-pdv.php");
 	require "config/database.php";

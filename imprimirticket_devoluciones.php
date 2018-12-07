@@ -19,7 +19,7 @@
 	}
 	$fecha = date("d-M-Y");
 
-	$pageSecurity = array("admin");
+	$pageSecurity = array("admin", "supervisor","venta");
 	require "config/security.php";
 	include("header-pdv.php");
 	require "config/database.php";

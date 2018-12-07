@@ -1,29 +1,33 @@
 <?php
 	$cantidadPagada=0;
 	$cambio =0;
+	$tarjeta=0;
 	if (isset($_GET['folio'])) {
 		$folio = $_GET['folio'];
-		if ($folio == "") {
-			echo "fallo";
-			header("Location: error.php");
-			exit;
-		}
-	}else{
-		header("Location: error.php");
-		exit;
 	}
-	$pageSecurity = array("admin");
+	if (isset($_GET['cambio'])) {
+		$cambio = $_GET['cambio'];
+	}
+	if (isset($_GET['cantidad_efectivo'])) {
+		$cantidadPagada = $_GET['cantidad_efectivo'];
+	}
+	if (isset($_GET['cantidad'])) {
+		$tarjeta = $_GET['cantidad_tarjeta'];
+	}
+	
+	$pageSecurity = array("admin", "supervisor","venta");
 	require "config/security.php";
 	include("header-pdv.php");
 	require "config/database.php";
 	try {
 	    $connection = new PDO($dsn, $username, $password, $options );
-	    $sql = "SELECT Venta.idFolio, Venta.idInventario, Inventario.idAlmacen, Almacen.name, Almacen.nombrefiscal, Almacen.rfc, Almacen.tel, Almacen.imagen, Almacen.address, Inventario.fecha,  Folio.idPersona, Almacen.codigoPostal
+	    $sql = "SELECT Venta.idFolio, Venta.idInventario, Inventario.idAlmacen, Almacen.name, Almacen.nombrefiscal, Almacen.rfc, Almacen.tel, Almacen.imagen, Almacen.address, Inventario.fecha,  Folio.idPersona, Almacen.codigoPostal, Persona.nombre, Persona.apellido
 			from Venta 
 			join Inventario on Venta.idInventario = Inventario.idInventario
 			join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
 			join Folio on Folio.idFolio = Venta.idFolio
-			where Venta.idFolio = $folio 
+			join Persona on Folio.idPersona = Persona.idPersona
+			where Venta.idFolio = $folio
 			limit 1";
 
 		    //echo $sql;
@@ -39,18 +43,18 @@
 	       	
 	    	
 ?>
-<div id="printableArea" style="width: 4in; margin: auto; text-align: center;">
+<div id="printableArea" style="width: 4in; margin: 0; text-align: center;">
 	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 45%;">
 	  <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 45%;">
-      <h2 style="padding:0; margin: 0;">Joyeria Claros</h2>
-      <h4 style="padding:0; margin: 0;"> <?php echo $row0["nombrefiscal"]; ?></h4>
-      <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
-      <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
-      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p>
-      <p style="padding:0; margin: 0;"> Fecha: <?php echo $row0["fecha"]; ?> </p>
-      <p style="padding:0; margin: 0;">Folio: <?php echo $row0["idFolio"]; ?></p>
-      <p style="padding:0; margin: 0;">Cliente: <?php echo $row0["idPersona"]; ?></p>
-      <p style="padding:0; margin: 0;">Proceso: Venta</p>
+      <h2 style="padding:0; margin: 0;text-transform: uppercase;">Joyeria Claros</h2>
+      <h4 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["nombrefiscal"]; ?></h4>
+      <h5 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["address"]; ?> </h5>
+      <p style="padding:0; margin: 0;text-transform: uppercase;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
+      <p style="padding:0; margin: 0;text-transform: uppercase;"> Tel: <?php echo $row0["tel"]; ?></p><br><br>
+      <p style="padding:0; margin: 0; font-weight: bold;text-align: left;"> Fecha: <?php echo $row0["fecha"]; ?> </p>
+      <p style="padding:0; margin: 0;text-align: left;">Folio: <?php echo $row0["idFolio"]; ?></p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;">Cliente: <?php echo $row0["nombre"]." ".$row0["apellido"]; ?></p>
+      <p style="padding:0; margin: 0;text-align: left;">Proceso: Venta</p>
       <table style="width: 100%;">
       	<thead >
 
@@ -60,10 +64,10 @@
 	      		<td>Cantidad</td>
 	      	</tr>
 	      	<tr style="border-bottom: 1px dashed;">
-	      		<td></td>
 	      		<td>P.Unit</td>
+	      		<td>$DCTO</td>
 	      		<td></td>
-	      		<td>Dcto</td>
+	      		<td>DCTO</td>
 	      		
 	      		<td>Importe</td>
 	      	</tr>
@@ -73,32 +77,35 @@
 	      	try 
 	      	{
 		    
-		    	$sqlProductos = "SELECT sum(b.monto) as monto, b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo  from (
-select Transaccion.monto, Venta.descuento, Venta.idFolio,  Venta.idInventario, Producto.codigo, Producto.nombre,Inventario.tipo from Venta
-join Inventario on Inventario.idInventario = Venta.idInventario
-join Producto on Inventario.idProducto = Producto.idProducto
-join Folio on Folio.idFolio = Venta.idFolio
-join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
-where Venta.idFolio = $folio and estado = 'Venta') as b
-group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";							   
+		    	$sqlProductos = "SELECT Venta.idFolio,  Venta.idInventario, Producto.codigo, Producto.nombre,Inventario.tipo, SUM(Transaccion.monto), Venta.descuento
+				from Venta
+				join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
+				join Inventario on Venta.idInventario = Inventario.idInventario 
+				join Producto on Inventario.idProducto = Producto.idProducto
+				group by Venta.idFolio,  Venta.idInventario,Venta.descuento,Producto.codigo,Producto.nombre,Inventario.tipo
+				having Venta.idFolio = $folio";							   
 		    
 
 			    $query2 = $connection->query($sqlProductos);
 			    $Subtotal = 0;
 			    $articulos = 0;	
-			    $Total = 0;		 
+			    $Total = 0;	
+			    $descuentopesos=0;	 
 			    foreach($query2->fetchAll() as $row) 
 			    {
 			    	
-			    	$totalpagado = $row["monto"];
+			    	$totalpagado = $row["SUM(Transaccion.monto)"];
 			    	$totalpagadoR = floor($totalpagado*pow(10,2))/pow(10,2);
 			    	$Total = $Total + $totalpagadoR;
 			    	$descuento = $row["descuento"];
+
 			    	$cantidad = $row["tipo"] * (-1);
 			    	$articulos= $articulos + $cantidad;
 			    	//echo "Cantidad= ".$cantidad;
-			    	$unitario= ($totalpagado / $cantidad)/(1 - $descuento/100);
-			    	$Subtotal += $unitario;
+			    	$unitario= (($totalpagadoR / (1-$descuento/100)))/$cantidad;
+			    	$descuentopesos= $descuentopesos - $totalpagadoR + $unitario * $cantidad;
+			    	$Subtotal = $Subtotal + $unitario*$cantidad;
+			    	$descuentopesos= $unitario - $totalpagadoR;
 			    	//echo "Unitairo= ".$unitario;
 			    //echo floor($totalpagado*pow(10,2))/pow(10,2);
 				  echo "<tr>
@@ -107,10 +114,10 @@ group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";
       						<td>".$cantidad."</td>
       					</tr>
       					<tr>
-      						<td></td>
       						<td>".$unitario."</td>
-      						<td></td>
       						<td>".$descuento."%</td>
+      						<td></td>
+      						<td>".$descuentopesos."</td>
       						<td>".$totalpagadoR."</td>
       					</tr>
       						";
@@ -131,7 +138,7 @@ group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";
       		<td colspan="2"></td>
       		<td colspan="2">Dcto: </td>
 
-      		<td><?php $descuento= 100- $Total * 100 /$Subtotal; echo floor($descuento*pow(10,2))/pow(10,2); ?></td>
+      		<td><?php  echo floor($descuentopesos*pow(10,2))/pow(10,2); ?></td>
       	</tr>
       	<tr>
       		<td colspan="2"></td>
@@ -151,7 +158,7 @@ group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";
       </tbody>
       </table>
       <BR>
-      <h5>NO HAY CAMBIO NI DEVOLUCIONES</h5>
+      <h5>NO HAY CAMBIO NI DEVOLUCIONES</h5><br><br>
 </div>
 <style>
 @page { size: auto;  margin: 0mm; }
@@ -164,7 +171,7 @@ group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";
     <script src="vendor/jquery/jquery.min.js"></script>
     <?php 
     	 
-	    	if ($rows > 0) {	
+	    		
 	    		echo '<script type="text/javascript">
 						window.onload = function(){
 							var divName = "printableArea";
@@ -173,17 +180,12 @@ group by b.descuento, b.idFolio, b.idInventario, b.codigo, b.nombre,b.tipo";
 						    document.body.innerHTML = printContents;
 					    	window.print();
 					    	document.body.innerHTML = originalContents;
-					    	window.close();
-						}
-					</script>';
-			}else{
-				echo '<script type="text/javascript">
-						window.onload = function(){
-						window.close();
+					    	//window.close();
 						}
 					</script>';
 		
-			}
+		
+		
 
      ?>
 <!--script type="text/javascript">

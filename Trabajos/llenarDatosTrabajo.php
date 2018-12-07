@@ -14,7 +14,23 @@
 	
 	for ($i=0; $i < $result->num_rows; $i++) {      
 	    $opcion = $result->fetch_assoc();
+	    $idCliente = $opcion["idCliente"];
 	    array_push($array, $opcion);
+	}
+
+	include "../config/database.php";
+	try 
+	{
+      $connection = new PDO($dsn, $username, $password, $options );
+	  $sql0 = "SELECT  nombre, apellido from Persona where idPersona =$idCliente;";
+	  $query0 = $connection->query($sql0);
+	  $row0 = $query0->fetch(PDO::FETCH_ASSOC);
+	  //$nombre = "".$row0["nombre"]." ".$row0["apellido"];
+	  array_push($array, $row0);
+		  
+	} catch (PDOException $error0) {
+	  echo $sql0 . "<br>" . $error0->getMessage();
+	
 	}
 
 	echo json_encode($array);

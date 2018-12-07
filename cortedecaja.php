@@ -7,7 +7,11 @@
   $hora = date("H:i:s");
   $almacen = $_SESSION['almacen'];
   include "header-pdv.php";
-  
+  if (isset($_GET['fecha'])) {
+    $fechacorte = $_GET['fecha'];
+  }else{
+    $fechacorte = date("Y-m-d ");
+  }
   try   
   {
 		  $sql0 = "SELECT * from Almacen where idAlmacen = $almacen;";
@@ -131,9 +135,9 @@
       <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p>
       <p style="padding:0; margin: 0;"> Fecha: <?php echo $fecha; ?> Hora: <?php echo $hora; ?> </p>
 
-      <p style="padding:0; margin: 0;">Proceso: Corte de caja del dia</p>
+      <p style="padding:0; margin: 0;">Proceso: Corte de caja del dia <?php echo $fechacorte; ?></p>
       <?php 
-      	$sql1 = "SELECT * from Transaccion where fecha = '$fecha' and idAlmacen = $almacen order by tipoDePago asc;";
+      	$sql1 = "SELECT * from Transaccion where fecha = '$fechacorte' and idAlmacen = $almacen order by tipoDePago asc;";
         //echo $sql1;
         $query1 = $connection->query($sql1);
       ?>
@@ -165,7 +169,7 @@
       <tfoot >
       	<tr>
       	<?php 
-          $sql2= "SELECT sum(monto) as monto from Transaccion where fecha = '$fecha' and idAlmacen = $almacen and tipoDePago ='efectivo';";
+          $sql2= "SELECT sum(monto) as monto from Transaccion where fecha = '$fechacorte' and idAlmacen = $almacen and tipoDePago ='efectivo';";
           $query2 = $connection->query($sql2);
           $row2 = $query2->fetch(PDO::FETCH_ASSOC);
           $formatted_number = number_format((float)$row2["monto"], 2, '.', '');
@@ -177,7 +181,7 @@
       	</tr>
         <tr>
           <?php 
-            $sql3= "SELECT sum(monto) as monto from Transaccion where fecha = '$fecha' and idAlmacen = $almacen and tipoDePago ='tarjeta';";
+            $sql3= "SELECT sum(monto) as monto from Transaccion where fecha = '$fechacorte' and idAlmacen = $almacen and tipoDePago ='tarjeta';";
             $query3 = $connection->query($sql3);
             $row3 = $query3->fetch(PDO::FETCH_ASSOC);
             $formatted_number = number_format((float)$row3["monto"], 2, '.', '');
@@ -189,7 +193,7 @@
         </tr>
         <tr style="border-bottom: 1px dashed;height: 20px;">
         <?php 
-          $sql4= "SELECT sum(monto) as monto from Transaccion where fecha = '$fecha' and idAlmacen = $almacen;";
+          $sql4= "SELECT sum(monto) as monto from Transaccion where fecha = '$fechacorte' and idAlmacen = $almacen;";
           $query4 = $connection->query($sql4);
           $row4 = $query4->fetch(PDO::FETCH_ASSOC);
           $formatted_number = number_format((float)$row4["monto"], 2, '.', '');
@@ -257,7 +261,12 @@ function goday(){
   var dia =document.getElementById("dedia").value;
   var mes = document.getElementById("mes1").value;
   var ano = document.getElementById("deano").value;
-  var fecha = ""+ano+"-"+mes+
-  location.href= "cortedecaja.php?fecha=";
+  var fecha = ""+ano+"-"+mes+"-";
+  if (dia <10) {
+    fecha = fecha + "0" + dia;
+  }else{
+    fecha = fecha + dia;
+  }
+  location.href= "cortedecaja.php?fecha="+fecha;
 }
 </script>

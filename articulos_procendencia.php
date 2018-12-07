@@ -1,6 +1,5 @@
  <?php
-	$pageSecurity = array("admin");
-  require "config/security.php";
+	
   require "config/database.php";
 
 	$linea = $_POST["linea"];

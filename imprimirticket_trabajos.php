@@ -8,7 +8,7 @@
 		$folio = $_GET['folio'];
 		
 	}
-	$pageSecurity = array("admin");
+	$pageSecurity = array("admin", "supervisor","venta");
 	require "config/security.php";
 	include("header-pdv.php");
 	require "config/database.php";
@@ -32,9 +32,19 @@
 	$costo = $row2["precio"];
 	$cliente = 	$row2["idCliente"];
 	$comentario = $row2["comentario"];
-	    	
+	try {
+	    
+	    $sqlcliente = "SELECT nombre, apellido from Persona where idCliente = $cliente;";
+	    $querycliente = $connection->query($sqlcliente);  		      
+	    $rowcliente = $querycliente->fetch(PDO::FETCH_ASSOC);
+	    
+
+	    } 	catch(PDOException $error) {
+	      	echo $sql . "<br>" . $error->getMessage();
+
+	    }    	
 ?>
-<div id="printableArea" style="width: 4in; margin: auto; text-align: center;">
+<div id="printableArea" style="width: 4in; margin: 0; text-align: center;">
 	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 45%;">
       <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 45%;">
       <h2 style="padding:0; margin: 0;">Joyeria Claros</h2>
@@ -42,11 +52,11 @@
       <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
       <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
       <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p><br>
-      <p style="padding:0; margin: 0;"> Fecha: <?php echo $fecha; ?> Hora: <?php echo $hora; ?> </p>
+      <p style="padding:0; margin: 0;"> Fecha: <?php echo $fecha; ?>      Hora: <?php echo $hora; ?> </p>
 
       <p style="padding:0; margin: 0;">Proceso: Anticipo de Trabajo</p>
       <p style="padding:0; margin: 0;">Folio: <?php echo $folio; ?></p>
-      <p style="padding:0; margin: 0;">Cliente: <?php echo $cliente; ?></p>
+      <p style="padding:0; margin: 0;">Cliente: <?php echo $rowcliente["nombre"]." ".$rowcliente["apellido"]; ?></p>
       <table style="width: 100%;">
       	<thead >
 	      	<tr style="border-top: 1px dashed;border-bottom: 1px dashed;">

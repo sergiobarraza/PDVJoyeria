@@ -2,6 +2,8 @@
 if (isset($_GET['prenda'])) {
 		$idprenda = $_GET['prenda'];
 	}
+	$pageSecurity = array("admin", "supervisor");
+require "config/security.php";
 include('header.php');
 include('Trabajos/conexion.php');
 ?>

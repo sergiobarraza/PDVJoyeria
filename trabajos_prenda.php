@@ -1,5 +1,6 @@
 <?php
-
+	$pageSecurity = array("admin");
+require "config/security.php";
 	include('Trabajos/conexion.php');
 	$prenda = $_POST["prenda"];
 	

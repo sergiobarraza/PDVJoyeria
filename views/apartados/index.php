@@ -1,4 +1,7 @@
-<?php include("../../header-pdv.php"); ?>
+<?php 
+$pageSecurity = array("admin", "supervisor","venta");
+require "../../config/security.php";
+include("../../header-pdv.php"); ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link href="/PDVJoyeria/css/apartados.css" rel="stylesheet">
 <div class="row" style="padding-bottom: 15px;">

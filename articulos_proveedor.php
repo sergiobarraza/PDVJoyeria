@@ -1,7 +1,6 @@
 <?php
 	//include 'conexion.php';
-$pageSecurity = array("admin");
-  require "config/security.php";
+
   require "config/database.php";
    // require "config/common.php";
 

@@ -1,12 +1,11 @@
 <?php
-	
+	$pageSecurity = array("admin","supervisor","venta");
+	require "../config/security.php";
 	include 'conexion.php';
+	include "../config/database.php";
   	$prendaprocesoArray=[];
 
-  	if (isset($_GET['folio'])) {
-		}
-	else{
-		;}
+  
 	?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +25,7 @@
 	</head>
 	<body class="w3-light-grey">
 		<div class="w3-bar w3-black w3-hide-small">
-		    <a href="logout.php" class="w3-bar-item w3-button">Cerrar sesión</a>
+		    <a href="../logout.php" class="w3-bar-item w3-button">Cerrar sesión</a>
 		    <a href="/PDVJoyeria/Trabajos/historial.php" class="w3-bar-item w3-button">Ver historial</a>
 		    <a href="../pdv2.php" class="w3-bar-item w3-button">Regresar</a>
 		    <a href="#" class="w3-bar-item w3-button w3-right"><i class="fa fa-info-circle"></i></a>
@@ -71,7 +70,24 @@
 			          				<table style="width: 100%;">
 			          	 				<tr>
 			          	    				<td><label class="w3-padding-16 w3-large">Nombre: </label></td>
-			          	    				<td><input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required><br></td>
+			          	    				<td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
+			          	    					<select style="width: 100%; max-width: 100%; overflow: hidden;" name="cliente">
+			          	    						<?php 
+			          	    							try 
+															{
+														      $connection = new PDO($dsn, $username, $password, $options );
+															  $sql0 = "SELECT idPersona, nombre, apellido from Persona where idPersona <>1;";
+															  $query0 = $connection->query($sql0);
+															  foreach($query0->fetchAll() as $row0) {
+																  echo "<option value='".$row0["idPersona"]."'>".$row0["nombre"]." ".$row0["apellido"]."</option>";
+																}
+															} catch (PDOException $error0) {
+															  echo $sql0 . "<br>" . $error0->getMessage();
+															
+															}
+			          	    						 ?>
+			          	    					</select>
+			          	    				</td>
 			          	  				</tr>		          
 			            				<tr>
 					      					<td><label class="w3-padding-16 w3-large">Urgencia:</label></td>
@@ -464,15 +480,15 @@
 		        			<div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
 			          			<?php
 			          					$sqlFila = "SELECT a.idFolio, a.estado, a.idCliente from (
-										SELECT Fila.idFolio,Fila.estado, Trabajo.idCliente, Fila.fecha
-										from Fila
-										join Trabajo 
-										on Trabajo.idTrabajo = Fila.idFolio 
+										SELECT fila.idFolio,fila.estado, trabajo.idCliente, fila.fecha
+										from fila
+										join trabajo 
+										on trabajo.idTrabajo = fila.idFolio 
 										where estado = 2 OR estado = 3 
 										group by idFolio ) as  a
 										left join
-										(SELECT Fila.idFolio
-										from Fila 
+										(SELECT fila.idFolio
+										from fila 
 										where not estado = 2 and not estado = 3 
 										group by idFolio) as  b
 										on a.idFolio = b.idFolio
@@ -524,30 +540,42 @@
                 }
             });
 </script>
+
 <script type="text/javascript">
 /* Inicialización de Variables 
 *	
 */
 <?php 
 	$sqlUrgente="SELECT SUM(T.tiempo_estimado) AS TIEMPO_TOTAL FROM (
-				SELECT Fila.idFolio, Fila.urgencia, Trabajo.idCliente, Trabajo.tiempo_estimado 
-				from Fila 
-				join trabajo on Fila.idFolio = Trabajo.idTrabajo
+				SELECT fila.idFolio, fila.urgencia, trabajo.idCliente, trabajo.tiempo_estimado 
+				from fila 
+				join trabajo on fila.idFolio = trabajo.idTrabajo
 				where (estado = 0 or estado = 1) and urgencia = 3
 				group by idFolio ) AS T;";
 	$resultUrgente = mysqli_query($con, $sqlUrgente);
 	$rowUrgente = $resultUrgente -> fetch_assoc();
-	echo "var filaurgente = ".$rowUrgente["TIEMPO_TOTAL"].";";
+	if (!$rowUrgente["TIEMPO_TOTAL"]) {
+		echo "var filaurgente = 0;";
+	}else{
+		echo "var filaurgente = ".$rowUrgente["TIEMPO_TOTAL"].";";
+	}
+	
 	$sqlTotal="SELECT SUM(T.tiempo_estimado) AS TIEMPO_TOTAL FROM (
-				SELECT Fila.idFolio, Fila.urgencia, Trabajo.idCliente, Trabajo.tiempo_estimado 
-				from Fila 
-				join trabajo on Fila.idFolio = Trabajo.idTrabajo
+				SELECT fila.idFolio,  trabajo.idCliente, trabajo.tiempo_estimado 
+				from fila 
+				join trabajo on fila.idFolio = trabajo.idTrabajo
 				where (estado = 0 or estado = 1) 
 				group by idFolio ) AS T;";
 	$resultTotal = mysqli_query($con, $sqlTotal);
 	$rowTotal = $resultTotal -> fetch_assoc();
-	echo "var filatotal = ".$rowTotal["TIEMPO_TOTAL"].";";
+	if (!$rowUrgente["TIEMPO_TOTAL"]) {
+		echo "var filatotal = 0;";
+	}else{
+		echo "var filatotal = ".$rowTotal["TIEMPO_TOTAL"].";";
+	}
+	
  ?>
+ 
 	var tablaPrendaProcesos = [];
 	var tiempos = [];
 	var costos = [];
@@ -653,24 +681,32 @@
 	*/
 	function llenarDeuda(response){
 		var abonado = response[0]['SUM(Transaccion.monto)'];
-		//console.log(abonado);
+		
 		if(!abonado){
 			abonado = 0;
 		}
 		document.getElementById("abonado").value = abonado;
 		abondo = parseInt(abonado);
-		var total = document.getElementById("precioTotal").value;
-		total = parseInt(total);
-		var restante = total - abonado;
-		document.getElementById("precioRestante").value = restante;
+		console.log("abonado= "+abonado);
+		var delayInMilliseconds = 400; //1 second
+		setTimeout(function() {
+		  var total = document.getElementById("precioTotal").value;
+			total = parseInt(total);
+			console.log("total= "+total);
+			var restante = total - abonado;
+			document.getElementById("precioRestante").value = restante;
+		}, delayInMilliseconds);
+		
 
 	}
 	/*Función llenarDatosTrabajo()
 	*	Es llamada por la función Myclick y sirve para convertir el tiempo de segundos a HH:MM:SS y lo coloca en los espacios del       
 	*	formulario predeterminado
 	*/
-	function llenarDatosTrabajo(response){	
-		document.getElementById("nombreClienteFolio").value = "El nombre del cliente";
+	function llenarDatosTrabajo(response){
+		console.log(response[1]['nombre']);
+		console.log(response[1]['apellido']);	
+		document.getElementById("nombreClienteFolio").value = response[1]['nombre']+" "+response[1]['apellido'] ;
 		//document.getElementById("nombreClienteFolio").value = response[0]['nombre_cliente'];
 		document.getElementById("ClienteId").value = response[0]['idCliente'];
 		document.getElementById("folioUpdate").innerHTML = response[0]['idTrabajo'];
@@ -914,6 +950,7 @@
 *	Es mandada a llamar cuando se orpime el boton de alguna de las prendas. Manda a llamar a la función procesos2.php y            	*	llenar_proceso()
 */
 	function select_prenda(id_prenda){
+		
 		var urlString = "procesos2.php";
 		var prendaSeleccionada = id_prenda;
 		var response = [];

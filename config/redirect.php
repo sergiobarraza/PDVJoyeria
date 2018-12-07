@@ -6,7 +6,10 @@
  			header("Location: pdv2.php");
  			exit;
  		}else if ($_SESSION['tipo'] == 'operador'){
- 			header("Location: sistemajoyeria.php");
+ 			header("Location: Trabajos/operador.php");
+ 			exit;
+ 		}else if ($_SESSION['tipo'] == 'supervisor'){
+ 			header("Location: pdv2.php");
  			exit;
  		}else{
  			header("Location: login.php");

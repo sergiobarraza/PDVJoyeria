@@ -32,7 +32,10 @@ session_start();
   		     			header("Location: pdv2.php");
   		     			exit;
   		     		}else if ($tipo == 'operador'){
-  		     			header("Location: sistemajoyeria.php");
+  		     			header("Location: Trabajos/operador.php");
+  		     			exit;
+  		     		}else if ($tipo == 'supervisor'){
+  		     			header("Location: pdv2.php");
   		     			exit;
   		     		}
  

@@ -1,6 +1,6 @@
 <?php
 	include 'conexion.php';
-	//$folio = $_GET['folio'];
+	$folio = $_GET['folio'];
 	//$folio = 5;
 	$array = [];
 	$sql0 = "SELECT asignado.idasignado, Fila.idFolio FROM asignado join Fila on asignado.idFila = Fila.idFila where Fila.idFolio = $folio;";
