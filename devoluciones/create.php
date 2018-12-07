@@ -141,6 +141,7 @@
       // Nuevos productos (reemplazo) salen del almacen y entran a almacen
       // apartado id: 200
       // Se necesitan 4 folios nuevos
+
       if($data['folio']['devuelto'] == 0 && $data['folio']['idEstadoDeFolio'] != 1){
         setFolioDevuelto($data['folio']['idFolio'], true);
         if($data['folio']['idEstadoDeFolio'] == 1){

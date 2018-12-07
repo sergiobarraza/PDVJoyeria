@@ -129,7 +129,7 @@
                         <input type="text" name="dcto" id="prod-total" value="0.00" class="form-control pt-1 pb-1 pl-2" style="width: 60px;" readonly="">
                       </td>
                       <td>
-                        <button type ="button" class="btn btn-success" data-toggle="modal" data-target="#checkoutModal" onclick="fillCheckoutModal()">Checkout</button>
+                        <button type="button" class="btn btn-success" onclick="fillCheckoutModal()">Checkout</button>
                       </td>
                     </tr>
                   </table>
@@ -285,6 +285,10 @@
     }
   }
 
+  function checkMinPrice(products) {
+    return products.toArray().every(e => e.price - (e.dcto_total/e.qty) >= e.min_price);
+  }
+
   function fillCheckoutModal() {
     var date = getDate();
     $("#checkout-modal__date").text("fecha: "+date);
@@ -297,6 +301,7 @@
        obj["id"] = $(this).find("#id-"+id).text();
        obj["name"] = $(this).find(".prod-name").text();
        obj["price"] = $(this).find("#price-"+id).text();
+       obj["min_price"] = $(this).find("#min-price-"+id).text();
        obj["porc_dcto"] = $(this).find("#discount-"+id).val();
        obj["dcto_total"] = $(this).find("#price-discount-"+id).text();
        obj["qty"] = $(this).find("#quantity-"+id).text();
@@ -304,6 +309,13 @@
 
       return obj;
     });
+
+    if(checkMinPrice(products)){
+      $('#checkoutModal').modal("show");
+    } else {
+      alert("Favor de disminuir el descuento en la venta");
+    }
+
 
     $("#checkout-modal__products").text("");
     products.each(function(){

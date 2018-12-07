@@ -153,8 +153,7 @@
           success: function(res){
             document.location.reload();
           }
-         });
-
+        });
       }
   });
 </script>

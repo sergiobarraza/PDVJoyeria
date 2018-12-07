@@ -243,6 +243,22 @@
       change.val((cash_payment + card_payment) - (cash_received + card_received));
     });
 
+    $("#purchaseButton").click(function(e){
+      $.ajax({
+        type: "POST",
+        url: "../../devoluciones/index.php",
+        data: {deposit: {}},
+        dataType: "json",
+        success: function(res){
+          $("#folio-loader-parent").hide();
+          data = res;
+          res.map(row => {
+            addFolioElement(row);
+          });
+        }
+      });
+    });
+
 
     function addProductToVentaInfo(obj) {
       let prod = products.find(e => e.idProducto == obj.inventario.idProducto);
@@ -255,7 +271,7 @@
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
            str += "<td>$"+((precio * qty * dcto) - parseFloat(paid)).toFixed(3)+"</td>"
-           str += "<td><input type='checkbox' class='form-control venta-body__chkbx' id='prod-"+obj.idProducto+"'></td>"
+           str += "<td><input type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)
       return {product: prod, price: precio, qty: qty, discount: obj.descuento}
