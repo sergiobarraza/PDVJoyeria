@@ -10,6 +10,82 @@
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
+  if(isset($_POST['deposit'])) {
+    try {
+       function createVenta($idFolio, $idInventario, $idCobranza, $estado, $idTransaccion){
+        global $connection, $data;
+
+        $venta = array(
+          "idFolio" => $idFolio,
+          "idInventario" => $idInventario,
+          "idTransaccion" => $idTransaccion,
+          "idCobranza" => $idCobranza,
+          "descuento" => 0,
+          "estado" => $estado
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Venta",
+          implode(", ", array_keys($venta)),
+          ":" . implode(", :", array_keys($venta))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($venta);
+        return $connection->lastInsertId();
+      }
+
+      function createCobranza(){
+        global $connection, $data;
+
+        $cobranza = array(
+          "monto" => (($data['monto_total'] - $data['abono']) < 0 ? 0 : $data['monto_total'] - $data['abono']),
+          "deudaTotal" => $data['monto_total'],
+          "fecha" => $data['fecha']
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Cobranza",
+          implode(", ", array_keys($cobranza)),
+          ":" . implode(", :", array_keys($cobranza))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($cobranza);
+      }
+
+       function createTransaction($idAlmacen, $monto, $concepto, $tipoDePago){
+        global $connection, $data;
+
+        $transaccion = array(
+          "monto" => intval($monto),
+          "idAlmacen" => $idAlmacen,
+          "concepto" => $concepto,
+          "tipoDePago" => $tipoDePago,
+          "fecha" => date("Y-m-d")
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Transaccion",
+          implode(", ", array_keys($transaccion)),
+          ":" . implode(", :", array_keys($transaccion))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($transaccion);
+
+        return $connection->lastInsertId();
+      }
+      echo $_POST['deposit']['cash'];
+    } catch(PDOException $error) {
+      echo $error->getMessage();
+    }
+
+  }
+
   if(isset($_POST['devolution'])){
     try {
       $data = $_POST['devolution'];

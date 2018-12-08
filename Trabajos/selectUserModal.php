@@ -12,7 +12,6 @@
         <div>
           <div class="row">
             <div class="col-md-7 inline">
-              <input type="text" style="display: none;" id="client_search_id" />
               <input type="text" id="client_search_input" class="form-control" placeholder="Buscar..."/>
             </div>
             <div class="col-md-4 inline">

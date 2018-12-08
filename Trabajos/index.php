@@ -72,7 +72,7 @@
 			         			<form class="panelControl" action="pedidoNew.php" method="post" enctype="multipart/form-data">
 			          				<table style="width: 100%;">
 			          	 				<tr>
-			          	    				<td><label class="w3-padding-16 w3-large">Nombre: </label></td>
+			          	          <td><label class="w3-padding-16 w3-large">Nombre: </label></td>
                               <td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
                                 <input type="text" style="display: none;" id="panel-client-id" />
                	                <input type="text" readonly="true" id="panel-client" style="width: 100%; max-width: 100%; overflow: hidden;" name="cliente" data-toggle="modal" data-target="#selectUserModal">

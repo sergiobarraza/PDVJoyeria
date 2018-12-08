@@ -60,6 +60,7 @@ include("../../header-pdv.php"); ?>
     let data = [];
     let products = [];
     let lines = [];
+    let folio_selected;
     $.ajax({
       type: "POST",
       url: "../../devoluciones/index.php",
@@ -102,8 +103,8 @@ include("../../header-pdv.php"); ?>
     $(".folio_index-container").on("click", function(e){
       if($(e.target ).is( ":button" )) {
         let folioId = $(e.target).data().idfolio;
-        let folio = data.find(obj => obj.idFolio == folioId)
-        fillModalInfo(folio);
+        folio_selected = data.find(obj => obj.idFolio == folioId)
+        fillModalInfo(folio_selected);
       }
     });
 
@@ -237,29 +238,37 @@ include("../../header-pdv.php"); ?>
       $("#ventInfo-folioDebt").text(current_debt);
     }
 
-    $("#cash_payment, #cash_received, #card_payment, #card_received").change(function(e) {
+    $("#cash_payment, #cash_received, #card_received").change(function(e) {
       let cash_payment = parseFloat($("#cash_payment").val() || 0);
-      let card_payment = parseFloat($("#card_payment").val() || 0);
       let cash_received = parseFloat($("#cash_received").val() || 0);
       let card_received = parseFloat($("#card_received").val() || 0);
       let change = $("#change");
-      change.val((cash_payment + card_payment) - (cash_received + card_received));
+      change.val((cash_received + card_received) - cash_payment);
     });
 
     $("#purchaseButton").click(function(e){
-      $.ajax({
-        type: "POST",
-        url: "../../devoluciones/index.php",
-        data: {deposit: {}},
-        dataType: "json",
-        success: function(res){
-          $("#folio-loader-parent").hide();
-          data = res;
-          res.map(row => {
-            addFolioElement(row);
-          });
+      if(!$(this).hasClass("disabled")){
+        $(this).addClass("disabled");
+        $(this).text("Cargando...");
+
+        deposit = {
+          folio: folio_selected,
+          deposit_amount: parseFloat($("#cash_payment").val() || 0),
+          cash: parseFloat($("#cash_received").val() || 0),
+          card: parseFloat($("#card_received").val() || 0),
+          selected_product_id: $('input[name=payment_selected]:checked').val(),
         }
-      });
+
+
+        $.ajax({
+          type: "POST",
+          url: "../../devoluciones/index.php",
+          data: {deposit: deposit},
+          success: function(res){
+            $("#folio-loader-parent").hide();
+          }
+        });
+      }
     });
 
 
@@ -274,7 +283,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
            str += "<td>$"+((precio * qty) - parseFloat(paid)).toFixed(3)+"</td>"
-           str += "<td><input type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
+           str += "<td><input data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)
       return {product: prod, price: precio, qty: qty, discount: obj.descuento}
