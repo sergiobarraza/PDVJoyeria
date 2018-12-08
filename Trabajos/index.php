@@ -5,7 +5,7 @@
 	include "../config/database.php";
   	$prendaprocesoArray=[];
 
-  
+
 	?>
 <!DOCTYPE html>
 <html>
@@ -15,13 +15,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="w3.css">
 		<link type="text/css" rel="stylesheet" href="css2.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 	</head>
 	<body class="w3-light-grey">
 		<div class="w3-bar w3-black w3-hide-small">
@@ -30,10 +36,8 @@
 		    <a href="../pdv2.php" class="w3-bar-item w3-button">Regresar</a>
 		    <a href="#" class="w3-bar-item w3-button w3-right"><i class="fa fa-info-circle"></i></a>
 		</div>
-
 		<div class="w3-content">
-		    
-		    <div class="w3-row w3-padding w3-border" id="panelprincipal">		  		
+		    <div class="w3-row w3-padding w3-border" id="panelprincipal">
 		   		<!-- Selección de procesos -->
 		    	<div class="w3-col l4 s12 " >
 		        	<div class="w3-container w3-white w3-margin w3-padding" id="prendamenu" style="min-height: 300px;display: <?php echo $bloquesprincipales;?>">
@@ -53,8 +57,7 @@
 			       		 ?>
 		      		</div>
 		    		<div class="w3-container w3-white w3-margin w3-padding" id="procesomenu" style="display: none;min-height: 300px;">
-		        
-		       		</div>
+	       		</div>
 		    	</div>
 
 		   		<!--Panel de Control-->
@@ -70,27 +73,14 @@
 			          				<table style="width: 100%;">
 			          	 				<tr>
 			          	    				<td><label class="w3-padding-16 w3-large">Nombre: </label></td>
-			          	    				<td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
-			          	    					<select style="width: 100%; max-width: 100%; overflow: hidden;" name="cliente">
-			          	    						<?php 
-			          	    							try 
-															{
-														      $connection = new PDO($dsn, $username, $password, $options );
-															  $sql0 = "SELECT idPersona, nombre, apellido from Persona where idPersona <>1;";
-															  $query0 = $connection->query($sql0);
-															  foreach($query0->fetchAll() as $row0) {
-																  echo "<option value='".$row0["idPersona"]."'>".$row0["nombre"]." ".$row0["apellido"]."</option>";
-																}
-															} catch (PDOException $error0) {
-															  echo $sql0 . "<br>" . $error0->getMessage();
-															
-															}
-			          	    						 ?>
-			          	    					</select>
-			          	    				</td>
-			          	  				</tr>		          
-			            				<tr>
-					      					<td><label class="w3-padding-16 w3-large">Urgencia:</label></td>
+                              <td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
+                                <input type="text" style="display: none;" id="panel-client-id" />
+               	                <input type="text" readonly="true" id="panel-client" style="width: 100%; max-width: 100%; overflow: hidden;" name="cliente" data-toggle="modal" data-target="#selectUserModal">
+                                </input>
+                         	   </td>
+                            </tr>
+                          <tr>
+                            <td><label class="w3-padding-16 w3-large">Urgencia:</label></td>
 			            					<td>
 						            			<select onchange="usuarioselect();" name="urgencia_select" id="urgencia">
 											        <option selected value="1">BAJA</option>
@@ -511,19 +501,91 @@
 				        </div>
 	  		        </div><hr>
 		    	</div>
-		    	
-		    	
-		  
-
 			</div>
-			
 		</div>
 		<footer class="w3-container w3-dark-grey" >
 	    	<p>Powered by BARRAZA.MX</p>
 		</footer>
 	</body>
+
+  <?php include "selectUserModal.php"; ?>
 </html>
 <script type="text/javascript">
+  $(function() {
+     let persons = [];
+     let client_selected;
+
+     $.ajax({
+      type: "POST",
+      url: "actions/buscarCliente.php",
+      data: {client_index: true},
+      dataType: "json",
+      success: function(res){
+        persons = res;
+        res.map(row => {
+          addPersonElement(row);
+        });
+      }
+     });
+
+    $("#client_search_input").change(function(e){
+      $("#client_index-tbody").text("");
+      let input = $("#client_search_input").val();
+      let select = $("#client_search_select").val();
+      res = persons.filter( e => input.indexOf(e[select]) >= 0 || e[select].indexOf(input) >= 0)
+      res.map(row => {
+        addPersonElement(row);
+      })
+    });
+
+    function addPersonElement(row) {
+      let str = "<tr style='height: 35px;font-size: 16px;'>"
+            str += "<td id='person-id' style='display: none;'>"+row.idPersona+"</td>"
+            str += "<td>"+row.nombre+"</td>"
+            str += "<td>"+row.apellido+"</td>"
+            str += "<td>"+row.tel+"</td>"
+            str += "<td>"+row.email+"</td>"
+            str += "<td>"+row.rfc+"</td>"
+      $("#client_index-tbody").append(str);
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "../../devoluciones/index.php",
+      data: {folio_products_list: true},
+      dataType: "json",
+      success: function(res){
+        $("#products-loader-parent").hide();
+        products = res.products;
+        lines = res.lines;
+      }
+    });
+
+    $("#client_index-tbody").click(function(e){
+      if($(e.target.parentElement).is("tr")) {
+        if(client_selected){
+          client_selected.row.removeClass("isSelected");
+          $(e.target.parentElement).addClass("isSelected")
+        } else {
+          $(e.target.parentElement).addClass("isSelected")
+        }
+
+        let client_id = $(e.target.parentElement.children[0]).text()
+        return client_selected = {
+          client: persons.find(e => e.idPersona == client_id),
+          row: $(e.target.parentElement)
+        }
+      }
+    });
+
+    $("#client_search_submit").click(function(e){
+      $("#panel-client").val(client_selected.client.nombre + " "+ client_selected.client.apellido);
+      $("#panel-client-id").val(client_selected.client.idPersona);
+      $("#selectUserModal").modal("hide");
+    });
+
+  });
+
 	$(".input-number2").keydown(function (e) {
                 // Allow: backspace, delete, tab, escape, enter and .
                 if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
@@ -1132,9 +1194,7 @@ function usuariohechura(usuariohech){
 		function calcular_precio(){
 			var suma = 0;
 			for (var i = 0; i < costos.length ; i++){
-			suma = suma + costos[i];
-			
-			 
+        suma = suma + costos[i];
 			}
 			//alert("Costo: "+suma);
 			anticipo = suma * 0.3;
@@ -1151,21 +1211,19 @@ function usuariohechura(usuariohech){
 			var anticipo = document.getElementById("precioanticipo").value; // Cuanto es el minimo de anticipo que se calculo
 			anticipo = parseInt(anticipo);
 			pago = parseInt(pago);
-			if (tipo == 'tarjeta' ) 
+			if (tipo == 'tarjeta' )
 			{
 				document.getElementById("Cambiofield").style.display = "none";
 				document.getElementById("Efectivofield").style.display = "none";
-				if (pago >= anticipo && tablaPrendaProcesos.length > 0) 
+				if (pago >= anticipo && tablaPrendaProcesos.length > 0)
 				{
 					document.getElementById("aceptarbtn").style.background = "#49af59";
 					document.getElementById("aceptarbtn").disabled = false;
-					
 				}else{
-					
 					document.getElementById("aceptarbtn").disabled = true;
 					document.getElementById("aceptarbtn").style.background = "grey";
 					//alert("El pago no puede ser menor a la cantidad minima de anticipo");
-				}				
+				}
 			}
 			else
 			{
@@ -1178,17 +1236,12 @@ function usuariohechura(usuariohech){
 				{
 					document.getElementById("aceptarbtn").style.background = "#49af59";
 					document.getElementById("aceptarbtn").disabled = false;
-					
 				}else{
-					
 					document.getElementById("aceptarbtn").disabled = true;
 					document.getElementById("aceptarbtn").style.background = "grey";
 					//alert("El pago no puede ser menor a la cantidad minima de anticipo");
-				}					
-				
+				}
 			}
-			
-			
 		}
 		function abonardinero(){
 			alert("abonar");
