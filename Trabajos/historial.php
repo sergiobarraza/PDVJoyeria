@@ -15,7 +15,7 @@
   <div class="w3-bar w3-black w3-hide-small">
     <a href="logout.php" class="w3-bar-item w3-button">Cerrar sesión</a>
     <a href="index.php" class="w3-bar-item w3-button">Panel de control</a>
-    <a onclick="borrarHistorial()" class="w3-bar-item w3-button w3-right"><i class="fa fa-trash"></i></a>
+    <!--a onclick="borrarHistorial()" class="w3-bar-item w3-button w3-right"><i class="fa fa-trash"></i></a-->
   </div>
 
   <div class="w3-content">
@@ -46,14 +46,15 @@
                      
                       <?php
                         include 'conexion.php';
-                        $sql = "SELECT Fila.idFolio, Fila.fecha, prenda.nombre_prenda, proceso.nombre_proceso, entregado.Operador, prenda_proceso.tiempo_estimado, entregado.fechaInicio, entregado.fechaFin, trabajo.idCliente
+                        $sql = "SELECT fila.idFolio, fila.fecha, prenda.nombre_prenda, proceso.nombre_proceso, entregado.Operador, prenda_proceso.tiempo_estimado, entregado.fechaInicio, entregado.fechaFin, trabajo.idCliente, Persona.nombre as cliente, Persona.apellido
                           from entregado
-                          join Fila on entregado.idFila = Fila.idFila
-                          join prenda_proceso on prenda_proceso.id = Fila.prenda_proceso
+                          join fila on entregado.idFila = fila.idFila
+                          join prenda_proceso on prenda_proceso.id = fila.prenda_proceso
                           join prenda on prenda_proceso.prenda = prenda.id_prenda
                           join proceso on prenda_proceso.proceso = proceso.id_proceso
-                          join trabajo on Fila.idFolio = trabajo.idTrabajo
-                          ORDER BY Fila.idFolio desc;";
+                          join trabajo on fila.idFolio = trabajo.idTrabajo
+                          join Persona on trabajo.idCliente = Persona.idPersona
+                          ORDER BY fila.idFolio desc;";
                         $result = mysqli_query($con, $sql);
                         $rows = $result->num_rows;
                         for ($i=0 ; $i < $rows ; $i++){
@@ -64,9 +65,17 @@
                           echo "<td>".$row["nombre_prenda"]."</td>";
                           echo "<td>".$row["nombre_proceso"]."</td>";
                           echo "<td>".$row["Operador"]."</td>";
-                          echo "<td>".$row["tiempo_estimado"]."</td>";
+
+                          $tiempoest = $row["tiempo_estimado"];
+                          $tiempoest = intval($tiempoest);
+                          $Horas = intval($tiempoest / 3600);
+                          $Minutos = intval(($tiempoest % 3600)/60);
+                          $Segundos = $tiempoest % 60;
+
+                          echo "<td>".$Horas."H ".$Minutos."M ".$Segundos."</td>";
                           $fechaInicio = $row["fechaInicio"];
                           $fechaFin = $row["fechaFin"];
+
                           $date1= DateTime::createFromFormat('Y-m-d H:i:s', $fechaInicio);
                           $date2=  DateTime::createFromFormat('Y-m-d H:i:s', $fechaFin);
                           $resultTime = $date1 ->diff($date2);
@@ -75,7 +84,7 @@
                           $minutes = $resultTime->format('%I');
                           $seconds = $resultTime->format('%s');
                           echo "<td>".$dias."D ".$hours."H ".$minutes."M ".$seconds." S</td>";
-                          echo "<td>".$row["idCliente"]."</td>";
+                          echo "<td>".$row["cliente"]." ".$row["apellido"]."</td>";
                           /*if ($row["imagen"]!="") {
                             echo '<td><a href="'.$row["imagen"].'">IMG</a></td>';
 

@@ -1,18 +1,18 @@
 <?php
 	if ($_SESSION['tipo'] == 'admin') {
- 			header("Location: index.php");
+ 			header("Location: /PDVJoyeria/index.php");
  			exit;
  		}else if ($_SESSION['tipo'] == 'venta'){
- 			header("Location: pdv2.php");
+ 			header("Location: /PDVJoyeria/pdv2.php");
  			exit;
  		}else if ($_SESSION['tipo'] == 'operador'){
- 			header("Location: Trabajos/operador.php");
+ 			header("Location: /PDVJoyeria/Trabajos/operador.php");
  			exit;
  		}else if ($_SESSION['tipo'] == 'supervisor'){
  			header("Location: pdv2.php");
  			exit;
  		}else{
- 			header("Location: login.php");
+ 			header("Location: /PDVJoyeria/login.php");
  			exit;
  		}
 ?>

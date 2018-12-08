@@ -19,14 +19,7 @@
 	$costo = $_POST["costo"];
 	$idProducto = $_POST["idProd"];
 
-	if (isset($_POST['imprimir']) && $_POST['imprimir'] == 'Yes') 
-	{
-	    echo "Imprimiendo etiquetas";
-	}
-	else
-	{
-	    echo "No imprimir etiquetas";
-	}
+	
 	
 	try 
 	{
@@ -64,6 +57,19 @@ if (isset($_POST['agregar']) && $_POST['agregar'] == 'Yes')
 		echo "<br>No se agrega Producto";
 	}
 
-	header("Refresh:0; url=articulos_editar.php?sku=$idProducto&status=successarticulo&articulo=$sku");
+	if (isset($_POST['imprimir']) && $_POST['imprimir'] == 'Yes') 
+	{
+	    header("Refresh:0; url=etiquetas_editar.php?producto=$idProducto&cantidad=$cantidad");
+	    exit;
+	}
+	else
+	{
+	    header("Refresh:0; url=articulos_editar.php?sku=$idProducto&status=successarticulo&articulo=$sku");
+	    exit;
+	}
+
+
+
+	
 
 ?>

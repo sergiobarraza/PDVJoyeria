@@ -57,10 +57,10 @@
                     <div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
                       
                         <?php
-                            $sqlFila = "SELECT Fila.idFila, Fila.idFolio, Fila.urgencia, Trabajo.idCliente, prenda.nombre_prenda,proceso.nombre_proceso, prenda_proceso.tiempo_estimado  
-                            from Fila 
-                            join trabajo on Fila.idFolio = Trabajo.idTrabajo
-                            join prenda_proceso on Fila.prenda_proceso = prenda_proceso.id
+                            $sqlFila = "SELECT fila.idFila, fila.idFolio, fila.urgencia, trabajo.idCliente, prenda.nombre_prenda,proceso.nombre_proceso, prenda_proceso.tiempo_estimado  
+                            from fila 
+                            join trabajo on fila.idFolio = trabajo.idTrabajo
+                            join prenda_proceso on fila.prenda_proceso = prenda_proceso.id
                             join prenda on prenda_proceso.prenda = prenda.id_prenda
                             join proceso on prenda_proceso.proceso = proceso.id_proceso
                             where estado = 0                     
@@ -105,7 +105,7 @@
                     <div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
                       
                         <?php
-                            $sqlOperador = "SELECT usuario, nombre from usuario where tipo = 'operador' and not usuario =  'hechuras'";
+                            $sqlOperador = "SELECT usuario, nombre from operador where tipo = 'operador' and not usuario =  'hechuras'";
                             $resultOperador = mysqli_query($con, $sqlOperador);
                             $rows = $resultOperador->num_rows;
 
@@ -133,7 +133,7 @@
               <div class="colas">
                 <?php
                   
-                  $sql = "SELECT nombre, usuario FROM usuario WHERE tipo='operador' AND NOT usuario='hechuras';";
+                  $sql = "SELECT nombre, usuario FROM operador WHERE tipo='operador' AND NOT usuario='hechuras';";
 
                   $result = mysqli_query($con, $sql);
                   $rows = $result->num_rows;
@@ -149,13 +149,13 @@
                               <th colspan="2">
                                 <?php 
                                   echo $nombre;
-                                  $sql3= "SELECT fila.idFolio, trabajo.idCliente, prenda.nombre_prenda, proceso.nombre_proceso, Trabajo.comentario, asignado.idAsignado 
+                                  $sql3= "SELECT fila.idFolio, trabajo.idCliente, prenda.nombre_prenda, proceso.nombre_proceso, trabajo.comentario, asignado.idAsignado 
                                     From asignado 
-                                    JOIN Fila ON Fila.idFila = asignado.idfila 
-                                    JOIN prenda_proceso ON prenda_proceso.id = Fila.prenda_proceso
+                                    JOIN fila ON fila.idFila = asignado.idfila 
+                                    JOIN prenda_proceso ON prenda_proceso.id = fila.prenda_proceso
                                     JOIN prenda ON prenda_proceso.prenda = prenda.id_prenda
-                                    JOIN PROCESO ON prenda_proceso.proceso = proceso.id_proceso
-                                    JOIN TRABAJO ON Fila.idFolio = Trabajo.idTrabajo
+                                    JOIN proceso ON prenda_proceso.proceso = proceso.id_proceso
+                                    JOIN trabajo ON fila.idFolio = trabajo.idTrabajo
                                     where asignado.operador = '$usuario' ORDER BY asignado.fechaInicio ASC;";
                                    //ECHO $sql3; 
                                   $result3 = mysqli_query($con, $sql3);

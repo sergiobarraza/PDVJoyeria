@@ -46,7 +46,7 @@
 		            	</div>
 		          		<!-- BOTONES -->
 		        		<?php  
-		          			$sql3 = "select * from prenda;";
+		          			$sql3 = "SELECT * from prenda;";
 		          			$result3 = mysqli_query($con, $sql3);
 			          		$rows3 = $result3->num_rows;
 
@@ -430,9 +430,9 @@
 		        			<div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
 			          		
 			          			<?php
-			          					$sqlFila = "SELECT Fila.idFolio, Fila.urgencia, Trabajo.idCliente, Trabajo.tiempo_estimado 
-													from Fila 
-													join trabajo on Fila.idFolio = Trabajo.idTrabajo
+			          					$sqlFila = "SELECT fila.idFolio, fila.urgencia, trabajo.idCliente, trabajo.tiempo_estimado 
+													from fila 
+													join trabajo on fila.idFolio = trabajo.idTrabajo
 													where estado = 0 or estado = 1
 													group by idFolio 
 

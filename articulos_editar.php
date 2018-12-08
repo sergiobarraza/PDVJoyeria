@@ -23,7 +23,7 @@
 		$cantidad = $_GET['cantidad'];
 	}if ($status == 'successarticulo') {
 		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<strong>¡Nuevo Producto Creado!</strong> Código de producto = '.$codigo;
+					<strong>¡Producto correctamente editado!</strong> Código de producto = '.$codigo;
 		if($cantidad > 0)
 			echo ' / Cantidad = '.$cantidad.' articulos' ;
 		echo ' <button type="button" class="close" data-dismiss="alert" aria-label="Close">

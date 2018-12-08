@@ -11,7 +11,7 @@
 	if (isset($_GET['cantidad_efectivo'])) {
 		$cantidadPagada = $_GET['cantidad_efectivo'];
 	}
-	if (isset($_GET['cantidad'])) {
+	if (isset($_GET['cantidad_tarjeta'])) {
 		$tarjeta = $_GET['cantidad_tarjeta'];
 	}
 	
@@ -103,9 +103,9 @@
 			    	$articulos= $articulos + $cantidad;
 			    	//echo "Cantidad= ".$cantidad;
 			    	$unitario= (($totalpagadoR / (1-$descuento/100)))/$cantidad;
-			    	$descuentopesos= $descuentopesos - $totalpagadoR + $unitario * $cantidad;
+			    	//$descuentopesos= $descuentopesos - $totalpagadoR + $unitario * $cantidad;
 			    	$Subtotal = $Subtotal + $unitario*$cantidad;
-			    	$descuentopesos= $unitario - $totalpagadoR;
+			    	$descuentopesos= $unitario*$cantidad - $totalpagadoR;
 			    	//echo "Unitairo= ".$unitario;
 			    //echo floor($totalpagado*pow(10,2))/pow(10,2);
 				  echo "<tr>
@@ -197,7 +197,7 @@
 						    document.body.innerHTML = printContents;
 					    	window.print();
 					    	document.body.innerHTML = originalContents;
-					    	//window.close();
+					    	window.close();
 						}
 					</script>';
 		

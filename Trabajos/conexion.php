@@ -1,5 +1,5 @@
 <?php
-	$con = new mysqli("localhost", "root", "", "joyeria");
+	$con = new mysqli("167.99.172.182", "sergio", "", "PDVJoyeria");
 
 
 

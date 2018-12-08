@@ -6,8 +6,8 @@
 	include("header-pdv.php");
 	require "config/database.php";
 	
-	if (isset($_GET['sucursal'])) {
-		$sucursal = $_GET['sucursal'];
+	if (isset($_GET['entrada'])) {
+		$almEntrada = $_GET['entrada'];
 		
 	}
 	
@@ -20,19 +20,18 @@
 		
 	}
 	$almacen = $_SESSION['almacen'];
-	$origen = 0;
-	//$almacen = $_SESSION['almacen'];
+	
+	
 	try {
-		    $connection = new PDO($dsn, $username, $password, $options );
-		    $sqlorigen = "SELECT * from Almacen where idAlmacen = $sucursal;";
-		    $queryorigen = $connection->query($sqlorigen);  		      
-		    $roworigen = $queryorigen->fetch(PDO::FETCH_ASSOC);
-		    $origenName = $roworigen["name"];
-	    } 	catch(PDOException $error) {
-	      	echo $sqlorigen . "<br>" . $error->getMessage();
+		$connection = new PDO($dsn, $username, $password, $options );    
+	    $sqldest = "SELECT * from Almacen where idAlmacen = $almEntrada;";
+	    $querydest = $connection->query($sqldest);  		      
+	    $rowdest = $querydest->fetch(PDO::FETCH_ASSOC);
+	    $destName = $rowdest["name"];
+	    }catch(PDOException $error) {
+	      	echo $sqldest . "<br>" . $error->getMessage();
 
 	    }
-	
 	try {    
 	    $sql0 = "SELECT * from Almacen where idAlmacen = $almacen;";
 	    $query0 = $connection->query($sql0);  		      
@@ -47,14 +46,15 @@
 <div id="printableArea" style="width: 4in; margin: 0; text-align: center;">
 	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 60%;">
 	  <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 38%;">
-      <h2 style="padding:0; margin: 0;">JOYERIA CLAROS</h2>
-      <h4 style="padding:0; margin: 0;"> <?php echo $row0["nombrefiscal"]; ?></h4>
-      <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
+      <h2 style="padding:0; margin: 0;text-transform: uppercase;">JOYERIA CLAROS</h2>
+      <h4 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["nombrefiscal"]; ?></h4>
+      <h5 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["address"]; ?> </h5>
       <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
       <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p><br><br>
-      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Fecha: <?php echo $fecha; ?>&nbsp;&nbsp;&nbsp;&nbsp; Hora: <?php echo $hora; ?> </p>
-      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Sucursal: <?php echo $origenName ?> </p>
-      <p style="padding:0; margin: 0;text-align: left;">Proceso: Salida de producto</p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Fecha: <?php echo $fecha; ?>&nbsp;&nbsp;&nbsp;&nbsp; Hora: <?php echo $hora;?> </p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Sucursal Origen: <?php echo $row0["name"]; ?> </p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Sucursal Destino: <?php echo $destName ?> </p>
+      <p style="padding:0; margin: 0;text-align: left;">Proceso: Prestamo de producto</p>
       <table style="width: 100%;">
       	<thead style="border-top: 1px dashed;border-bottom: 1px dashed;">
 
@@ -75,14 +75,11 @@
       	try 
 	      	{
 		    
-		    	$sqlProductos = "SELECT Producto.codigo, Proveedor.nombre, Inventario.tipo, Producto.nombre as producto, Tipoprod.nombre as 			tipoprod
-								from Inventario 
-								join Producto on Inventario.idProducto = Producto.idProducto
+		    	$sqlProductos = "SELECT Producto.codigo, Proveedor.nombre,  Producto.nombre as producto, Tipoprod.nombre as 			tipoprod
+								from  Producto 
 								join Proveedor on Producto.idProveedor = Proveedor.idProveedor
 								join Tipoprod on Tipoprod.idTipoprod = Producto.idTipoprod
-								where Producto.codigo =$sku
-								order by idInventario desc
-								limit 1;";							   		    
+								where Producto.codigo = $sku;";							   		    
 
 			    $query1 = $connection->query($sqlProductos);
 			    	
@@ -94,7 +91,7 @@
 		                    <td >'.$row1['codigo'].'</td>  
 		                    <td colspan="2">'.$row1['producto'].'</td>
 		                    
-		                    <td>'.($row1['tipo']*-1).'</td>
+		                    <td>1</td>
 		                                         
 		                  </tr>';
 		            echo '<tr>
@@ -126,9 +123,9 @@
         </tr>
       	<tr>
           <td></td>
-          <td>Autoriza</td>
+          <td>Entrega</td>
           <td></td>
-          <td>Realiza</td>
+          <td>Recibe</td>
           <td></td>
         </tr>
 
@@ -156,8 +153,8 @@
 						    document.body.innerHTML = printContents;
 					    	window.print();
 					    	document.body.innerHTML = originalContents;
-					    	//window.close();
-					    	location.href= "inventario.php?status=successesalida&sucursal='.$sucursal.'&articulo='.$sku.'&cantidad='.$cantidad.'#nuevaSalida";
+					    	window.close();
+					    	//location.href= "inventario.php?status=successmovimiento&entrada=$almEntrada&salida=$almSalida&articulo=$sku&cantidad=$cantidad#nuevoMovimiento";
 						}
 					</script>';
 			

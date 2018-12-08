@@ -26,7 +26,7 @@
 	      	echo $sql . "<br>" . $error->getMessage();
 
 	    }
-	$sql2 = "SELECT * from Trabajo where idTrabajo = $folio;";
+	$sql2 = "SELECT * from trabajo where idTrabajo = $folio;";
 	$result2 = mysqli_query($con, $sql2);
 	$row2 = $result2->fetch_assoc();
 	$costo = $row2["precio"];
@@ -53,7 +53,7 @@
       <h5 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["address"]; ?> </h5>
       <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
       <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p><br>
-      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Fecha: <?php echo $fecha; ?> Hora: <?php echo $hora; ?> </p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Fecha: <?php echo $fecha; ?>&nbsp;&nbsp;&nbsp;&nbsp; Hora: <?php echo $hora; ?> </p>
 
       <p style="padding:0; margin: 0;text-align: left;">Proceso: Abono de Trabajo</p>
       <p style="padding:0; margin: 0;text-align: left;">Folio: <?php echo $folio; ?></p>
@@ -68,13 +68,13 @@
 	    </thead>
 	    <tbody >
 		    <?php 
-		    	$sql1 = "SELECT Fila.idFolio, prenda.nombre_prenda, proceso.nombre_proceso, prenda_proceso.costo, trabajo.idCliente
-						from Fila 
-						join prenda_proceso on prenda_proceso.id = Fila.prenda_proceso
+		    	$sql1 = "SELECT fila.idFolio, prenda.nombre_prenda, proceso.nombre_proceso, prenda_proceso.costo, trabajo.idCliente
+						from fila 
+						join prenda_proceso on prenda_proceso.id = fila.prenda_proceso
 						join prenda on prenda_proceso.prenda = prenda.id_prenda
 						join proceso on prenda_proceso.proceso = proceso.id_proceso
-						join trabajo on Fila.idFolio = trabajo.idTrabajo
-						where Fila.idFolio = $folio;";
+						join trabajo on fila.idFolio = trabajo.idTrabajo
+						where fila.idFolio = $folio;";
 				$result1 = mysqli_query($con, $sql1);
 			    $rows1 = $result1->num_rows;
 				for ($i=0 ; $i < $rows1 ; $i++)
@@ -102,9 +102,9 @@
       	</thead>
       	<tbody>
       		<?php 
-      			$sql3 = "SELECT transaccion_trabajo.idTrabajo, transaccion_trabajo.idTransaccion, transaccion.fecha, transaccion.monto, transaccion.tipoDePago
-						FROM joyeria.transaccion_trabajo 
-						JOIN transaccion on transaccion_trabajo.idTransaccion = transaccion.idTransaccion
+      			$sql3 = "SELECT transaccion_trabajo.idTrabajo, transaccion_trabajo.idTransaccion, Transaccion.fecha, Transaccion.monto, Transaccion.tipoDePago
+						FROM transaccion_trabajo 
+						JOIN Transaccion on transaccion_trabajo.idTransaccion = Transaccion.idTransaccion
 						where transaccion_trabajo.idTrabajo = $folio;";
 				$result3 = mysqli_query($con, $sql3);
 			    $rows3 = $result3->num_rows;
@@ -123,9 +123,9 @@
       		<tr >
       			<td>Total Abonado</td>
       			<?php 
-      				$sql4 = "SELECT transaccion_trabajo.idTrabajo, SUM(transaccion.monto) as monto
-							FROM joyeria.transaccion_trabajo 
-							JOIN transaccion on transaccion_trabajo.idTransaccion = transaccion.idTransaccion
+      				$sql4 = "SELECT transaccion_trabajo.idTrabajo, SUM(Transaccion.monto) as monto
+							FROM transaccion_trabajo 
+							JOIN Transaccion on transaccion_trabajo.idTransaccion = Transaccion.idTransaccion
 							group by transaccion_trabajo.idTrabajo
 							having transaccion_trabajo.idTrabajo = $folio;";
 					$result4 = mysqli_query($con, $sql4);
@@ -167,7 +167,7 @@
       		<td colspan="5">Esta nota sera incluida en la Factura Global</td>
       	</tr>
       </tbody>
-      </table>
+      </table><br><br>
      
 </div>
 <style>
@@ -187,7 +187,7 @@
 		    document.body.innerHTML = printContents;
 	    	window.print();
 	    	document.body.innerHTML = originalContents;
-	    	//location.href= "Trabajos/index.php?folio=$folio";
+	    	location.href= "Trabajos/index.php?folio=$folio";
 	    	//window.close();
 		}
 	</script>

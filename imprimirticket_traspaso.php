@@ -55,16 +55,18 @@
 	    }
 	
 ?>
-<div id="printableArea" style="width: 4in; margin: auto; text-align: center;">
-      <h2 style="padding:0; margin: 0;">JOYERIA CLAROS</h2>
-      <h4 style="padding:0; margin: 0;"> <?php echo $row0["nombrefiscal"]; ?></h4>
-      <h5 style="padding:0; margin: 0;"> <?php echo $row0["address"]; ?> </h5>
+<div id="printableArea" style="width: 4in; margin: 0; text-align: center;">
+	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 60%;">
+	  <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 38%;">
+      <h2 style="padding:0; margin: 0;text-transform: uppercase;">JOYERIA CLAROS</h2>
+      <h4 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["nombrefiscal"]; ?></h4>
+      <h5 style="padding:0; margin: 0;text-transform: uppercase;"> <?php echo $row0["address"]; ?> </h5>
       <p style="padding:0; margin: 0;">C.P. <?php echo $row0["codigoPostal"]; ?> RFC: <?php echo $row0["rfc"]; ?></p>
-      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p><br>
-      <p style="padding:0; margin: 0;"> Fecha: <?php echo $fecha; ?> Hora: <?php echo $hora; ?> </p>
-      <p style="padding:0; margin: 0;"> Sucursal Origen: <?php echo $origenName ?> </p>
-      <p style="padding:0; margin: 0;"> Sucursal Destino: <?php echo $destName ?> </p>
-      <p style="padding:0; margin: 0;">Proceso: Traspaso de producto</p>
+      <p style="padding:0; margin: 0;"> Tel: <?php echo $row0["tel"]; ?></p><br><br>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Fecha: <?php echo $fecha; ?>&nbsp;&nbsp;&nbsp;&nbsp; Hora: <?php echo $hora; ?> </p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Sucursal Origen: <?php echo $origenName ?> </p>
+      <p style="padding:0; margin: 0;font-weight: bold;text-align: left;"> Sucursal Destino: <?php echo $destName ?> </p>
+      <p style="padding:0; margin: 0;text-align: left;">Proceso: Traspaso de producto</p>
       <table style="width: 100%;">
       	<thead style="border-top: 1px dashed;border-bottom: 1px dashed;">
 
@@ -143,7 +145,7 @@
         </tr>
 
       </tbody>
-      </table>
+      </table><br><br>
      
 </div>
 <style>

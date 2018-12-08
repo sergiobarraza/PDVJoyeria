@@ -270,8 +270,8 @@
 							<th>name</th>
 							<th>Tipo</th>
 							<th>Linea</th>
-							<th>Departamento</th>
-							<th>Subdepartamento</th>
+							<th>Depto</th>
+							<th>Subdepto</th>
 							<th>Proveedor</th>
 							<th>Precio</th>	
 							<th>Editar</th>

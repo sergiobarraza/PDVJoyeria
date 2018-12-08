@@ -8,7 +8,7 @@
 	$array = [];
 
 	$sql = "SELECT distinct prenda_proceso.prenda, prenda_proceso.proceso, prenda.nombre_prenda, proceso.nombre_proceso 
-			FROM Fila 
+			FROM fila 
 			JOIN prenda_proceso ON Fila.prenda_proceso = prenda_proceso.id
 			JOIN prenda ON prenda_proceso.prenda = prenda.id_prenda 
 			JOIN proceso ON prenda_proceso.proceso = proceso.id_proceso WHERE idFolio = $folio;";

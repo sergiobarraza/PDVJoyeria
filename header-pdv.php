@@ -50,6 +50,7 @@
         <a href="/PDVJoyeria/views/devoluciones/index.php" style="display: block">Devoluciones</a>
         <a href="/PDVJoyeria/cortedecaja.php" style="display: <?php echo $showhalhmenu; ?>">Corte de caja</a>  
         <a href="/PDVJoyeria/views/entradaSalidaDinero/index.php" style="display: <?php echo $showhalhmenu; ?>">Entrada y Salida de dinero</a>
+        <a href="/PDVJoyeria/prestamo.php" style="display:block;">Prestamos de productos</a>
         <a href="/PDVJoyeria/logout.php" >Salir</a>
       </div>
       <span class="collapsed-menu" onclick="openNav()">&#9776;</span>

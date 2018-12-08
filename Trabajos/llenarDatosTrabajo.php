@@ -7,7 +7,7 @@
 	$folio = $_GET['folio'];
 	$array = [];
 
-	$sql = "SELECT idTrabajo, tiempo_estimado, precio, idCliente, comentario from Trabajo  where idTrabajo =$folio limit 1;";
+	$sql = "SELECT idTrabajo, tiempo_estimado, precio, idCliente, comentario from trabajo  where idTrabajo =$folio limit 1;";
 
 	$result = mysqli_query($con, $sql);
 	$count = $result->num_rows;

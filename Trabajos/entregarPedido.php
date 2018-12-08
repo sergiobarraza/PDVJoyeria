@@ -4,10 +4,10 @@
 	
 	$folio = $_POST["folioName"];
 	$fecha = date("Y-m-d H:i:s");
-	$sql = "SELECT Fila.idFila, terminado.idTerminado, terminado.operador, terminado.fechaFin, terminado.fechaInicio, Fila.estado, terminado.idTerminado 
-			from Fila 
-			join terminado on Fila.idFila = terminado.idFila
-			where Fila.idFolio = $folio;";
+	$sql = "SELECT fila.idFila, terminado.idTerminado, terminado.operador, terminado.fechaFin, terminado.fechaInicio, fila.estado, terminado.idTerminado 
+			from fila 
+			join terminado on fila.idFila = terminado.idFila
+			where fila.idFolio = $folio;";
 			echo $sql;
 	$result = mysqli_query($con,$sql);
 	$rows = $result->num_rows;
@@ -20,7 +20,7 @@
 			exit;
 		}else
 		{
-			$SQLupdate = "UPDATE Fila set estado = 4 where idFolio = $folio;";
+			$SQLupdate = "UPDATE fila set estado = 4 where idFolio = $folio;";
 			echo $SQLupdate ."<br>";
 			$ResultUPDATE = mysqli_query($con, $SQLupdate);
 			$idFila = $row["idFila"];
@@ -36,5 +36,5 @@
 		}
 		
 	}
-	header("Refresh:0; url=../imprimirticket_entrega_trabajo.php");
+	header("Refresh:0; url=../imprimirticket_entrega_trabajo.php?folio=$folio");
 ?>

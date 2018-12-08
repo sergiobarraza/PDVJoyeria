@@ -3,7 +3,7 @@
 	$folio = $_GET['folio'];
 	//$folio = 5;
 	$array = [];
-	$sql0 = "SELECT asignado.idasignado, Fila.idFolio FROM asignado join Fila on asignado.idFila = Fila.idFila where Fila.idFolio = $folio;";
+	$sql0 = "SELECT asignado.idasignado, Fila.idFolio FROM asignado join fila on asignado.idFila = Fila.idFila where Fila.idFolio = $folio;";
 	$result0 = mysqli_query($con, $sql0);
 	$rows0 = $result0->num_rows;
 
@@ -17,7 +17,7 @@
 
 	//$sql = "DELETE FROM asignado where idasignado =$idasignado;";
 	//$result = mysqli_query($con, $sql);
-	$sql1 = "UPDATE Fila set estado = 5 where idFolio = $folio";
+	$sql1 = "UPDATE fila set estado = 5 where idFolio = $folio";
 	//echo $sql1;
 	$result1 = mysqli_query($con, $sql1);
 

@@ -51,14 +51,14 @@
 	
 
 	
-	$nombreCliente = $_POST["nombreCliente"];
+	//$nombreCliente = $_POST["nombreCliente"];
 //	$folio = $_POST["folio"];
 	$pp = $_POST["tablaName"];
 	$operador = $_POST["operador_select"];
 	$urgencia = $_POST["urgencia_select"];
 	$tiempo_estimado = $_POST["tiempoEstimado"];
 	$comentario = $_POST["comentario"];
-	$fecha = date("Y-m-d H:i:s");
+	$fecha = date("Y-m-d");
 	$precio = $_POST["precioTotal"];
 	$anticipo = $_POST["preciopago"];
 	$cliente =$_POST["cliente"];;
@@ -78,10 +78,10 @@
 	{
 
 		//El FOLIO
-		$sqlTrabajo = "INSERT into Trabajo (tiempo_estimado, precio, idCliente, comentario) VALUES ($tiempo_estimado, $precio, $cliente, '$comentario');";
+		$sqlTrabajo = "INSERT into trabajo (tiempo_estimado, precio, idCliente, comentario) VALUES ($tiempo_estimado, $precio, $cliente, '$comentario');";
 		
 		$resultTrabajo = mysqli_query($con, $sqlTrabajo);	
-		$sqlFolio = "SELECT idTrabajo from Trabajo order by cast(idTrabajo as unsigned)desc limit 1;";
+		$sqlFolio = "SELECT idTrabajo from trabajo order by cast(idTrabajo as unsigned)desc limit 1;";
 		$resultFolio = mysqli_query($con, $sqlFolio);
 		$FolioTrabajo = $resultFolio->fetch_assoc();
 		$FolioTrabajoNuevo = $FolioTrabajo["idTrabajo"];
@@ -93,12 +93,12 @@
 		for ($i=0 ; $i < $mod ; $i++){
 			$prenda = $prenda_proceso[$x];
 			$proceso = $prenda_proceso[$y];	
-			$sqlPrendaProceso = "SELECT id from Prenda_proceso where prenda= $prenda and proceso = $proceso limit 1";
+			$sqlPrendaProceso = "SELECT id from prenda_proceso where prenda= $prenda and proceso = $proceso limit 1";
 			$resultPrendaProceso = mysqli_query($con, $sqlPrendaProceso);
 			$rowPrendaProceso = $resultPrendaProceso -> fetch_assoc();
 			$prenda_procesoVar = $rowPrendaProceso["id"];
 			
-			$sqlFila = "INSERT into Fila (idFolio, prenda_proceso, urgencia, fecha, estado) values ($FolioTrabajoNuevo, $prenda_procesoVar, $urgencia, '$fecha', 0);";
+			$sqlFila = "INSERT into fila (idFolio, prenda_proceso, urgencia, fecha, estado) values ($FolioTrabajoNuevo, $prenda_procesoVar, $urgencia, '$fecha', 0);";
 			//echo $sqlFila;
 			$resultFila = mysqli_query($con, $sqlFila);
 
