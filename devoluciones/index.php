@@ -7,6 +7,124 @@
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
+  if(isset($_POST['deposit'])) {
+    try {
+      function createVenta($idFolio, $idInventario, $idCobranza, $estado, $idTransaccion){
+        global $connection, $data;
+
+        $venta = array(
+          "idFolio" => $idFolio,
+          "idTransaccion" => $idTransaccion,
+          "idInventario" => $idInventario,
+          "idCobranza" => $idCobranza,
+          "descuento" => 0,
+          "estado" => $estado
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Venta",
+          implode(", ", array_keys($venta)),
+          ":" . implode(", :", array_keys($venta))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($venta);
+        return $connection->lastInsertId();
+      }
+
+      function createCobranza(){
+        global $connection, $data;
+
+        $cobranza = array(
+          "monto" => -$data['deposit_amount'],
+          "fecha" => date("Y-m-d")
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Cobranza",
+          implode(", ", array_keys($cobranza)),
+          ":" . implode(", :", array_keys($cobranza))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($cobranza);
+
+        return $connection->lastInsertId();
+      }
+
+      function createInventario($idProducto, $multiplier = 0){
+        global $connection, $data;
+        $inventario = array(
+          "idAlmacen" => $_SESSION['almacen'],
+          "idProducto" => intval($idProducto),
+          "tipo" => $multiplier,
+          "comentario" => "abono",
+          "fecha" => date("Y-m-d")
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Inventario",
+          implode(", ", array_keys($inventario)),
+          ":" . implode(", :", array_keys($inventario))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($inventario);
+
+        return $connection->lastInsertId();
+
+      }
+
+      function createTransaction($idAlmacen, $monto, $concepto, $tipoDePago){
+        global $connection, $data;
+
+        $transaccion = array(
+          "monto" => intval($monto),
+          "idAlmacen" => $idAlmacen,
+          "concepto" => $concepto,
+          "tipoDePago" => $tipoDePago,
+          "fecha" => date("Y-m-d")
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Transaccion",
+          implode(", ", array_keys($transaccion)),
+          ":" . implode(", :", array_keys($transaccion))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($transaccion);
+
+        return $connection->lastInsertId();
+      }
+
+      $data = $_POST['deposit'];
+
+      if($data['cash'] > 0) {
+        $idTransaccionCash = createTransaction($_SESSION['almacen'], $data['cash'], "abono", "cash");
+        $idInventario = createInventario($data['selected_product_id']);
+        $idCobranza = createCobranza();
+        createVenta($data['folio']['idFolio'], $idInventario, $idCobranza, "abono", $idTransaccionCash);
+      }
+
+      if($data['card'] > 0) {
+        $idTransaccionCard = createTransaction($_SESSION['almacen'], $data['cash'], "abono", "card");
+        $idInventario = createInventario($data['selected_product_id']);
+        $idCobranza = createCobranza();
+        createVenta($data['folio']['idFolio'], $idInventario, $idCobranza, "abono", $idTransaccionCard);
+      }
+
+      echo "OK";
+
+    } catch(PDOException $error) {
+      echo $sql . "<br>" . $error->getMessage();
+    }
+  }
+
   if(isset($_POST['cancel_folio'])) {
     try {
       $data = $_POST['cancel_folio'];

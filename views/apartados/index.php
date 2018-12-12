@@ -159,7 +159,7 @@ include("../../header-pdv.php"); ?>
       let uniqueInvs = [];
       folio.venta.filter(function(item) {
         var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
-        if(i <= -1 && item.inventario.idAlmacen == 200) {
+        if(i <= -1 && item.inventario && item.inventario.idAlmacen == 200) {
           uniqueInvs.push({
             idInventario: item.idInventario,
             idProducto: item.inventario.idProducto,
@@ -184,11 +184,13 @@ include("../../header-pdv.php"); ?>
             var i = uniqueTransaction.findIndex(x => x.idTransaccion == item.idTransaccion);
             if(i <= -1) {
               uniqueTransaction.push(item);
+              if(item.monto > 0) {
+                addPaymentHistoryElement(item);
+              }
             }
           }
         });
       }
-
 
       if(folio.venta[0].inventario){
         uniqueInvs = [];
@@ -199,10 +201,17 @@ include("../../header-pdv.php"); ?>
           }
         })
 
+        folio.venta.filter(function(item) {
+          var i = uniqueInvs.findIndex(x => x.idTransaccion == item.idTransaccion);
+          if(i <= -1) {
+            uniqueInvs.push(item);
+          }
+        })
+
         invList = [];
         uniqueInvs.map(( obj ) => {
           last_id_inventario = obj.idInventario;
-          if (obj.inventario.idAlmacen == 200) {
+          if (obj.inventario && obj.inventario.idAlmacen == 200) {
             if (obj.inventario.tipo > 0){
               invList.push(obj);
             } else {
@@ -219,9 +228,6 @@ include("../../header-pdv.php"); ?>
 
         invList.map((obj) => {
           addProductToVentaInfo(obj)
-          if(obj.transaccion && obj.transaccion.monto > 0) {
-            addPaymentHistoryElement(obj.transaccion);
-          }
         });
       }
 
@@ -231,6 +237,7 @@ include("../../header-pdv.php"); ?>
         let folio_ventas = folio.venta.map((obj) => {return obj})
         let last_venta = folio_ventas.filter(n => n.cobranza).slice(-1)[0];
         let paid_amount = uniqueTransaction.reduce((a, b) => a + parseFloat(b.monto), 0);
+        debugger;
         current_debt = "$ "+ parseFloat(last_venta.cobranza.deudaTotal * ((100 - parseFloat(last_venta.descuento))/100) - paid_amount).toFixed(3);
       } else {
         current_debt = "Liquidado";
@@ -256,16 +263,15 @@ include("../../header-pdv.php"); ?>
           deposit_amount: parseFloat($("#cash_payment").val() || 0),
           cash: parseFloat($("#cash_received").val() || 0),
           card: parseFloat($("#card_received").val() || 0),
-          selected_product_id: $('input[name=payment_selected]:checked').val(),
+          selected_product_id: $('input[name=payment_selected]:checked').data("id"),
         }
-
 
         $.ajax({
           type: "POST",
           url: "../../devoluciones/index.php",
           data: {deposit: deposit},
           success: function(res){
-            $("#folio-loader-parent").hide();
+            document.location.reload();
           }
         });
       }

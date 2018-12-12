@@ -81,11 +81,11 @@
                       <div class="row">
                         <form method="post" id="search_form">
                           <input type="text" name="search" class="form-control col-sm-10" style="margin: 0px;width:50%;display: inline-block;" id="productid" autofocus="autofocus" onkeydown="searchfield(event);">
-                          <select name="search_select" class="form-control form-control-sm" style="width: 100px;display:inline-block;height:38px;padding:6px 12px;">
-                            <option>
+                          <select id="search_select" name="search_select" class="form-control form-control-sm" style="width: 100px;display:inline-block;height:38px;padding:6px 12px;">
+                            <option value="codigo">
                               Código
                             </option>
-                            <option>
+                            <option value="nombre">
                               Nombre
                             </option>
                           </select>
@@ -185,10 +185,14 @@
     $("#search_form").on('submit', function (e){
       e.preventDefault();
       var searchstr = $("#productid").val();
+      if ($("#search_select").val() == "codigo") {
+        searchstr = parseInt(searchstr, 10).toString();
+      }
+
       $.ajax({
         type: "POST",
         url: "pdv2/search_post.php",
-        data: $("#search_form").serialize(),
+        data: {search: searchstr, search_select: $("#search_select").val()},
         cache: false,
         success: function(result) {
           appendNewProduct(result);
