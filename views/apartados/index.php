@@ -1,4 +1,4 @@
-<?php 
+<?php
 $pageSecurity = array("admin", "supervisor","venta");
 require "../../config/security.php";
 include("../../header-pdv.php"); ?>
@@ -177,6 +177,8 @@ include("../../header-pdv.php"); ?>
          // lista de pagos
       let uniqueTransaction = [];
       let paid_amount = 0;
+      let prodPaid = []
+
       if(folio.venta[0].transaccion) {
         let payments = folio.venta.map((obj) => {return obj.transaccion});
         payments.filter(function(item){
@@ -211,8 +213,8 @@ include("../../header-pdv.php"); ?>
         invList = [];
         uniqueInvs.map(( obj ) => {
           last_id_inventario = obj.idInventario;
-          if (obj.inventario && obj.inventario.idAlmacen == 200) {
-            if (obj.inventario.tipo > 0){
+          if (obj.inventario && (obj.inventario.idAlmacen == 200 || obj.inventario.tipo === "0")) {
+            if (obj.inventario.tipo >= 0){
               invList.push(obj);
             } else {
               let item = invList.find(x => x.inventario.idProducto == obj.inventario.idProducto)
@@ -226,25 +228,46 @@ include("../../header-pdv.php"); ?>
           }
         });
 
-        invList.map((obj) => {
-          addProductToVentaInfo(obj)
-        });
-      }
+        let current_debt;
+        let unique_cobranza = []
+        if (folio.idEstadoDeFolio == "1") {
+          let folio_ventas = folio.venta.map((obj) => {return obj})
 
-      // deuda actual
-      let current_debt;
-      if (folio.idEstadoDeFolio == "1") {
-        let folio_ventas = folio.venta.map((obj) => {return obj})
-        let last_venta = folio_ventas.filter(n => n.cobranza).slice(-1)[0];
-        let paid_amount = uniqueTransaction.reduce((a, b) => a + parseFloat(b.monto), 0);
-        debugger;
-        current_debt = "$ "+ parseFloat(last_venta.cobranza.deudaTotal * ((100 - parseFloat(last_venta.descuento))/100) - paid_amount).toFixed(3);
-      } else {
-        current_debt = "Liquidado";
+          if(folio.venta[0].cobranza) {
+            let cobranza = folio.venta.map((obj) => {return obj.cobranza});
+            folio.venta.filter(function(item){
+              if(item.idCobranza){
+                var i = unique_cobranza.findIndex(x => x.idCobranza == item.idCobranza);
+                if(i <= -1) {
+                  unique_cobranza.push(item);
+                }
+              }
+            });
+          }
+
+          current_debt = "$ " + unique_cobranza.reduce((a, b) => a + parseFloat(b.cobranza.monto), 0).toFixed(3);
+        } else {
+          current_debt = "Liquidado";
+        }
+        $("#ventInfo-folioDebt").text(current_debt);
+
+        unique_cobranza.map((obj) => {
+          val = prodPaid[obj.inventario.idProducto]
+          prodPaid[obj.inventario.idProducto] =
+            (val == null ? parseFloat(obj.cobranza.monto) : val += parseFloat(obj.cobranza.monto));
+        });
+
+        invList.map((obj) => {
+          if(obj.inventario.idAlmacen === "200" ){
+            addProductToVentaInfo(obj, (prodPaid[obj.inventario.idProducto] || "none"));
+          }
+        })
+
+
       }
-      $("#ventInfo-folioDebt").text(current_debt);
     }
 
+      // deuda actual
     $("#cash_payment, #cash_received, #card_received").change(function(e) {
       let cash_payment = parseFloat($("#cash_payment").val() || 0);
       let cash_received = parseFloat($("#cash_received").val() || 0);
@@ -278,7 +301,7 @@ include("../../header-pdv.php"); ?>
     });
 
 
-    function addProductToVentaInfo(obj) {
+    function addProductToVentaInfo(obj, debt) {
       let prod = products.find(e => e.idProducto == obj.inventario.idProducto);
       let precio = prod.precio * (100 - obj.descuento) / 100;
       let qty = obj.inventario.tipo;
@@ -288,7 +311,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>$"+((precio * qty) - parseFloat(paid)).toFixed(3)+"</td>"
+           str += "<td>$"+(debt !== "none" ? debt : precio * qty)+"</td>"
            str += "<td><input data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)

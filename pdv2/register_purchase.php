@@ -10,11 +10,11 @@
   error_reporting(E_ALL);
 
   if(isset($_POST['register_purchase'])){
-    function createCobranza(){
+    function createCobranza($monto){
       global $connection, $data;
 
       $cobranza = array(
-        "monto" => (($data['monto_total'] - $data['abono']) < 0 ? 0 : $data['monto_total'] - $data['abono']),
+        "monto" => $monto,
         "deudaTotal" => $data['monto_total'],
         "fecha" => $data['fecha']
       );
@@ -182,9 +182,6 @@
         $folioId = $connection->lastInsertId();
         echo json_encode(['folio' => $folioId]);
 
-        createCobranza();
-        $cobranzaId = $connection->lastInsertId();
-
         $cashAmountRemaining = 0;
         $cardAmountRemaining = 0;
 
@@ -196,19 +193,33 @@
           $cashAmountRemaining = $data['monto_efectivo'];
         }
 
+          $prodQty = count($data['productos']);
+
         foreach($data['productos'] as $producto){
-          $amountToPay = $producto['importe'];
+          //$amountToPay = $producto['importe'];
+          $amountToPay = $data['abono'] / $prodQty;
+
+          // variables para cobranza
+          //
           $transactionId = null;
           $transactionId2 = null;
+          $cobranzaId;
 
-          if($cardAmountRemaining > -1 ){
+          if($cardAmountRemaining > 0 ){
             if($cardAmountRemaining >= $amountToPay) {
               createTrasaction(1, $amountToPay, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
+
+              createCobranza($amountToPay);
+              $cobranzaId = $connection->lastInsertId();
+
               $cardAmountRemaining = $cardAmountRemaining - $amountToPay;
             } else {
               createTrasaction(1, $cardAmountRemaining, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
+
+              createCobranza($amountToPay);
+              $cobranzaId = $connection->lastInsertId();
 
               $amountToPay = $amountToPay - $cardAmountRemaining;
               $cardAmountRemaining = 0;

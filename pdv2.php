@@ -49,8 +49,11 @@
 
 <?php include("header-pdv.php"); ?>
     <div class="row " id="panelprincipal">
+
       <!-- Articulos -->
       <div class="col-sm-12 col-md-9 bg-white pt-3" >
+        <div id="alertContainer">
+        </div>
         <div class="row mb-2" >
           <div class="col-sm-12" id="prendamenu">
             <div class="text-center" style="height: 540px; overflow-y: scroll; max-height: 440px;">
@@ -477,7 +480,7 @@
         if($("#defaultCheck2").is(":checked")){
           data['register_purchase']['abono'] = card + cash;
         }
-
+        debugger;
         $.ajax({
           type: "POST",
           url: "pdv2/register_purchase.php",
@@ -547,9 +550,27 @@
 
       if (canSubmitForm){
         // verificar que no hay errores en los campos antes del submit
-        $("form.create_person_form").submit();
+        $.ajax({
+          type: "POST",
+          url: "pdv2.php",
+          data: $("form.create_person_form").serialize(),
+          success: function(res) {
+            createNewUserAlert();
+          }
+        });
+
       }
     });
+
+    function createNewUserAlert() {
+        str = "<div class='alert alert-success alert-dismissible fade in show' id='generalAlert' role='alert'>";
+          str += "<strong>Usuario creado!</strong> Se ha registrado el usuario correctamente.";
+          str += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+          str += "<span aria-hidden='true'>&times;</span>";
+          str += "</button>";
+        str += "</div>";
+        $("#alertContainer").html(str);
+    }
 
     function validateSingleField(){
        $("#email-error").text("");

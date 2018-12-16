@@ -33,11 +33,11 @@
         return $connection->lastInsertId();
       }
 
-      function createCobranza(){
+      function createCobranza($amount){
         global $connection, $data;
 
         $cobranza = array(
-          "monto" => -$data['deposit_amount'],
+          "monto" => -$amount,
           "fecha" => date("Y-m-d")
         );
 
@@ -107,14 +107,14 @@
       if($data['cash'] > 0) {
         $idTransaccionCash = createTransaction($_SESSION['almacen'], $data['cash'], "abono", "cash");
         $idInventario = createInventario($data['selected_product_id']);
-        $idCobranza = createCobranza();
+        $idCobranza = createCobranza($data['cash']);
         createVenta($data['folio']['idFolio'], $idInventario, $idCobranza, "abono", $idTransaccionCash);
       }
 
       if($data['card'] > 0) {
         $idTransaccionCard = createTransaction($_SESSION['almacen'], $data['cash'], "abono", "card");
         $idInventario = createInventario($data['selected_product_id']);
-        $idCobranza = createCobranza();
+        $idCobranza = createCobranza($data['cash']);
         createVenta($data['folio']['idFolio'], $idInventario, $idCobranza, "abono", $idTransaccionCard);
       }
 
