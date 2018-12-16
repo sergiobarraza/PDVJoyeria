@@ -64,24 +64,28 @@
 		    	<div class="w3-col l4 s12"  >
 			    	<div class="row">	
 			    		<div  class="w3-white w3-margin" id="divPanel">
-			        		<div class="w3-container  w3-black">
-			          			<h4>Panel de control</h4>
+			        		<div class="w3-container  w3-black p-2">
+			          			<h4 style="font-size: 18px;">Panel de control</h4>
 			        		</div>
 			       			<div style="padding:15px" class="w3-ul w3-hoverable w3-white">
 			        		<!-- AGREGAR NUEVO PEDIDO -->
 			         			<form class="panelControl" action="pedidoNew.php" method="post" enctype="multipart/form-data">
 			          				<table style="width: 100%;">
 			          	 				<tr>
-			          	          <td><label class="w3-padding-16 w3-large">Nombre: </label></td>
-                              <td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
-                                <input type="text" style="display: none;" id="panel-client-id" />
-               	                <input type="text" readonly="true" id="panel-client" style="width: 100%; max-width: 100%; overflow: hidden;" name="cliente" data-toggle="modal" data-target="#selectUserModal">
-                                </input>
-                         	   </td>
-                            </tr>
-                          <tr>
-                            <td><label class="w3-padding-16 w3-large">Urgencia:</label></td>
-			            					<td>
+			          	          			<td>
+			          	          				<label class=" w3-large">Nombre: </label>
+			          	          			</td>
+                              				<td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
+				                                <input type="text" style="display: none;" id="panel-client-id" name="cliente2" />
+				               	                <input type="text" readonly="true" id="panel-client" style="width: 100%; max-width: 100%; overflow: hidden;" name="cliente" data-toggle="modal" data-target="#selectUserModal">
+                                				
+                         	   				</td>
+                            			</tr>
+                          				<tr>
+                            			<td>
+                            				<label class=" w3-large">Urgencia:</label>
+                            			</td>
+			            				<td>
 						            			<select onchange="usuarioselect();" name="urgencia_select" id="urgencia">
 											        <option selected value="1">BAJA</option>
 											        <option value="3">ALTA</option>
@@ -90,7 +94,7 @@
 			            				</tr>
 			            				<tr>
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">Tiempo:</label>
+			            						<label class=" w3-large">Tiempo:</label>
 			            					</td>
 											<td >
 												<input type="hidden" name="tiempoEstimado" id="tiempo" style="width: 100%;" value="900">
@@ -99,16 +103,16 @@
 			            				</tr>
 			            				<tr>
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">Precio:</label>
+			            						<label class=" w3-large">Precio:</label>
 			            					</td>
 											<td >
 												
 												<input type="text" name="precioTotal" id="precio" style="width: 100%;" value="0" readonly="">
 											</td>
 			            				</tr>
-			            				<tr>
+			            				<tr style="display: none;">
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">Anticipo Min:</label>
+			            						<label class=" w3-large" >Anticipo Min:</label>
 			            					</td>
 											<td >
 												
@@ -117,7 +121,7 @@
 			            				</tr>
 			            				<tr>
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">A pagar:</label>
+			            						<label class=" w3-large">Abono:</label>
 			            					</td>
 											<td >
 												
@@ -126,7 +130,7 @@
 			            				</tr>
 			            				<tr>
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">Tipo:</label>
+			            						<label class=" w3-large">Tipo:</label>
 			            					</td>
 											<td >
 												
@@ -138,7 +142,7 @@
 			            				</tr>
 			            				<tr id="Efectivofield">
 			            					<td >
-			            						<label for="Efectivo" class="w3-padding-16 w3-large">Efectivo:</label>
+			            						<label for="Efectivo" class=" w3-large">Efectivo:</label>
 			            					</td>
 											<td >
 												
@@ -147,7 +151,7 @@
 			            				</tr>
 			            				<tr id="Cambiofield">
 			            					<td >
-			            						<label for="Cambio" class="w3-padding-16 w3-large">Cambio:</label>
+			            						<label for="Cambio" class=" w3-large">Cambio:</label>
 			            					</td>
 											<td >
 												
@@ -156,7 +160,7 @@
 			            				</tr>
 			            				<tr>
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">Comentario:</label>
+			            						<label class=" w3-large">Comentario:</label>
 			            					</td>
 			            					<td >
 			            						<input type="text" name="comentario" id="comentarioFolio" style="width: 100%;" >
@@ -204,7 +208,7 @@
 				          			<table class="panelFolio">
 				          	  			<tr>
 				          	    			<td>
-				          	    				<label class="w3-padding-16 w3-large">Nombre: </label>
+				          	    				<label class=" w3-large">Nombre: </label>
 				          	    			</td>
 				          	    			<td colspan="2">
 				          	    				<input type="text" name="nombreClienteFolio" id="nombreClienteFolio"  readOnly value="Rosa Maria">
@@ -212,7 +216,7 @@
 				          	  			</tr>
 				            			<tr>
 				            				<td>
-				            					<label class="w3-padding-16 w3-large">Cliente:</label>
+				            					<label class=" w3-large">Cliente:</label>
 				            				</td>
 				            				<td colspan="2">
 				            					<input style="text-transform: uppercase;" name="ClienteId" id="ClienteId" readonly>				 							    
@@ -221,7 +225,7 @@
 						            	
 						            	<tr>
 						            		<td>
-						            			<label class="w3-padding-16 w3-large">Tiempo Estimado:</label>
+						            			<label class=" w3-large">Tiempo Estimado:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="tiempoFolio" id="tiempoFolio" style="width: 100%;" value="" readOnly>
@@ -229,7 +233,7 @@
 						            	</tr>
 						            	<tr>
 						            		<td>
-						            			<label class="w3-padding-16 w3-large">Precio Total:</label>
+						            			<label class=" w3-large">Precio Total:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="precioTotal" id="precioTotal" style="width: 100%;" value="" readOnly>
@@ -238,7 +242,7 @@
 						            	<tr>
 						            		
 						            		<td>
-						            			<label class="w3-padding-16 w3-large">Abonado:</label>
+						            			<label class=" w3-large">Abonado:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="abonado" id="abonado" style="width: 100%;" value="" readOnly>
@@ -247,7 +251,7 @@
 						            	<tr>
 						            		
 						            		<td>
-						            			<label class="w3-padding-16 w3-large">Restante:</label>
+						            			<label class=" w3-large">Restante:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="precioRestante" id="precioRestante" style="width: 100%;" value="" readOnly>
@@ -256,7 +260,7 @@
 						            	<tr>
 						            		
 						            		<td>
-						            			<label class="w3-padding-16 w3-large">A pagar:</label>
+						            			<label class=" w3-large">A pagar:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="apagar" id="apagar" style="width: 100%;" value=""  class="input-number2" onchange="enable_abono();">
@@ -264,7 +268,7 @@
 						            	</tr>
 						            	<tr>
 			            					<td >
-			            						<label class="w3-padding-16 w3-large">Tipo:</label>
+			            						<label class=" w3-large">Tipo:</label>
 			            					</td>
 											<td >
 												
@@ -277,7 +281,7 @@
 			            				<tr id="Efectivo1field">
 						            	
 						            		<td>
-						            			<label for="Efectivo1" class="w3-padding-16 w3-large">Efectivo:</label>
+						            			<label for="Efectivo1" class=" w3-large">Efectivo:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="Efectivo1" id="Efectivo1" style="width: 100%;" value="" class="input-number2" onchange="enable_abono();">
@@ -286,7 +290,7 @@
 						            	<tr id="Cambio1field">
 						            	
 						            		<td>
-						            			<label for="Cambio1" class="w3-padding-16 w3-large">Cambio:</label>
+						            			<label for="Cambio1" class=" w3-large">Cambio:</label>
 						            		</td>
 											<td colspan="2">
 												<input type="text" name="Cambio1" id="Cambio1" style="width: 100%;" value="0" class="input-number2" readonly>
@@ -295,7 +299,7 @@
 						            	<tr>
 
 						            		<td >
-						            			<label class="w3-padding-16 w3-large">Comentario:</label>
+						            			<label class=" w3-large">Comentario:</label>
 						            		</td>
 						            		<td colspan="2">
 						            			<input type="text" name="comentarioName" id="comentarioFolio2" readOnly style="width: 100%;">
@@ -303,13 +307,13 @@
 						            	</tr>
 						            	<tr >
 						            		<td >
-						            			<a  class= "button-eliminar" onclick="eliminar();" >ELIMINAR</a>
+						            			<a  class= "button-eliminar" onclick="eliminar(); "  style="display: none;">ELIMINAR</a>
 						            		</td>
 						            		<td id="botonCambiar">
 						            			<button class="button-editar" disabled="true" id="buttonabonar" style="background-color:grey;">Abonar</button>
 						            		</td>
 											<td>
-												<a id="btn_agregados" class= "button-aceptar2" onclick="window.location.replace(location.pathname);">ACEPTAR</a>
+												<a id="btn_agregados" class= "button-aceptar2" onclick="window.location.replace(location.pathname);">  Salir</a>
 											</td>
 											
 						            	</tr>
@@ -334,18 +338,11 @@
 				          	    				<label class="w3-padding-16 w3-large">Nombre: </label>
 				          	    			</td>
 				          	    			<td colspan="2">
-				          	    				<input type="text" name="nombreClienteFolio" id="nombreClienteFolio"  readOnly value="Rosa Maria">
+				          	    				<input type="text" name="nombreClienteFolio2" id="nombreClienteFolio2"  readOnly value="">
 				          	    			</td>
 				          	  			</tr>
-				            			<tr>
-				            				<td>
-				            					<label class="w3-padding-16 w3-large">Cliente:</label>
-				            				</td>
-				            				<td colspan="2">
-				            					<input style="text-transform: uppercase;" name="ClienteId" id="ClienteId" readonly>				 							    
-						      				</td>
-						      			</tr>
-						            	
+				            			
+						            	<!-- 
 						            	
 						            	<tr>
 
@@ -353,9 +350,9 @@
 						            			<label class="w3-padding-16 w3-large">Comentario:</label>
 						            		</td>
 						            		<td colspan="2">
-						            			<input type="text" name="comentarioName" id="comentarioFolio2" readOnly style="width: 100%;">
+						            			<input type="text" name="comentarioName" id="comentarioFolio3" readOnly style="width: 100%;">
 						            		</td>
-						            	</tr>
+						            	</tr> -->
 						            	<tr >
 						            		<td colspan="2">
 						            			<a id="btn_agregados" class= "button-cancelar" onclick="window.location.replace(location.pathname);">Regresar</a>
@@ -372,9 +369,9 @@
 			    
 			      	</div>
 			      	<div class="row" id="divAgregados">
-			      		<div class="w3-white w3-margin">
-			        		<div class="w3-container  w3-black">
-			          			<h4>Procesos agregados</h4>
+			      		<div class="w3-white w3-margin" style="width: 100%;">
+			        		<div class="w3-container  w3-black p-2">
+			          			<h4 style="font-size: 18px;">Procesos agregados</h4>
 			        		</div>
 			        		<div style="padding:15px 10px; font-size: 24px;" class="w3-ul w3-hoverable w3-white">
 			        			<div id="procesos_agregados" class="tablaAgregados">
@@ -422,9 +419,9 @@
 				
 		   		<!--En Fila-->
 		    	<div  id="divProcesos" class="w3-col l2" >
-		      		<div class="w3-white w3-margin">
-		        		<div class="w3-container  w3-black">
-		          			<h4>Procesos en fila</h4>
+		      		<div class="w3-white w3-margin ">
+		        		<div class="w3-container  w3-black p-2">
+		          			<h4 style="font-size: 18px;">Procesos en fila</h4>
 		        		</div>
 		        		<div style="padding:0px ; font-size: 24px;" class="w3-ul w3-hoverable w3-white">
 		        			<div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
@@ -457,14 +454,14 @@
 			          				?>
 		            		</div>
 				        </div>
-	  		        </div><hr>
+	  		        </div>
 		    	</div>
 
 		    	<!--Terminados-->
 		    	<div  id="divterminados" class="w3-col l2" >
-		      		<div class="w3-white w3-margin">
-		        		<div class="w3-container  w3-black">
-		          			<h4>Terminados</h4>
+		      		<div class="w3-white w3-margin ">
+		        		<div class="w3-container  w3-black p-2">
+		          			<h4 style="font-size: 18px;">Terminados</h4>
 		        		</div>
 		        		<div style="padding:0; font-size: 24px;" class="w3-ul w3-hoverable w3-white">
 		        			<div  class="tablaAgregados" style="height:500px;overflow-y: scroll;">
@@ -499,8 +496,76 @@
 			          				?>
 		            		</div>
 				        </div>
-	  		        </div><hr>
+	  		        </div>
 		    	</div>
+		    	<div  id="divProcesos" class="w3-col l4" >
+		      		<div class="w3-white w3-margin ">
+		        		<div class="w3-container  w3-black p-2">
+		          			<h4 style="font-size: 18px;">Agregar Nuevo Cliente</h4>
+		        		</div>
+		        		<table style="width: 100%;">
+			          	 				<tr>
+			          	          			<td>
+			          	          				<label class=" w3-large" for="addname">Nombre: </label>
+			          	          			</td>
+                              				<td><!--input type="text" name="nombreCliente" id="nombreCliente" style="width: 100%;" required-->
+				                                
+				               	                <input type="text"  id="addname" style="width: 100%; max-width: 100%; overflow: hidden;" required="true" onchange="habilitarnuevocliente();">
+                                				
+                         	   				</td>
+                            			</tr>
+                          				
+			            				
+			            				<tr>
+			            					<td >
+			            						<label class=" w3-large" for="addapellido" required="true">Apellido:</label>
+			            					</td>
+											<td >
+												
+												<input type="text"  id="addapellido" style="width: 100%;"onchange="habilitarnuevocliente();">
+											</td>
+			            				</tr>
+			            				<tr ">
+			            					<td >
+			            						<label class=" w3-large" for="addemail">Email:</label>
+			            					</td>
+											<td >
+												
+												<input type="email"  id="addemail" style="width: 100%;">
+											</td>
+			            				</tr>
+			            				<tr>
+			            					<td >
+			            						<label for="addrfc" class=" w3-large">RFC:</label>
+			            					</td>
+											<td >
+												
+												<input type="text" name="preciopago" id="addrfc" style="width: 100%;" >
+											</td>
+			            				</tr>
+			            				
+			            				
+			            				<tr >
+			            					<td >
+			            						<label for="addtel" class=" w3-large">Tel:</label>
+			            					</td>
+											<td >
+												
+												<input type="text"  id="addtel" style="width: 100%;"  >
+											</td>
+			            				</tr>
+			            				
+			            				<tr>
+			            					<td >
+			            						
+			            					</td>
+											<td  id="botonAceptar">
+												<input type="submit" value="Agregar" name="submit" class="button-aceptar" style="background-color: gray;" disabled id="addbutton" onclick="addcliente();">
+											</td>
+			            				</tr>
+						            </table>
+		        	</div>
+		        </div>
 			</div>
 		</div>
 		<footer class="w3-container w3-dark-grey" >
@@ -1214,7 +1279,7 @@ function usuariohechura(usuariohech){
         suma = suma + costos[i];
 			}
 			//alert("Costo: "+suma);
-			anticipo = suma * 0.3;
+			anticipo = suma * 0;
 			document.getElementById("precio").value = suma;
 			document.getElementById("precioanticipo").value = anticipo;
 			anticipo2();
@@ -1223,6 +1288,7 @@ function usuariohechura(usuariohech){
 *
 */
 		function anticipo2(){
+			var precio = document.getElementById("precio").value;
 			var pago = document.getElementById("preciopago").value;	// Cuanto quiero pagar		
 			var tipo = document.getElementById("tipopago").value; // Metodo de pago
 			var anticipo = document.getElementById("precioanticipo").value; // Cuanto es el minimo de anticipo que se calculo
@@ -1232,7 +1298,7 @@ function usuariohechura(usuariohech){
 			{
 				document.getElementById("Cambiofield").style.display = "none";
 				document.getElementById("Efectivofield").style.display = "none";
-				if (pago >= anticipo && tablaPrendaProcesos.length > 0)
+				if (precio > pago && tablaPrendaProcesos.length > 0)
 				{
 					document.getElementById("aceptarbtn").style.background = "#49af59";
 					document.getElementById("aceptarbtn").disabled = false;
@@ -1249,7 +1315,7 @@ function usuariohechura(usuariohech){
 				document.getElementById('Cambio').value = cambio; // Muestra el cambio calculado
 				document.getElementById("Cambiofield").style.display = "table-row";
 				document.getElementById("Efectivofield").style.display = "table-row";
-				if (pago >= anticipo && tablaPrendaProcesos.length > 0 && cambio >= 0) 
+				if (precio > pago && tablaPrendaProcesos.length > 0 && cambio >= 0) 
 				{
 					document.getElementById("aceptarbtn").style.background = "#49af59";
 					document.getElementById("aceptarbtn").disabled = false;
@@ -1265,7 +1331,12 @@ function usuariohechura(usuariohech){
 		}
 
 		function Entregar(folio){
-			
+			var urlString = "llenarDatosTrabajo.php";
+			if (folio){
+				$.get(urlString, {folio: folio}, (response) => {
+					Entregar_Llenar(JSON.parse(response));
+				});
+			}
 			document.getElementById("divAgregados").style.display = "none";
 			document.getElementById("divAgregados2").style.display = "none";
 			document.getElementById("divPanel").style.display = "none";
@@ -1273,6 +1344,13 @@ function usuariohechura(usuariohech){
 			document.getElementById("divEntrega").style.display = "block";
 			document.getElementById("folioUpdate2").innerHTML = folio;
 			document.getElementById("folioForm2").value = folio;
+			
+		}
+
+		function Entregar_Llenar(response){
+			console.log(response[1]['nombre']);
+		console.log(response[1]['apellido']);
+		document.getElementById("nombreClienteFolio2").value = response[1]['nombre'] + " "+ response[1]['apellido'] ;
 		}
 
 		function calcular_cambio(totalfield,efectivofield,cambiofield){
@@ -1332,6 +1410,68 @@ function usuariohechura(usuariohech){
 				
 			}
 			console.log(tipo);
+		}
+
+		function habilitarnuevocliente(){
+			var nombre = document.getElementById("addname").value; 
+			var apellido = document.getElementById("addapellido").value;
+			if (nombre && apellido ) {
+				document.getElementById("addbutton").disabled = false;
+				document.getElementById("addbutton").style.background = "blue";
+			}else{
+				document.getElementById("addbutton").disabled = true;
+				document.getElementById("addbutton").style.background = "grey";
+			}
+		}
+
+		function addcliente(){
+			var urlString = "checkclient.php";
+
+			
+			//alert("ENTRO A LA FUNCION");
+			var nombre = document.getElementById("addname").value; 
+			var apellido = document.getElementById("addapellido").value;
+			
+			$.get(urlString, {nombre: nombre, apellido: apellido}, (response) => {
+				
+				checkDatosNuevoCliente(JSON.parse(response));
+				
+			});
+
+			/*urlString = "addclient.php";
+			$.get(urlString, {nombre: nombre, apellido: apellido, tel: tel, rfc: rfc, mail: mail}, (response) => {
+				
+				llenarDatosNuevoCliente(JSON.parse(response));
+				alert("NUEVO CLIENTE REGISTRADO");
+			});*/
+		
+		}
+		function llenarDatosNuevoCliente(response){
+			
+			document.getElementById("panel-client").value=response[0]['nombre']+" "+response[0]['apellido'];
+			document.getElementById("panel-client-id").value = response[0]['idPersona'];
+			console.log(response[0]['idPersona']);
+		}
+
+		function checkDatosNuevoCliente(response){
+			if (response[0][0] == 0) {
+				var nombre = document.getElementById("addname").value; 
+				var apellido = document.getElementById("addapellido").value;
+				var tel = document.getElementById("addtel").value; 
+				var rfc = document.getElementById("addrfc").value;
+				var mail = document.getElementById("addemail").value;
+				urlString = "addclient.php";
+				$.get(urlString, {nombre: nombre, apellido: apellido, tel: tel, rfc: rfc, mail: mail}, (response) => {
+					
+					llenarDatosNuevoCliente(JSON.parse(response));
+					alert("NUEVO CLIENTE REGISTRADO");
+				});
+			}else{
+				alert("CLIENTE EXISTENTE");
+				document.getElementById("panel-client").value=response[0]['nombre']+" "+response[0]['apellido'];
+				document.getElementById("panel-client-id").value = response[0]['idPersona'];
+			}
+			console.log(response);
 		}
 </script>
 

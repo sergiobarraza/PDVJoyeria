@@ -19,8 +19,8 @@
 	//include 'plantilla.php';
 	//require 'conexion.php';
 
-	$sql = "SELECT a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  SUM(a.monto) as monto,  a.comentario, a.idAlmacen,  a.fecha
-from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, Producto.codigo, Producto.nombre as Descripcion, Inventario.tipo,  Transaccion.monto,  Inventario.comentario, Inventario.idAlmacen,  Inventario.fecha
+	$sql = "SELECT a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  SUM(a.monto) as monto,  a.comentario, a.idAlmacen,  a.fecha, a.name
+from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, Producto.codigo, Producto.nombre as Descripcion, Inventario.tipo,  Transaccion.monto,  Inventario.comentario, Inventario.idAlmacen,  Inventario.fecha, Almacen.name
 		from Venta
         join Inventario on Venta.idInventario = Inventario.idInventario
 		join Producto on Inventario.idProducto = Producto.idProducto
@@ -28,9 +28,10 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		join Linea on Producto.idLinea = Linea.idLinea
 		join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
         join EstadoDeFolio on Folio.idEstadoDeFolio = EstadoDeFolio.idEstadosDeFolio
+        join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
         where Inventario.tipo < 0 and Inventario.fecha >= '$fecha' and Inventario.fecha <= '$fechafin' ) as a
-        group by a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  a.comentario, a.idAlmacen,  a.fecha
-        order by a.idLinea asc
+        group by a.idInventario, a.idLinea, a.Linea, a.codigo, a.Descripcion, a.tipo,  a.comentario, a.idAlmacen,  a.fecha, a.name
+        order by a.fecha asc, a.idLinea asc
         ;";
         $meses = array(
 								0 => "", 
@@ -101,12 +102,14 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		$pdf->Setfillcolor(232,232,232);
 		$pdf->SetFont('Arial','B', 12);
 		
+		$pdf->Cell(20, 6, 'Fecha', 1, 0, 'C', 1);
+		$pdf->Cell(30, 6, 'Almacen', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Linea', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Codigo', 1, 0, 'C', 1);
-		$pdf->Cell(65, 6, 'Descripcion', 1, 0, 'C', 1);
+		$pdf->Cell(35, 6, 'Descripcion', 1, 0, 'C', 1);
 		$pdf->Cell(17, 6, 'Unidad', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Precio', 1, 0, 'C', 1);
-		$pdf->Cell(20, 6, 'Fecha', 1, 0, 'C', 1);
+		
 		$pdf->Ln();
 
 		
@@ -123,14 +126,16 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 					$lineaShow = '';
 					$idLineaShow = '';
 				}
+				$pdf->Cell(20, 6, $row['fecha'], 1, 0, 'C');
+				$pdf->Cell(30, 6, $row['name'], 1, 0, 'C');
 				$monto = floor($row['monto']*pow(10,2))/pow(10	,2);
 				//$pdf->Cell(15, 6, $idLineaShow, 1, 0, 'C');
 				$pdf->Cell(30, 6, $lineaShow, 1, 0, 'C');
 				$pdf->Cell(30, 6, $row['codigo'], 1, 0, 'C');
-				$pdf->Cell(65, 6, $row['Descripcion'], 1, 0, 'C');
+				$pdf->Cell(35, 6, $row['Descripcion'], 1, 0, 'C');
 				$pdf->Cell(17, 6, ($row['tipo'])*-1, 1, 0, 'C');
-				$pdf->Cell(30, 6, $monto, 1, 0, 'c');
-				$pdf->Cell(20, 6, $row['fecha'], 1, 0, 'C');
+				$pdf->Cell(30, 6, $monto, 1, 0, 'C');
+				
 				$pdf->Ln();
 
 			}

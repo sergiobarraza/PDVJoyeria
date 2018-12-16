@@ -45,7 +45,7 @@
 	    }  
 	    	
 ?>
-<div id="printableArea" style="width: 4in; margin: auto; text-align: center;">
+<div id="printableArea" style="width: 4in; margin: 0; text-align: center;">
 	  <img src="img/LOGOTIPO JOYERIAS_Mesa de trabajo 2.png" style="display: inline-block; width: 60%;">
       <img src="<?php echo $row0['imagen']; ?>" style="display: inline-block; width: 38%;">
       <h2 style="padding:0; margin: 0;text-transform: uppercase">Joyeria Claros</h2>

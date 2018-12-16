@@ -15,7 +15,7 @@
 ?>
 <!-- Form-->
 	<div class="card mb-3" id="settings">
-        <div class="card-header"><i class="fa fa-area-chart"></i> Configuración de Almacen <span style="color:green; display: <?php if ($status== 'successentrada') { echo "inline-block";} else {echo "none";}?>"> - Entrada correcta</span><span style="color:red; display: <?php if ($status== 'errorentrada') { echo "inline-block";} else {echo "none";}?>"> - No existe producto</span></div>
+        <div class="card-header"><i class="fa fa-area-chart"></i> Configuración de Ticket de Almacen <span style="color:green; display: <?php if ($status== 'successentrada') { echo "inline-block";} else {echo "none";}?>"> - Entrada correcta</span><span style="color:red; display: <?php if ($status== 'errorentrada') { echo "inline-block";} else {echo "none";}?>"> - No existe producto</span></div>
         <div class="card-body">
         	<form method="Post" action="settings_update.php">
         		<div class="form-group row">

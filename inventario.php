@@ -224,7 +224,7 @@
   	<?php 
   		if ($status == 'successesalida') {
 		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<strong>¡Nuevo Prodocuto Ingresado!</strong> Código de producto = '.$codigo.' / Cantidad = '.$cantidad.' articulos 
+					<strong>¡Salida de Producto Correcta!</strong> Código de producto = '.$codigo.' / Cantidad = '.$cantidad.' articulos 
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					    <span aria-hidden="true">&times;</span>
 					</button>

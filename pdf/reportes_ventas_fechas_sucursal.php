@@ -104,7 +104,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 		$pdf->Setfillcolor(232,232,232);
 		$pdf->SetFont('Arial','B', 12);
 		
-		$pdf->Cell(30, 6, 'Linea', 1, 0, 'C', 1);
+		$pdf->Cell(35, 6, 'Linea', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Codigo', 1, 0, 'C', 1);
 		$pdf->Cell(65, 6, 'Descripcion', 1, 0, 'C', 1);
 		$pdf->Cell(17, 6, 'Unidad', 1, 0, 'C', 1);

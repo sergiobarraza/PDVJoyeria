@@ -229,8 +229,8 @@
 			
 					  	<div class="form-group row">
 						  	<div class="col-sm-2"></div>
-							<button class="btn btn-success col-sm-12 col-md-5 ml-3"> Aceptar</button>
-							<a class="btn btn-primary col-sm-12 col-md-4 ml-3 ml-4" onclick="location.reload();"> Default</a>
+							<button class="btn btn-success col-sm-12 col-md-3 ml-3"> Aceptar</button>
+							<a class="btn btn-primary col-sm-12 col-md-3 ml-3 ml-4" onclick="location.reload();"> Default</a>
 						</div>
 			        	
 			        </div>

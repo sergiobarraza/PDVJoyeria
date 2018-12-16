@@ -296,7 +296,7 @@
 				echo "<td>".$row1["precio"]."</td>";
 				
 			echo "<td><a class='btn btn-primary' href='articulos_editar.php?sku=".$row1["idProducto"]."'>Editar</a></td>";
-			echo "<td><a class='btn btn-secondary'>Imprimir</a></td>";
+			echo "<td><a class='btn btn-secondary' href='etiquetas_boton.php?producto=".$row1["idProducto"]."' target='_blank'>Imprimir</a></td>";
 			echo "</tr>";
 			  	  
 				}

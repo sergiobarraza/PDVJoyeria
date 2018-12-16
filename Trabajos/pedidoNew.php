@@ -61,7 +61,7 @@
 	$fecha = date("Y-m-d");
 	$precio = $_POST["precioTotal"];
 	$anticipo = $_POST["preciopago"];
-	$cliente =$_POST["cliente"];;
+	$cliente =$_POST["cliente2"];
 	$prenda_proceso= explode(",",$pp);
 	$mod = count($prenda_proceso);
 	$mod= $mod/3;
