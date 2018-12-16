@@ -143,6 +143,7 @@
       // Se necesitan 4 folios nuevos
 
       if($data['folio']['devuelto'] == 0 && $data['folio']['idEstadoDeFolio'] != 1){
+        echo $data['folio']['idFolio'];
         setFolioDevuelto($data['folio']['idFolio'], true);
         if($data['folio']['idEstadoDeFolio'] == 1){
           // Productos devueltos salen de 200 y entran a almacen central id: 1

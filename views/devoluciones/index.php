@@ -1,4 +1,4 @@
-<?php 
+<?php
 $pageSecurity = array("admin", "supervisor","venta");
 require "../../config/security.php";
 
@@ -525,7 +525,7 @@ include("../../header-pdv.php"); ?>
         data: devolution,
         success: function(res){
           data = res;
-          window.open("../../imprimirticket_devoluciones.php?idTransaccion="+res+"&cantidad="+$("#paidCash").val()+"&cambio="+$("#returnCash").val(), "_blank");
+          window.open("../../imprimirticket_devoluciones.php?folio="+parseInt(res)+"&cantidad="+$("#paidCash").val()+"&cambio="+$("#returnCash").val(), "_blank");
           document.location.reload();
         }
       });
