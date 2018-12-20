@@ -323,7 +323,8 @@ include("../../header-pdv.php"); ?>
 
         uniqueInvs.map(obj => {
           selectedProductInfo = products.find(prod => prod.idProducto == obj.inventario.idProducto);
-          deuda += selectedProductInfo.precio * (100 - obj.descuento) / 100;
+          qty = -obj.inventario.tipo;
+          deuda += qty * selectedProductInfo.precio * (100 - obj.descuento) / 100;
         });
         deuda = deuda.toFixed(2);
 
@@ -349,7 +350,7 @@ include("../../header-pdv.php"); ?>
           invList.map((obj) => {
             var tipo = parseInt(obj.inventario.tipo)*-1;
             for(var i=0; i < tipo; i++){
-              addFolioProductElement(obj.idInventario, obj.inventario.idProducto)
+              addFolioProductElement(obj.idInventario, obj.inventario.idProducto, false, obj.descuento);
             }
           });
         }
@@ -461,7 +462,7 @@ include("../../header-pdv.php"); ?>
       $("#product_index").append(str);
     }
 
-    function addFolioProductElement(inventarioId, productoId, isReplacement = false){
+    function addFolioProductElement(inventarioId, productoId, isReplacement = false, dcto = 0){
       var prod = products.find(obj => obj.idProducto == productoId);
       let linea = lines.find(obj => obj.idLinea == prod.idLinea);
       let str = isReplacement ? "<tr id='"+inventarioId+"' class='isReplacement bg-green'>" : "<tr id='"+inventarioId+"'>";
@@ -471,7 +472,7 @@ include("../../header-pdv.php"); ?>
         str += "<th class='folioProd-code'>"+prod['codigo']+"</th>"
         str += "<th>"+prod['nombre']+"</th>"
         str += "<th>"+linea.nombre+"</th>"
-        str += "<th class='folioProd-precio'>"+prod['precio']+"</th>"
+        str += "<th class='folioProd-precio'>"+prod['precio'] * (100 - dcto)/100+"</th>"
         str += "</tr>"
       $("#folio_products_list").prepend(str);
     }
