@@ -528,11 +528,28 @@
       }
      });
 
-    $("#client_search_input").change(function(e){
+    $("#client_search_input, #client_search_input-name, #client_search_input-last").change(function(e){
       $("#client_index-tbody").text("");
       let input = $("#client_search_input").val();
+      let name_input = $("#client_search_input-name").val();
+      let last_input = $("#client_search_input-last").val();
       let select = $("#client_search_select").val();
-      res = persons.filter( e => input.indexOf(e[select]) >= 0 || e[select].indexOf(input) >= 0)
+      let res;
+
+      if(select == "nombre"){
+        res = persons.filter(obj => (
+          name_input.indexOf(obj.nombre) >= 0 ||
+          obj.nombre.indexOf(name_input) >= 0
+        ));
+
+        res = res.filter(obj => (
+          last_input.indexOf(obj.apellido) >= 0 ||
+          obj.apellido.indexOf(last_input) >= 0
+        ));
+      } else {
+        res = persons.filter( e => input.indexOf(e[select]) >= 0 || e[select].indexOf(input) >= 0)
+      }
+
       res.map(row => {
         addPersonElement(row);
       })
@@ -543,8 +560,8 @@
             str += "<td id='person-id' style='display: none;'>"+row.idPersona+"</td>"
             str += "<td>"+row.nombre+"</td>"
             str += "<td>"+row.apellido+"</td>"
-            str += "<td>"+row.tel+"</td>"
-            str += "<td>"+row.email+"</td>"
+            str += "<td style='width:15%;'>"+row.tel+"</td>"
+            str += "<td style='width: 25%;'>"+row.email+"</td>"
             str += "<td>"+row.rfc+"</td>"
       $("#client_index-tbody").append(str);
     }
