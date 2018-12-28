@@ -429,10 +429,11 @@
     });
 
     function togglePurchaseButton(){
-      var cash = parseInt($("#cash_received").val());
-      var card = parseInt($("#card_received").val());
-      var deposit = parseFloat(card + cash);
-      var cash_payment = parseInt($("#cash_payment").val());
+      var cash = parseFloat($("#cash_received").val());
+      var card = parseFloat($("#card_received").val());
+      var cash_payment = parseFloat($("#cash_payment").val() || 0);
+      var card_payment = parseFloat($("#card_payment").val() || 0);
+      var deposit = parseFloat(cash_payment + card_payment);
       var is_separated = $("#defaultCheck2").is(":checked");
       var btn = $("#purchaseButton");
 
@@ -446,7 +447,7 @@
         }
       }
 
-      if(cash_payment >= deposit && deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated && prod_total > 250){
+      if((cash + card) >= deposit && deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated && prod_total > 250){
         if(btn.hasClass("disabled")){
           btn.removeClass("disabled");
         }
@@ -483,7 +484,7 @@
             idPersona: $("#clientNumber").val(),
             monto_total: parseFloat(prod_total).toFixed(3),
             monto_tarjeta: card,
-            monto_efectivo: ($("#defaultCheck1").is(":checked") ? cash - change : cash),
+            monto_efectivo: (cash - change),
             fecha: new Date().toJSON().slice(0,10),
             payment_type: {
             },
@@ -519,6 +520,7 @@
             } else {
               window.open("imprimirticket.php?folio="+idFolio+"&cambio="+(change || 0)+"&cantidad_efectivo="+cash+"&cantidad_tarjeta="+card, "_blank");
             }
+
             document.location.reload();
           }
         })
