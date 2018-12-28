@@ -257,12 +257,11 @@
             }
           }
           createInventario($producto, $_SESSION['almacen']);
+          createInventario($producto, 200, +1);
           $inventarioId = $connection->lastInsertId();
 
           createVenta($folioId, $inventarioId, $cobranzaId, $transactionId, $producto['porc_dcto'], "Venta");
           $idVenta = $connection->lastInsertId();
-
-          createInventario($producto, 200, +1);
 
           if($transactionId2 > 0) {
             createVenta($folioId, $inventarioId, $cobranzaId, $transactionId2, $producto['porc_dcto'], "Venta");

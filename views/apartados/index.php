@@ -311,7 +311,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>$"+(debt !== "none" ? debt : precio * qty)+"</td>"
+           str += "<td>$"+(debt !== "none" ? debt.toFixed(3) : (precio * qty).toFixed(3))+"</td>"
            str += "<td><input data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       $("#venta-tbody").append(str)
