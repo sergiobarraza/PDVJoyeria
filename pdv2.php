@@ -502,7 +502,7 @@
         }
 
         if($("#defaultCheck2").is(":checked")){
-          data['register_purchase']['abono'] = card + cash;
+          data['register_purchase']['abono'] = deposit;
         }
         $.ajax({
           type: "POST",
