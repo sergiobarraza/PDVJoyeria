@@ -515,7 +515,7 @@
             var is_separated = $("#defaultCheck2").is(":checked");
 
             if(is_separated){
-              window.open("imprimirticket_abono_apartado.php?folio="+idFolio);
+              window.open("imprimirticket_abono_apartado.php?folio="+idFolio+"&cambio="+( change || 0)+"&cantidad="+cash);
             } else {
               window.open("imprimirticket.php?folio="+idFolio+"&cambio="+(change || 0)+"&cantidad_efectivo="+cash+"&cantidad_tarjeta="+card, "_blank");
             }
