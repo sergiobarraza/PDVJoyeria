@@ -1,7 +1,9 @@
 <?php
     require "config/database.php";
 
-session_start();
+session_start([
+    'cookie_lifetime' => 86400,
+]);
 	$error=''; // Variable To Store Error Message
 	// Define $username and $password
 	$user=$_POST['username'];
