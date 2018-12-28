@@ -13,8 +13,8 @@
 	if (isset($_GET['cambio'])) {
 		$cambio = $_GET['cambio'];
 	}
-	if (isset($_GET['cantidad_efectivo'])) {
-		$cantidadPagada = $_GET['cantidad_efectivo'];
+	if (isset($_GET['cantidad'])) {
+		$cantidadPagada = $_GET['cantidad'];
 	}
 
 	include("header-pdv.php");
@@ -96,30 +96,40 @@
 	      	<tr style="border-bottom: 1px dashed;">
 	      		<td># </td>
 	      		<td colspan="3">Nombre</td>
+	      		<td>Valor</td>
 	      		
 	      	</tr>
       </thead>
       <tbody>
 		    <?php 
-		    	$sqlProductos = "SELECT Producto.codigo, Producto.nombre 
+		    	$sqlProductos = "SELECT Producto.codigo, Producto.nombre, Producto.idProducto
 				from Venta 
 				join Inventario on Inventario.idInventario = Venta.idInventario
-				
 				join Producto on Producto.idProducto = Inventario.idProducto
-				where idFolio = 436 and estado = 'Entrada de producto';";							   
-		    
+				where idFolio = $folio and estado = 'Entrada de producto';";							   
+			    
 
 			    $query2 = $connection->query($sqlProductos);
-			    $articulos=0;			    	 
+			    $articulos=0;	
+			    $monto1 = 0;		    	 
 			    foreach($query2->fetchAll() as $row) 
 			    {
+			    	$prod = $row["idProducto"];
+			    	$sqlMonto = "SELECT Transaccion.monto from Venta 
+			    	join Transaccion on Venta.idTransaccion = Transaccion.idTransaccion
+			    	join Inventario on Venta.idInventario = Inventario.idInventario
+
+			    	where Venta.idFolio = $folio and estado = 'Venta' and idProducto= $prod;";
+			    	$queryMonto= $connection->query($sqlMonto);
+			    	$rowMonto = $queryMonto->fetch(PDO::FETCH_ASSOC);
+
 			    	$articulos++;
-			    	
+			    	$monto1 = $monto1 + $rowMonto["monto"];
 			    	
 				  echo "<tr>
       						<td class ='pr-3'>".$row["codigo"]."</td>
       						<td colspan='3'>".$row["nombre"]."</td>
-      						
+      						<td >".$rowMonto["monto"]."</td>
       					</tr>
       					
       						";
@@ -129,7 +139,10 @@
 	      		
       		?>
   		<tr style="border-top: 1px dashed;">
-      		<td colspan="4"><?php echo $articulos; ?> Art(s)</td>
+  			<td colspan="2"><?php echo $articulos; ?> Art(s)</td>
+      		<td colspan="2">Subtotal</td>
+      		<td><?php echo floor($monto1*pow(10,2))/pow(10,2); ?></td>
+      		
 	      		
       	</tr>
       </tbody>
@@ -144,33 +157,35 @@
 	      	<tr style="border-bottom: 1px dashed;">
 	      		<td># </td>
 	      		<td colspan="3">Nombre</td>
-	      		<td></td>
+	      		<td>Precio</td>
 	      	</tr>
   	</thead>
   	<tbody>
       	<?php 
-		    	$sqlProductos = "SELECT Producto.codigo, Producto.nombre, Transaccion.monto 
+		    	$sqlProductos = "SELECT Producto.codigo, Producto.nombre, Transaccion.monto, Producto.precio 
 				from Venta 
 				join Inventario on Inventario.idInventario = Venta.idInventario
 				join Transaccion on Transaccion.idTransaccion = Venta.idTransaccion
 				
 				join Producto on Producto.idProducto = Inventario.idProducto
-				where idFolio = 436 and estado = 'Salida de producto';";							   
+				where idFolio = $folio and estado = 'Salida de producto';";							   
 		    
 
 			    $query2 = $connection->query($sqlProductos);
 			    $articulos=0;
-			    $monto = 0;			    	 
+			    $dif = 0;
+			    $precio = 0;			    	 
 			    foreach($query2->fetchAll() as $row) 
 			    {
 			    	$articulos++;
-			    	$monto = $monto + $row["monto"];
+			    	$precio = $precio + $row["precio"];
+			    	$dif = $dif + $row["monto"];
 			    	
 			    	
 				  echo "<tr>
       						<td class ='pr-3'>".$row["codigo"]."</td>
       						<td colspan='3'>".$row["nombre"]."</td>
-      						<td></td>
+      						<td>".$row["precio"]."</td>
       					</tr>
       					
       						";
@@ -182,7 +197,7 @@
 		<tr style="border-top: 1px dashed;">
       		<td colspan="2"><?php echo $articulos; ?> Art(s)</td>
       		<td colspan="2">Subtotal</td>
-      		<td><?php echo floor($monto*pow(10,2))/pow(10,2); ?></td>
+      		<td><?php echo floor($precio*pow(10,2))/pow(10,2); ?></td>
       	</tr>
       	<tr>
       		<td colspan="2"></td>
@@ -193,15 +208,32 @@
       	<tr>
       		<td colspan="2"></td>
       		<td colspan="2">Total: </td>
-      		<td><?php $Total = floor($monto*pow(10,2))/pow(10,2); echo $Total; ?></td>
+      		<td><?php $Total = floor($precio*pow(10,2))/pow(10,2); echo $Total; ?></td>
       	</tr>
       	<tr style="border-bottom: 1px dashed;">
       		<td colspan="5">
       			<?php include "numero_letras.php";echo numtowords($Total); ?>
       		</td>
       	</tr>
-      	
       	<tr>
+      		<td></td>
+      		<td>Total Art Devueltos:</td>
+      		<td></td>
+      		<td><?php echo $monto1; ?> </td>
+      	</tr>
+      	<tr>
+      		<td></td>
+      		<td>Total Art Nuevos:</td>
+      		<td></td>
+      		<td><?php echo $precio; ?> </td>
+      	</tr>
+      	<tr>
+      		<td></td>
+      		<td>Diferencia:</td>
+      		<td></td>
+      		<td><?php echo $dif; ?> </td>
+      	</tr>
+      	<tr style="border-top: 1px dashed;">
       		<td></td>
       		<td>Efectivo Entregado:</td>
       		<td></td>
@@ -240,7 +272,7 @@
 	    	//window.print();
 	    	document.body.innerHTML = originalContents;
 	    	//location.href= "Trabajos/index.php?folio=$folio";
-	    	//window.close();
+	    	window.close();
 		}
 	</script>
 			

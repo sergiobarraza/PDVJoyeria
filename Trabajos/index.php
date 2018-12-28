@@ -1298,7 +1298,7 @@ function usuariohechura(usuariohech){
 			{
 				document.getElementById("Cambiofield").style.display = "none";
 				document.getElementById("Efectivofield").style.display = "none";
-				if (precio > pago && tablaPrendaProcesos.length > 0)
+				if (precio >= pago && tablaPrendaProcesos.length > 0)
 				{
 					document.getElementById("aceptarbtn").style.background = "#49af59";
 					document.getElementById("aceptarbtn").disabled = false;
@@ -1315,7 +1315,7 @@ function usuariohechura(usuariohech){
 				document.getElementById('Cambio').value = cambio; // Muestra el cambio calculado
 				document.getElementById("Cambiofield").style.display = "table-row";
 				document.getElementById("Efectivofield").style.display = "table-row";
-				if (precio > pago && tablaPrendaProcesos.length > 0 && cambio >= 0) 
+				if (precio >= pago && tablaPrendaProcesos.length > 0 && cambio >= 0) 
 				{
 					document.getElementById("aceptarbtn").style.background = "#49af59";
 					document.getElementById("aceptarbtn").disabled = false;
@@ -1369,14 +1369,17 @@ function usuariohechura(usuariohech){
 		}
 
 		function enable_abono(){
-			var total = document.getElementById('apagar').value;			
+			var total = document.getElementById('apagar').value;
+			total = parseFloat(total);			
 			var tipo = document.getElementById("tipopago2").value;
+			var restante = document.getElementById("precioRestante").value;
+			restante = parseFloat(restante);
 			if (tipo == 'tarjeta' ) 
 			{
 				document.getElementById("Cambio1field").style.display = "none";
 				document.getElementById("Efectivo1field").style.display = "none";
 				
-				if (total > 0) 
+				if (total > 0 && restante >= total) 
 				{
 					document.getElementById("buttonabonar").disabled = false;
 					document.getElementById("buttonabonar").style.background = "blue";
@@ -1395,14 +1398,21 @@ function usuariohechura(usuariohech){
 				document.getElementById("Efectivo1field").style.display = "table-row";
 				var efectivo = document.getElementById('Efectivo1').value;
 				var cambio = efectivo - total ;
+				console.log("---------");
+				console.log("Cambio= "+cambio);
+				console.log("Restante= "+restante);
+				console.log("Total= "+total);
 				document.getElementById('Cambio1').value = cambio;
-				if (total>0 && cambio >=0) 
+				if (total>0 && cambio >=0 && restante>=total) 
 				{
+					
 					document.getElementById("buttonabonar").disabled = false;
 					document.getElementById("buttonabonar").style.background = "blue";
 				}
 				else
 				{
+					
+
 					document.getElementById("buttonabonar").disabled = true;
 					document.getElementById("buttonabonar").style.background = "grey";
 				}
@@ -1410,6 +1420,7 @@ function usuariohechura(usuariohech){
 				
 			}
 			console.log(tipo);
+			console.log("---------");
 		}
 
 		function habilitarnuevocliente(){
