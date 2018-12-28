@@ -43,7 +43,7 @@ $almacen = $_SESSION['almacen'];
 		<div class="row">
 			<div class="col-sm-4 col-md-2"></div>
 			<div class="col-sm-4 col-md-6">
-				<button type="success" class="btn btn-success"   autofocus="autofocus">	Success</button>								
+				<button type="success" class="btn btn-success"   autofocus="autofocus">	Prestar</button>								
 			</div>
 			
 						

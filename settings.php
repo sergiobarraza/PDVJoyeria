@@ -12,7 +12,23 @@
 	}else{
 		$idAlmacen = $_SESSION['almacen'];
 	}
+	if ($status == 'success') {
+		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>¡Almacen '.$idAlmacen.' Actualizado!</strong> 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}elseif($status == 'error') {
+		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<strong>¡Error!  - </strong> 
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+			</div>';
+	}
 ?>
+
 <!-- Form-->
 	<div class="card mb-3" id="settings">
         <div class="card-header"><i class="fa fa-area-chart"></i> Configuración de Ticket de Almacen <span style="color:green; display: <?php if ($status== 'successentrada') { echo "inline-block";} else {echo "none";}?>"> - Entrada correcta</span><span style="color:red; display: <?php if ($status== 'errorentrada') { echo "inline-block";} else {echo "none";}?>"> - No existe producto</span></div>

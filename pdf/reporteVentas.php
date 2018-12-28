@@ -97,12 +97,14 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 
 		$pdf->Setfillcolor(232,232,232);
 		$pdf->SetFont('Arial','B', 12);
+		$pdf->Cell(190, 6, 'VENTA DEL DIA', 1, 0, 'C', 1);
+			$pdf->Ln();
 		$pdf->Cell(15, 6, '#', 1, 0, 'C', 1);
 		$pdf->Cell(35, 6, 'Linea', 1, 0, 'C', 1);
 		$pdf->Cell(30, 6, 'Codigo', 1, 0, 'C', 1);
 		$pdf->Cell(65, 6, 'Descripcion', 1, 0, 'C', 1);
 		$pdf->Cell(17, 6, 'Unidad', 1, 0, 'C', 1);
-		$pdf->Cell(30, 6, 'Precio', 1, 0, 'C', 1);
+		$pdf->Cell(28, 6, 'Precio', 1, 0, 'C', 1);
 		$pdf->Ln();
 
 		
@@ -125,7 +127,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 				$pdf->Cell(30, 6, $row['codigo'], 1, 0, 'C');
 				$pdf->Cell(65, 6, $row['Descripcion'], 1, 0, 'C');
 				$pdf->Cell(17, 6, ($row['tipo'])*-1, 1, 0, 'C');
-				$pdf->Cell(30, 6, $monto, 1, 0, 'c');
+				$pdf->Cell(28, 6, $monto, 1, 0, 'c');
 				$pdf->Ln();
 
 			}
@@ -136,7 +138,7 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
 			join Producto on Producto.idProducto = Inventario.idProducto
 			join Linea on Producto.idLinea = Linea.idLinea
 			join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
-			where Inventario.idAlmacen = $sucursal and Inventario.fecha < '$fecha'
+			where Inventario.idAlmacen = $sucursal 
 			order by Producto.codigo asc, cast(Producto.codigo as unsigned) asc) as a
 			group by a.idAlmacen, a.linea, a.codigo, a.producto,a.Almname) as b
 			where cantidad <0
@@ -146,6 +148,8 @@ from (SELECT  Inventario.idInventario, Producto.idLinea, Linea.nombre as Linea, 
         	$pdf->Setfillcolor(232,232,232);
 			$pdf->SetFont('Arial','B', 12);
 			//$pdf->Cell(40, 6, 'Almacen', 1, 0, 'C', 1);
+			$pdf->Cell(190, 6, 'PRODUCTOS CON INVENTARIO NEGATIVO', 1, 0, 'C', 1);
+			$pdf->Ln();
 			$pdf->Cell(40, 6, 'Linea', 1, 0, 'C', 1);
 			$pdf->Cell(35, 6, 'Codigo', 1, 0, 'C', 1);
 			$pdf->Cell(85, 6, 'Descripcion', 1, 0, 'C', 1);
