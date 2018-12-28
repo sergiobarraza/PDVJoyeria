@@ -16,7 +16,7 @@ require "config/security.php";
 	}
 	
 	$sql = "UPDATE prenda_proceso set tiempo_estimado = $tiempo, costo = $costo where id = $id; ";
-	echo $sql;
+	//echo $sql;
 	$result = mysqli_query($con, $sql);
 	header("Refresh:0; url=trabajos_prendaproceso.php?prenda=$prenda");
 

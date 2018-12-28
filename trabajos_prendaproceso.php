@@ -60,7 +60,7 @@ try {
 											echo "<td style='padding: 0;'><input type='text' name='tiempoH' value=' ".$Horas."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
 											echo "<td style='padding: 0;'><input type='text' name='tiempoM' value=' ".$Minutos."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
 											echo "<td style='padding: 0;'><input type='text' name='tiempoS' value=' ".$Segundos."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
-											echo "<td style='padding: 0;'><input type='text' name='costo' value='".$row["costo"]."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
+											echo "<td style='padding: 0;'><input type='text' name='costo' value='".$row["costo"]."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required class='input-number'></td>";
 											echo "<td style='padding: 0;'><button type='success' class='btn btn-success mt-1'>Actualizar</button>";
 											echo "</form></tr>";
 										}

@@ -107,7 +107,7 @@
 			            					</td>
 											<td >
 												
-												<input type="text" name="precioTotal" id="precio" style="width: 100%;" value="0" readonly="">
+												<input type="text" name="precioTotal" id="precio" style="width: 100%;" value="0" class="input-number2">
 											</td>
 			            				</tr>
 			            				<tr style="display: none;">
