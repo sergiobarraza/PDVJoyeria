@@ -119,7 +119,7 @@
 			    	
 			    	$preciototal= $preciounitario * $cantidad * (1-$descuento/100);
 			    	$preciototalR= floor($preciototal*pow(10,2))/pow(10,2);
-			    	$Total = $Total + $preciototalR;
+			    	$Total = $Total + $preciototal;
 			    	$descuentop= ($preciounitarioR - $preciototalR/$cantidad)*$cantidad;
 			    	$descuentopesos= $descuentopesos + $descuentop;
 			    	$articulos= $articulos + $cantidad;			 			    	
@@ -159,7 +159,7 @@
       	<tr>
       		<td colspan="2"></td>
       		<td colspan="2">Total: </td>
-      		<td><?php echo $Total ?></td>
+      		<td><?php echo floor($Total*pow(10,2))/pow(10,2); ?></td>
       	</tr>
       	<tr style="border-bottom: 1px dashed;">
       		<td colspan="5">
