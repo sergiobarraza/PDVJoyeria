@@ -82,7 +82,7 @@
         global $connection, $data;
 
         $transaccion = array(
-          "monto" => intval($monto),
+          "monto" => $monto,
           "idAlmacen" => $idAlmacen,
           "concepto" => $concepto,
           "tipoDePago" => $tipoDePago,
