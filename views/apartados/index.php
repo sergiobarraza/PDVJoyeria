@@ -203,15 +203,16 @@ include("../../header-pdv.php"); ?>
           }
         })
 
+        let uniqueTrans = [];
         folio.venta.filter(function(item) {
-          var i = uniqueInvs.findIndex(x => x.idTransaccion == item.idTransaccion);
+        var i = uniqueTrans.findIndex(x => x.idTransaccion == item.idTransaccion);
           if(i <= -1) {
-            uniqueInvs.push(item);
+            uniqueTrans.push(item);
           }
         })
 
         invList = [];
-        uniqueInvs.map(( obj ) => {
+        uniqueTrans.map(( obj ) => {
           last_id_inventario = obj.idInventario;
           if (obj.inventario && (obj.inventario.idAlmacen == 200 || obj.inventario.tipo === "0")) {
             if (obj.inventario.tipo >= 0){
@@ -257,7 +258,7 @@ include("../../header-pdv.php"); ?>
             (val == null ? parseFloat(obj.cobranza.monto) : val += parseFloat(obj.cobranza.monto));
         });
 
-        invList.map((obj) => {
+        uniqueInvs.map((obj) => {
           if(obj.inventario.idAlmacen === "200" ){
             addProductToVentaInfo(obj, (prodPaid[obj.inventario.idProducto] || "none"));
           }
