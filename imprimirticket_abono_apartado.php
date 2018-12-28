@@ -101,7 +101,7 @@
 		    	$sqlProductos = "SELECT Venta.descuento, Inventario.tipo, Producto.precio, Producto.nombre, Producto.codigo from Venta 
 					join Inventario on Venta.idInventario = Inventario.idInventario
 					join Producto on Producto.idProducto = Inventario.idProducto 
-					where Venta.idFolio = $folio and Inventario.tipo < 0";							   
+					where Venta.idFolio = $folio and Inventario.tipo > 0";							   
 		    
 
 			    $query2 = $connection->query($sqlProductos);
@@ -114,7 +114,7 @@
 			    	
 			    	$preciounitario = $row["precio"];
 			    	$preciounitarioR = floor($preciounitario*pow(10,2))/pow(10,2);
-			    	$cantidad = $row["tipo"] * (-1);
+			    	$cantidad = $row["tipo"];
 			    	$descuento = $row["descuento"];
 			    	
 			    	$preciototal= $preciounitario * $cantidad * (1-$descuento/100);
@@ -263,10 +263,10 @@
 	    	var printContents = document.getElementById(divName).innerHTML;
 	    	var originalContents = document.body.innerHTML;
 		    document.body.innerHTML = printContents;
-	    	//window.print();
+	    	window.print();
 	    	document.body.innerHTML = originalContents;
 	    	//location.href= "Trabajos/index.php?folio=$folio";
-	    	//window.close();
+	    	window.close();
 		}
 	</script>
 			

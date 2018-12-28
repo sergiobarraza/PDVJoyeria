@@ -21,7 +21,7 @@
 
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>pvd - Joyería Claro</title>
+  <title>pdv - Joyería Claro</title>
   <!-- Bootstrap core CSS-->
   <link href="/PDVJoyeria/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->

@@ -21,19 +21,22 @@ require "config/database.php";
 	  try 
 	  {
         $connection = new PDO($dsn, $username, $password, $options );
-        $sql0= "SELECT Folio.idFolio, Folio.idPersona, Folio.fechaDeCreacion, EstadoDeFolio.nombre, Persona.nombre as cliente, Persona.apellido  
+        $sql0= "SELECT Folio.idFolio, Folio.idPersona, Folio.fechaDeCreacion, EstadoDeFolio.nombre, Persona.nombre as cliente, Persona.apellido, Almacen.name as almacen
 		from Venta 
 		join Folio on Venta.idFolio = Folio.idFolio
 		join EstadoDeFolio on EstadoDeFolio.idEstadosDeFolio = Folio.idEstadoDeFolio
 		join Persona on Folio.idPersona = Persona.idPersona
+		join Inventario on Venta.idInventario = Inventario.idInventario
+		join Almacen on Inventario.idAlmacen = Almacen.idAlmacen
 		group by Folio.idFolio
+		having Almacen.name <> 'apartado'
 		limit 10000;";
         $query0 = $connection->query($sql0);
         
        
       } catch(PDOException $error) {
         echo $sql . "<br>" . $error->getMessage();
-        header("Refresh:0; url=pdv2.php");
+        //header("Refresh:0; url=pdv2.php");
 
       }
 	?>
@@ -50,6 +53,7 @@ require "config/database.php";
 							<th>#Cliente</th>
 							<th>Cliente</th>
 							<th>Fecha</th>
+							<th>Sucursal</th>
 							<th>Estado</th>
 							<th>Seleccionar</th>
 						</tr>
@@ -63,6 +67,7 @@ require "config/database.php";
 										<td>".$row["idPersona"]."</td>
 										<td>".$row["cliente"]." ".$row["apellido"]."</td>
 										<td>".$row["fechaDeCreacion"]."</td>
+										<td>".$row["almacen"]."</td>
 										<td>".$row["nombre"]."</td>
 										<td><input href='foliosventa.php?folio=".$row["idFolio"]."' class='btn btn-success' value='Seleccionar' onclick='myFunction(".$row["idFolio"].")'></td>
 									</tr>";

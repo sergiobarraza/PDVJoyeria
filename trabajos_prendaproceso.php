@@ -57,10 +57,10 @@ try {
 											echo "<tr><form action='trabajos_prendaproceso_update.php' method='Post'>";
 											echo "<td style='padding: 0;'><input type='text' name='id' value='".$prenda." ' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' readonly></td>";
 											echo "<td style='padding: 0;'><input type='text' name='idproceso' style='display:none;' value='".$row['id']."'><input type='text' name='idprenda' style='display:none;' value='".$idprenda."'><input type='text' name='nombre' value='".$row["nombre_proceso"]."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' readonly></td>";
-											echo "<td style='padding: 0;'><input type='text' name='tiempoH' value=' ".$Horas."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
-											echo "<td style='padding: 0;'><input type='text' name='tiempoM' value=' ".$Minutos."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
-											echo "<td style='padding: 0;'><input type='text' name='tiempoS' value=' ".$Segundos."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required></td>";
-											echo "<td style='padding: 0;'><input type='text' name='costo' value='".$row["costo"]."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required class='input-number'></td>";
+											echo "<td style='padding: 0;'><input type='text' name='tiempoH' value=' ".$Horas."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required class='input-number2'></td>";
+											echo "<td style='padding: 0;'><input type='text' name='tiempoM' value=' ".$Minutos."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required class='input-number2'></td>";
+											echo "<td style='padding: 0;'><input type='text' name='tiempoS' value=' ".$Segundos."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required class='input-number2'></td>";
+											echo "<td style='padding: 0;'><input type='text' name='costo' value='".$row["costo"]."' style = 'border:0; background: transparent; margin: 0; width: 100%; height: 48px; display: block; text-align: center;' required class='input-number2'></td>";
 											echo "<td style='padding: 0;'><button type='success' class='btn btn-success mt-1'>Actualizar</button>";
 											echo "</form></tr>";
 										}
