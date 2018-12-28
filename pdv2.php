@@ -371,29 +371,51 @@
     $("#checkout-modal__products").append('<td><b>$'+parseFloat(prod_total).toFixed(2)+'</b></td>');
     $("#checkout-modal__products").append('</tr>');
 
-    $(".cash_payment").hide();
-    if($("#checkCash").is(':checked')){
-      $(".cash_payment").show();
-      $("#cash_payment").val(parseFloat(prod_total).toFixed(2));
-      if(!$("#checkCard").is(':checked')){
+    var is_separated = $("#defaultCheck2").is(":checked");
+
+    if(is_separated) {
+      $(".cash_payment").hide();
+      if($("#checkCash").is(':checked')){
+        $(".cash_payment").show();
+        $("#cash_payment").val(parseFloat(prod_total).toFixed(2));
+      }
+
+      $(".card_payment").hide();
+      $(".full_card_payment").hide();
+      if($("#checkCard").is(':checked')){
+        $(".card_payment").show();
+        $("#cash_payment").attr('readonly', false);
+        if(!$("#checkCash").is(':checked')){
+          $(".full_card_payment").show();
+          $("#cash_received").val(0);
+          $("#card_payment").val(prod_total).attr("readonly", true);
+          togglePurchaseButton();
+        }
+      }
+
+    } else {
+      //mostrador y factura
+      $(".cash_payment").hide();
+      if($("#checkCash").is(':checked')){
+        $(".cash_payment").show();
+        $("#cash_payment").val(parseFloat(prod_total).toFixed(2));
         $("#cash_payment").attr('readonly', true);
       }
-    }
 
-    $(".card_payment").hide();
-    $(".full_card_payment").hide();
-    if($("#checkCard").is(':checked')){
-      $(".card_payment").show();
-      $("#cash_payment").attr('readonly', false);
-      if(!$("#checkCash").is(':checked')){
-        $(".full_card_payment").show();
-        $("#cash_received").val(0);
-        $("#card_payment").val(prod_total).attr("readonly", true);
-        togglePurchaseButton();
+      $(".card_payment").hide();
+      $(".full_card_payment").hide();
+      if($("#checkCard").is(':checked')){
+        $(".card_payment").show();
+        if(!$("#checkCash").is(':checked')){
+          $(".full_card_payment").show();
+          $("#cash_received").val(0);
+          $("#card_payment").val(prod_total).attr("readonly", true);
+          togglePurchaseButton();
+        }
       }
     }
 
-    $("#cash_received, #card_received, input[name='payment_type']").change(()=>{
+    $("#cash_received, #cash_payment, #card_received, input[name='payment_type']").change(()=>{
       var cash = parseFloat($("#cash_payment").val());
       var received = parseFloat($("#cash_received").val());
       var card_received = parseFloat($("#card_received").val());
@@ -410,6 +432,7 @@
       var cash = parseInt($("#cash_received").val());
       var card = parseInt($("#card_received").val());
       var deposit = parseFloat(card + cash);
+      var cash_payment = parseInt($("#cash_payment").val());
       var is_separated = $("#defaultCheck2").is(":checked");
       var btn = $("#purchaseButton");
 
@@ -423,7 +446,7 @@
         }
       }
 
-      if(deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated && prod_total > 250){
+      if(cash_payment >= deposit && deposit >= 100 && (prod_total * 0.25 < deposit) && is_separated && prod_total > 250){
         if(btn.hasClass("disabled")){
           btn.removeClass("disabled");
         }
