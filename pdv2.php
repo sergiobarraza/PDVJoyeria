@@ -480,7 +480,6 @@
         if($("#defaultCheck2").is(":checked")){
           data['register_purchase']['abono'] = card + cash;
         }
-        debugger;
         $.ajax({
           type: "POST",
           url: "pdv2/register_purchase.php",

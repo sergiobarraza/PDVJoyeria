@@ -193,24 +193,21 @@
           $cashAmountRemaining = $data['monto_efectivo'];
         }
 
-          $prodQty = count($data['productos']);
+        $prodQty = count($data['productos']);
 
         foreach($data['productos'] as $producto){
           //$amountToPay = $producto['importe'];
           $amountToPay = $data['abono'] / $prodQty;
-
           // variables para cobranza
-          //
           $transactionId = null;
           $transactionId2 = null;
           $cobranzaId;
-
           if($cardAmountRemaining > 0 ){
             if($cardAmountRemaining >= $amountToPay) {
               createTrasaction(1, $amountToPay, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
 
-              createCobranza($amountToPay);
+              createCobranza($producto['importe'] - $amountToPay);
               $cobranzaId = $connection->lastInsertId();
 
               $cardAmountRemaining = $cardAmountRemaining - $amountToPay;
@@ -237,14 +234,28 @@
             //pago en efectivo
             if($cashAmountRemaining >= $amountToPay) {
               createTrasaction(1, $amountToPay, "Venta", "efectivo");
+              $transactionId = $connection->lastInsertId();
+
               $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
+
+              createCobranza($producto['importe'] - $amountToPay);
+              $cobranzaId = $connection->lastInsertId();
+
             } else {
               createTrasaction(1, $cashAmountRemaining, "Venta", "efectivo");
+              $transactionId = $connection->lastInsertId();
+
+              $amountToPay = $amountToPay - $cashAmountRemaining;
+
+              $cashAmountRemaining = 0;
+
+              createCobranza($amountToPay);
+              $cobranzaId = $connection->lastInsertId();
+
+              $amountToPay = $amountToPay - $cashAmountRemaining;
               $cashAmountRemaining = 0;
             }
-            $transactionId = $connection->lastInsertId();
           }
-
           createInventario($producto, $_SESSION['almacen']);
           $inventarioId = $connection->lastInsertId();
 
@@ -252,12 +263,10 @@
           $idVenta = $connection->lastInsertId();
 
           createInventario($producto, 200, +1);
-          $inventarioId = $connection->lastInsertId();
 
           if($transactionId2 > 0) {
             createVenta($folioId, $inventarioId, $cobranzaId, $transactionId2, $producto['porc_dcto'], "Venta");
           }
-
         }
       }
     } catch(PDOException $error) {
