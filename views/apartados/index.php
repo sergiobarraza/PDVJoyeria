@@ -262,8 +262,6 @@ include("../../header-pdv.php"); ?>
             addProductToVentaInfo(obj, (prodPaid[obj.inventario.idProducto] || "none"));
           }
         })
-
-
       }
     }
 
@@ -300,20 +298,39 @@ include("../../header-pdv.php"); ?>
       }
     });
 
+    $("#give_product").click(function(e){
+      debugger;
+    });
 
-    function addProductToVentaInfo(obj, debt) {
+    function giveAwayProduct(e){
+      debugger;
+    }
+
+
+    function addProductToVentaInfo(obj, debt, taken=false) {
       let prod = products.find(e => e.idProducto == obj.inventario.idProducto);
       let precio = prod.precio * (100 - obj.descuento) / 100;
       let qty = obj.inventario.tipo;
       let paid = obj.transaccion ? obj.transaccion.monto : 0;
       let dcto = (100 - obj.descuento) / 100;
-      let str = "<tr class='venta-body__tr'>"
+      let str;
+      if(taken) {
+        str = "<tr class='venta-body__tr'>"
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>$"+(debt !== "none" ? debt.toFixed(3) : (precio * qty).toFixed(3))+"</td>"
+           str += "<td>"+"Entregado"+"</td>"
+           str += "<td><input disabled data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
+         str += "</tr>";
+      } else {
+        str = "<tr class='venta-body__tr'>"
+           str += "<td>"+prod.nombre+"</td>"
+           str += "<td>$"+precio+"</td>"
+           str += "<td style='text-align: center;'>"+qty+"</td>"
+           str += "<td>"+(debt !== "none" ? "<input type='button' id='give_product' onclick='giveAwayProduct("+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(precio * qty).toFixed(3))+"</td>"
            str += "<td><input data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
+      }
       $("#venta-tbody").append(str)
       return {product: prod, price: precio, qty: qty, discount: obj.descuento}
     }
