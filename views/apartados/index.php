@@ -327,7 +327,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td>"+(debt === "none" ? "<input type='button' id='give_product' onclick='giveAwayProduct("+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(debt).toFixed(2))+"</td>"
+           str += "<td style='padding-right:0px;'>"+(debt === "none" ? "<input type='button' id='give_product' onclick='giveAwayProduct("+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(debt).toFixed(2))+"</td>"
            str += "<td><input data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       }

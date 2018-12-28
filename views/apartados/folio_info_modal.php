@@ -69,10 +69,10 @@
                   <td>
                     Precio
                   </td>
-                  <td>
+                  <td style="padding-left: 0px;padding-right: 0px;">
                     Cantidad
                   </td>
-                  <td>
+                  <td style="padding-left: 30px;padding-right: 30px;">
                     Saldo
                   </td>
                   <td>
