@@ -10,6 +10,70 @@
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
+  if(isset($_POST['giveAwayProduct'])){
+    try {
+       function createVenta($idFolio, $idInventario, $estado){
+        global $connection, $data;
+
+        $venta = array(
+          "idFolio" => $idFolio,
+          "idInventario" => $idInventario,
+          "descuento" => 0,
+          "estado" => $estado
+        );
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Venta",
+          implode(", ", array_keys($venta)),
+          ":" . implode(", :", array_keys($venta))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($venta);
+        return $connection->lastInsertId();
+      }
+
+      function createInventario($idProducto, $almacen = 0, $multiplier = 0){
+        global $connection, $data;
+        $inventario = array(
+          "idProducto" => intval($idProducto),
+          "tipo" => $multiplier,
+          "comentario" => "entrega",
+          "fecha" => date("Y-m-d")
+        );
+
+        if ($almacen > 0) {
+          $inventario["idAlmacen"] = $almacen;
+        }
+
+        $sql = sprintf(
+          "INSERT INTO %s (%s) values (%s)",
+          "Inventario",
+          implode(", ", array_keys($inventario)),
+          ":" . implode(", :", array_keys($inventario))
+        );
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($inventario);
+
+        return $connection->lastInsertId();
+      }
+      $data = $_POST['giveAwayProduct'];
+      $idInventario = createInventario($data['prodId'], 200, -1);
+      $idVenta = createVenta($data['folioId'], $idInventario, "entrega");
+
+      $idInventario = createInventario($data['prodId']);
+      $idVenta = createVenta($data['folioId'], $idInventario, "entrega");
+
+      echo $idVenta;
+
+    } catch(PDOException $error) {
+      echo $error->getMessage();
+    }
+
+  }
+
   if(isset($_POST['devolution'])){
     try {
       $data = $_POST['devolution'];

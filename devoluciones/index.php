@@ -235,6 +235,7 @@
                 'idProducto' => $inv_row['idProducto'],
                 'tipo' => $inv_row['tipo'],
                 'idAlmacen' => $inv_row['idAlmacen'],
+                'comentario' => $inv_row['comentario'],
                 'fecha' => $inv_row['fecha']
               ];
             }

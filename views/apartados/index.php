@@ -56,6 +56,25 @@ include("../../header-pdv.php"); ?>
 <?php include "../../footer-pdv.php"; ?>
 
 <script>
+    function giveAwayProduct(folioId, prodId){
+      var bool = confirm("Seguro de entregar el producto?");
+      if(bool) {
+        $.ajax({
+          type: "POST",
+          url: "../../devoluciones/create.php",
+          data: {giveAwayProduct: { folioId: folioId, prodId: prodId }},
+          dataType: "json",
+          success: function(res){
+            $("#give_product-"+prodId).parent().text("Entregado");
+            document.location.reload();
+          }
+         });
+      } else {
+        alert("Se ha cancelado la solicitud");
+      }
+    }
+
+
   $(document).ready(function(){
     let data = [];
     let products = [];
@@ -159,11 +178,12 @@ include("../../header-pdv.php"); ?>
       let uniqueInvs = [];
       folio.venta.filter(function(item) {
         var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
-        if(i <= -1 && item.inventario && item.inventario.idAlmacen == 200) {
+        if(i <= -1 && item.inventario && item.inventario.idAlmacen == 200 && item.inventario.comentario !== "entrega") {
           uniqueInvs.push({
             idInventario: item.idInventario,
             idProducto: item.inventario.idProducto,
             tipo: item.inventario.tipo,
+            comentario: item.inventario.comentario,
             idAlmacen: item.inventario.idAlmacen,
             descuento: item.descuento
           });
@@ -198,7 +218,11 @@ include("../../header-pdv.php"); ?>
         uniqueInvs = [];
         folio.venta.filter(function(item) {
           var i = uniqueInvs.findIndex(x => x.idInventario == item.idInventario);
-          if(i <= -1) {
+          if (item.inventario.comentario === "entrega") {
+            let index = uniqueInvs.findIndex(x => x.inventario.idProducto == item.inventario.idProducto);
+            uniqueInvs[index].inventario.entregado = true;
+          }
+          if(i <= -1 && item.inventario.comentario !== "entrega") {
             uniqueInvs.push(item);
           }
         })
@@ -260,7 +284,7 @@ include("../../header-pdv.php"); ?>
 
         uniqueInvs.map((obj) => {
           if(obj.inventario.idAlmacen === "200" ){
-            addProductToVentaInfo(obj, (prodPaid[obj.inventario.idProducto] || "none"));
+            addProductToVentaInfo(obj, (prodPaid[obj.inventario.idProducto] || "none"), obj.inventario.entregado);
           }
         })
       }
@@ -302,14 +326,6 @@ include("../../header-pdv.php"); ?>
       }
     });
 
-    $("#give_product").on('click', 'selector', function(e){
-      debugger;
-    });
-
-    function giveAwayProduct(e){
-      debugger;
-    }
-
 
     function addProductToVentaInfo(obj, debt, taken=false) {
       let prod = products.find(e => e.idProducto == obj.inventario.idProducto);
@@ -331,7 +347,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>"+prod.nombre+"</td>"
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
-           str += "<td style='padding-right:0px;'>"+(debt === "none" ? "<input type='button' id='give_product' onclick='giveAwayProduct("+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(debt).toFixed(2))+"</td>"
+           str += "<td style='padding-right:0px;'>"+(debt === "none" ? "<input type='button' id='give_product-"+obj.inventario.idProducto+"' onclick='giveAwayProduct("+obj.idFolio+", "+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(debt).toFixed(2))+"</td>"
            str += "<td><input "+ (debt === "none" ? "disabled" : "") +" data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       }

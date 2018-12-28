@@ -54,7 +54,7 @@
                 <tr style="margin-bottom: 15px;">
                   <td style="font-weight: 600;">Numero de productos:</td>
                   <td id="ventaInfo-prodCount" style="padding: 0 15px;"></td>
-                  <td style="font-weight: 600;">Deuda actual:</td>
+                  <td style="font-weight: 600;">Saldo actual:</td>
                   <td id="ventInfo-folioDebt" style="padding: 0 15px;">$0</td>
                 </tr>
               </tbody>
