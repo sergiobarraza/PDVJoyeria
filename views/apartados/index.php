@@ -293,13 +293,16 @@ include("../../header-pdv.php"); ?>
           url: "../../devoluciones/index.php",
           data: {deposit: deposit},
           success: function(res){
+            //generar ticket
+            //cantidad efectivo y cambio
+            window.open("../../imprimirticket_abono_apartado.php?folio="+deposit.folio.idFolio+"&cantidad="+deposit.cash+"&cambio="+($("#change").val()));
             document.location.reload();
           }
         });
       }
     });
 
-    $("#give_product").click(function(e){
+    $("#give_product").on('click', 'selector', function(e){
       debugger;
     });
 
@@ -329,7 +332,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
            str += "<td style='padding-right:0px;'>"+(debt === "none" ? "<input type='button' id='give_product' onclick='giveAwayProduct("+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(debt).toFixed(2))+"</td>"
-           str += "<td><input data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
+           str += "<td><input "+ (debt === "none" ? "disabled" : "") +" data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       }
       $("#venta-tbody").append(str)

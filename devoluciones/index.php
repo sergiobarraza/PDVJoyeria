@@ -106,7 +106,7 @@
 
       if($data['cash'] > 0) {
         $cash_amount = $data['deposit_amount'] - $data['card'];
-        $idTransaccionCash = createTransaction($_SESSION['almacen'], $cash_amount, "abono", "cash");
+        $idTransaccionCash = createTransaction($_SESSION['almacen'], $cash_amount, "abono", "efectivo");
         $idInventario = createInventario($data['selected_product_id']);
         $idCobranza = createCobranza($cash_amount);
         createVenta($data['folio']['idFolio'], $idInventario, $idCobranza, "abono", $idTransaccionCash);
@@ -114,7 +114,7 @@
 
       if($data['card'] > 0) {
         $card_amount = $data['deposit_amount'] - $data['cash'];
-        $idTransaccionCard = createTransaction($_SESSION['almacen'], $card_amount, "abono", "card");
+        $idTransaccionCard = createTransaction($_SESSION['almacen'], $card_amount, "abono", "tarjeta");
         $idInventario = createInventario($data['selected_product_id']);
         $idCobranza = createCobranza($card_amount);
         createVenta($data['folio']['idFolio'], $idInventario, $idCobranza, "abono", $idTransaccionCard);
