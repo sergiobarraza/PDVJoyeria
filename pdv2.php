@@ -407,8 +407,8 @@
     });
 
     function togglePurchaseButton(){
-      var cash = $("#cash_received").val();
-      var card = $("#card_received").val();
+      var cash = parseInt($("#cash_received").val());
+      var card = parseInt($("#card_received").val());
       var deposit = parseFloat(card + cash);
       var is_separated = $("#defaultCheck2").is(":checked");
       var btn = $("#purchaseButton");
@@ -489,7 +489,13 @@
           success: function(result) {
             btn.text("OK!");
             let idFolio = result.folio;
-            window.open("imprimirticket.php?folio="+idFolio+"&cambio="+(change || 0)+"&cantidad_efectivo="+cash+"&cantidad_tarjeta="+card, "_blank");
+            var is_separated = $("#defaultCheck2").is(":checked");
+
+            if(is_separated){
+              window.open("imprimirticket_abono_apartado.php?folio="+idFolio);
+            } else {
+              window.open("imprimirticket.php?folio="+idFolio+"&cambio="+(change || 0)+"&cantidad_efectivo="+cash+"&cantidad_tarjeta="+card, "_blank");
+            }
             document.location.reload();
           }
         })
