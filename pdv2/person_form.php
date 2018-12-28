@@ -31,7 +31,7 @@
       <div class="col-sm-9 row">
         <input
           type="text"
-          class="form-control col-sm-10"
+          class="form-control col-sm-10 unique-field"
           id="Name"
           name="nombre"
           placeholder="Mostrador"
@@ -42,53 +42,45 @@
     <div class="form-group row">
       <label for="LastName" class="col-sm-3 col-form-label">Apellido</label>
       <div class="col-sm-9 row">
-          <input type="text" class="form-control col-sm-10" minlength="4" id="LastName" name="apellido" placeholder="Mostrador" readonly required>
+          <input type="text" class="form-control col-sm-10 unique-field" minlength="4" id="LastName" name="apellido" placeholder="Mostrador" readonly required>
           <div class="col-sm-2" onclick="search_person('name')" ><i class="fa fa-search clickable"></i></div>
       </div>
     </div>
-    <span id="email-error" style="font-size: 16px;color: red;"></span>
     <div class="form-group row">
       <label for="Email" class="col-sm-3 col-form-label">Email</label>
       <div class="col-sm-9 row">
-          <input type="email" class="form-control col-sm-10 unique-field"
+          <input type="email" class="form-control col-sm-10"
              id="Email"
              name="email"
              placeholder="Correo Electronico"
-             onChange="validateSingleField()"
              readonly
-             required>
+             >
           <div class="col-sm-2" onclick="search_person('email')" ><i class="fa fa-search clickable"></i></div>
       </div>
     </div>
-    <span id="rfc-error" style="font-size: 16px;color: red;"></span>
     <div class="form-group row">
       <label for="Rfc" class="col-sm-3 col-form-label">RFC</label>
       <div class="col-sm-9 row">
-        <input type="text" class="form-control col-sm-10 unique-field"
+        <input type="text" class="form-control col-sm-10"
           id="Rfc"
           name="rfc"
           placeholder="Ingrese un Rfc (opcional)"
           readonly
-          onChange="validateSingleField()"
-          onkeyup="validateRfc(this)"
         >
         <div class="col-sm-2" onclick="search_person('rfc')" ><i class="fa fa-search clickable"></i></div>
       </div>
     </div>
-    <span id="tel-error" style="font-size: 16px;color: red;"></span>
     <div class="form-group row">
       <label for="Tel" class="col-sm-3 col-form-label">Tel</label>
       <div class="col-sm-9 row">
         <input
           type="tel"
-          class="form-control col-sm-10 unique-field"
+          class="form-control col-sm-10"
           id="Tel"
           name="tel"
-          onChange="validateSingleField()"
           placeholder="871-123-4567"
           readonly
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          required>
+          >
         <div class="col-sm-2" onclick="search_person('tel')"><i class="fa fa-search clickable"></i></div>
       </div>
     </div>
@@ -100,7 +92,7 @@
     </div>
   </div>
 </form>
-<link rel="stylesheet" type="text/css" href="css/person_form.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/person_form.css"> -->
 
 <script>
   function search_person(opt) {

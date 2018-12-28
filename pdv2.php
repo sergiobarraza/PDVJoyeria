@@ -576,19 +576,24 @@
         tel: $("#Tel")
       }
 
-      var fieldsUnique = validatePersonFieldsUnique(data);
-
-      if (canSubmitForm){
-        // verificar que no hay errores en los campos antes del submit
+      if(data.nombre.val().length < 4) {
+        alert("El nombre debe contener al menos 4 letras");
+      } else if( data.lastName.val().length < 4) {
+        alert("Los apellidos deben contener al menos 4 letras");
+      } else {
         $.ajax({
           type: "POST",
           url: "pdv2.php",
           data: $("form.create_person_form").serialize(),
           success: function(res) {
             createNewUserAlert();
+            data.nombre.val("");
+            data.lastName.val("");
+            data.email.val("");
+            data.rfc.val("");
+            data.tel.val("");
           }
         });
-
       }
     });
 
@@ -618,27 +623,28 @@
     function validatePersonFieldsUnique(data){
       var obj = {validatePersonFields: {}}
       var result = true;
+      canSubmitForm = true;
       Object.keys(data).map(function(key, index) {
         if(data[key].val() && data[key].hasClass("unique-field")){
          $("#"+key.substr(0,1).toUpperCase()+key.substr(1))[0].setCustomValidity("");
           return obj["validatePersonFields"][key] = data[key].val();
         }
       });
-      $.ajax({
-        type: "POST",
-        url: "pdv2/verify_person_field.php",
-        data: obj,
-        dataType: "json",
-        success: function(res) {
-          Object.keys(res).map( key => {
-            if(!res[key]){
-              $(`#${key}-error`).text(`* El ${key} proporcionado ya existe.`);
-              let field = key.substr(0,1).toUpperCase()+key.substr(1);
-              $("#"+field)[0].setCustomValidity("Email existe.");
-            }
-            canSubmitForm = Object.keys(res).every((k)=> {return res[k]});
-          });
-        }
-      });
+      //$.ajax({
+//        type: "POST",
+//        url: "pdv2/verify_person_field.php",
+//        data: obj,
+//        dataType: "json",
+//        success: function(res) {
+//          Object.keys(res).map( key => {
+//            if(!res[key]){
+//              $(`#${key}-error`).text(`* El ${key} proporcionado ya existe.`);
+//              let field = key.substr(0,1).toUpperCase()+key.substr(1);
+//              $("#"+field)[0].setCustomValidity("Email existe.");
+//            }
+//            canSubmitForm = Object.keys(res).every((k)=> {return res[k]});
+//          });
+//        }
+//      });
     }
 </script>
