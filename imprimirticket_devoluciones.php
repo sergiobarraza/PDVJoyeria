@@ -16,6 +16,11 @@
 	if (isset($_GET['cantidad'])) {
 		$cantidadPagada = $_GET['cantidad'];
 	}
+	if(!$cambio){
+		$cambio = "0.00";
+	}if(!$cantidadPagada){
+		$cantidadPagada = "0.00";
+	}
 
 	include("header-pdv.php");
 	require "config/database.php";
@@ -162,13 +167,13 @@
   	</thead>
   	<tbody>
       	<?php 
-		    	$sqlProductos = "SELECT Producto.codigo, Producto.nombre, Transaccion.monto, Producto.precio 
+		    	$sqlProductos = "SELECT Producto.codigo, Producto.nombre,  Producto.precio 
 				from Venta 
 				join Inventario on Inventario.idInventario = Venta.idInventario
-				join Transaccion on Transaccion.idTransaccion = Venta.idTransaccion
+				
 				
 				join Producto on Producto.idProducto = Inventario.idProducto
-				where idFolio = $folio and estado = 'Salida de producto';";							   
+				where Venta.idFolio = $folio and Venta.estado = 'Salida de producto';";							   
 		    
 
 			    $query2 = $connection->query($sqlProductos);
@@ -179,7 +184,7 @@
 			    {
 			    	$articulos++;
 			    	$precio = $precio + $row["precio"];
-			    	$dif = $dif + $row["monto"];
+			    	
 			    	
 			    	
 				  echo "<tr>
@@ -229,9 +234,9 @@
       	</tr>
       	<tr>
       		<td></td>
-      		<td>Diferencia:</td>
+      		<td>Restante:</td>
       		<td></td>
-      		<td><?php echo $dif; ?> </td>
+      		<td><?php $dif = $precio - $monto1;if($dif > 0) {echo $dif; } else{echo "0.00";}?> </td>
       	</tr>
       	<tr style="border-top: 1px dashed;">
       		<td></td>
@@ -272,7 +277,7 @@
 	    	//window.print();
 	    	document.body.innerHTML = originalContents;
 	    	//location.href= "Trabajos/index.php?folio=$folio";
-	    	window.close();
+	    	//window.close();
 		}
 	</script>
 			
