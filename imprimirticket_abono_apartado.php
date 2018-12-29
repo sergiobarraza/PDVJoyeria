@@ -208,9 +208,9 @@
       			<td></td>
       		</tr>
       		<?php 
-      			$sqlRestante = "SELECT Cobranza.idCobranza, Cobranza.monto, Venta.idFolio from Venta 
+      			$sqlRestante = "SELECT Cobranza.idCobranza, Sum(Cobranza.monto) as monto, Venta.idFolio from Venta 
 								join Cobranza on Cobranza.idCobranza =Venta.idCobranza 
-								group by Cobranza.idCobranza having Venta.idFolio=437 ";
+								group by Cobranza.idCobranza, Venta.idFolio having Venta.idFolio=$folio ";
 				$queryRestante = $connection->query($sqlRestante);
 				 $abonado =0;
 				 foreach($queryRestante->fetchAll() as $rowRestante) 
