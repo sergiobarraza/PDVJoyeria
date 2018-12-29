@@ -590,11 +590,11 @@
             createNewUserAlert();
             let idFromRes = JSON.parse(res.split("\n")[0]).id
             $("#clientNumber").val(idFromRes);
-            data.nombre.attr("disabled", true);
-            data.lastName.attr("disabled", true);
-            data.email.attr("disabled", true);
-            data.rfc.attr("disabled", true);
-            data.tel.attr("disabled", true);
+            data.nombre.attr("readonly", true);
+            data.lastName.attr("readonly", true);
+            data.email.attr("readonly", true);
+            data.rfc.attr("readonly", true);
+            data.tel.attr("readonly", true);
           }
         });
       }
