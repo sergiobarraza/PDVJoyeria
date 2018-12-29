@@ -590,7 +590,6 @@
             createNewUserAlert();
             let idFromRes = JSON.parse(res.split("\n")[0]).id
             $("#clientNumber").val(idFromRes);
-            debugger;
             data.nombre.attr("disabled", true);
             data.lastName.attr("disabled", true);
             data.email.attr("disabled", true);
