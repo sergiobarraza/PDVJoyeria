@@ -365,7 +365,7 @@ include("../../header-pdv.php"); ?>
     $("#paidCash").change((e) => {
       let toCharge = parseFloat($("#missing_payment").val());
       let toPay = parseFloat($("#paidCash").val());
-      let toReturn = toPay - toCharge;
+      let toReturn = (toPay - toCharge).toFixed(3);
       $("#returnCash").val(toReturn);
 
     });
@@ -388,7 +388,7 @@ include("../../header-pdv.php"); ?>
 
     $("#folio_products_list").click(function(e){
       var prices = $( "#folio_products_list input:checked" ).map(function() {return $(this).parent().parent().not('.isReplacement').find(".folioProd-precio").text()});
-      var total = prices.toArray().reduce((a,b) => { return parseInt(a || 0) + parseInt(b || 0)}, 0);
+      var total = prices.toArray().reduce((a,b) => { return parseFloat(a || 0) + parseFloat(b || 0)}, 0);
       $("#returned_products_value").val(total);
       calculateMissingPayment();
     });
