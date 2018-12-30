@@ -144,24 +144,24 @@
           $transactionId2 = 0;
           if($cardAmountRemaining > 0 ){
             if($cardAmountRemaining >= $amountToPay) {
-              createTrasaction(1, $amountToPay, "Venta", "tarjeta");
+              createTrasaction($_SESSION['almacen'], $amountToPay, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
               $cardAmountRemaining = $cardAmountRemaining - $amountToPay;
             } else {
-              createTrasaction(1, $cardAmountRemaining, "Venta", "tarjeta");
+              createTrasaction($_SESSION['almacen'], $cardAmountRemaining, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
 
               $amountToPay = $amountToPay - $cardAmountRemaining;
               $cardAmountRemaining = 0;
 
-              createTrasaction(1, $amountToPay, "Venta", "efectivo");
+              createTrasaction($_SESSION['almacen'], $amountToPay, "Venta", "efectivo");
               $transactionId2 = $connection->lastInsertId();
 
               $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
             }
           } elseif($cashAmountRemaining > 0) {
             //pago en efectivo
-            createTrasaction(1, $amountToPay, "Venta", "efectivo");
+            createTrasaction($_SESSION['almacen'], $amountToPay, "Venta", "efectivo");
             $transactionId = $connection->lastInsertId();
             $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
           }
@@ -204,7 +204,7 @@
           $cobranzaId;
           if($cardAmountRemaining > 0 ){
             if($cardAmountRemaining >= $amountToPay) {
-              createTrasaction(1, $amountToPay, "Venta", "tarjeta");
+              createTrasaction($_SESSION['almacen'], $amountToPay, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
 
               createCobranza($producto['importe'] - $amountToPay);
@@ -212,7 +212,7 @@
 
               $cardAmountRemaining = $cardAmountRemaining - $amountToPay;
             } else {
-              createTrasaction(1, $cardAmountRemaining, "Venta", "tarjeta");
+              createTrasaction($_SESSION['almacen'], $cardAmountRemaining, "Venta", "tarjeta");
               $transactionId = $connection->lastInsertId();
 
               createCobranza($amountToPay);
@@ -222,10 +222,10 @@
               $cardAmountRemaining = 0;
 
               if($cashAmountRemaining >= $amountToPay) {
-                createTrasaction(1, $amountToPay, "Venta", "efectivo");
+                createTrasaction($_SESSION['almacen'], $amountToPay, "Venta", "efectivo");
                 $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
               } else {
-                createTrasaction(1, $cashAmountRemaining, "Venta", "efectivo");
+                createTrasaction($_SESSION['almacen'], $cashAmountRemaining, "Venta", "efectivo");
                 $cashAmountRemaining = 0;
               }
               $transactionId2 = $connection->lastInsertId();
@@ -233,7 +233,7 @@
           } elseif($cashAmountRemaining > 0) {
             //pago en efectivo
             if($cashAmountRemaining >= $amountToPay) {
-              createTrasaction(1, $amountToPay, "Venta", "efectivo");
+              createTrasaction($_SESSION['almacen'], $amountToPay, "Venta", "efectivo");
               $transactionId = $connection->lastInsertId();
 
               $cashAmountRemaining = $cashAmountRemaining - $amountToPay;
@@ -242,7 +242,7 @@
               $cobranzaId = $connection->lastInsertId();
 
             } else {
-              createTrasaction(1, $cashAmountRemaining, "Venta", "efectivo");
+              createTrasaction($_SESSION['almacen'], $cashAmountRemaining, "Venta", "efectivo");
               $transactionId = $connection->lastInsertId();
 
               $amountToPay = $amountToPay - $cashAmountRemaining;
