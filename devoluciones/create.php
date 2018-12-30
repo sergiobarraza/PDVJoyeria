@@ -179,7 +179,7 @@
         global $connection, $data;
 
         $transaccion = array(
-          "monto" => intval($monto),
+          "monto" => floatval($monto),
           "idAlmacen" => $idAlmacen,
           "concepto" => $concepto,
           "tipoDePago" => $tipoDePago,
