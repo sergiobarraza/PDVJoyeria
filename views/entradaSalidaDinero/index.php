@@ -80,7 +80,7 @@
           $("#withdraw-concepto").val("");
           $("#withdraw-qty").val("");
 
-          window.alert(res.message);
+          alert(res.message);
           window.open("../../imprimirticket_entradasalidadinero.php?idTransaccion="+res.idTransaccion, "_blank");
           document.location.reload();
         }
