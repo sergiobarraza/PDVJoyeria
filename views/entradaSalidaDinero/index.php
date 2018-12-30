@@ -1,7 +1,7 @@
-<?php 
+<?php
   $pageSecurity = array("admin", "supervisor","venta");
   require "../../config/security.php";
-  include("../../header-pdv.php"); 
+  include("../../header-pdv.php");
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link href="/PDVJoyeria/css/entradasalida.css" rel="stylesheet">

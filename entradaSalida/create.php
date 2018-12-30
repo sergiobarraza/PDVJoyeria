@@ -3,7 +3,6 @@
   require "../config/database.php";
 
   $pageSecurity = array("venta", "admin", "supervisor");
-  require "../config/security.php";
 
   $connection = new PDO($dsn, $username, $password, $options);
 
