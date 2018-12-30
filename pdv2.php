@@ -470,7 +470,6 @@
     })
 
     $("#purchaseButton").click(function(e){
-      togglePurchaseButton();
       if(!$(this).hasClass('disabled')) {
         let btn = $(this);
         btn.attr("disabled", true);
