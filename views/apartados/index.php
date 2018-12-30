@@ -315,10 +315,13 @@ include("../../header-pdv.php"); ?>
         $(this).addClass("disabled");
         $(this).text("Cargando...");
 
+        let change = parseFloat($("#change").val() || 0);
+        let cash = parseFloat($("#cash_received").val() || 0) - change;
+
         deposit = {
           folio: folio_selected,
           deposit_amount: parseFloat($("#cash_payment").val() || 0),
-          cash: parseFloat($("#cash_received").val() || 0),
+          cash: cash,
           card: parseFloat($("#card_received").val() || 0),
           selected_product_id: $('input[name=payment_selected]:checked').data("id"),
         }
