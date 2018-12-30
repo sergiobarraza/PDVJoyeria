@@ -4,7 +4,6 @@
   $connection = new PDO($dsn, $username, $password, $options);
 
   $pageSecurity = array("venta", "admin", "supervisor");
-  require "../config/security.php";
 
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
