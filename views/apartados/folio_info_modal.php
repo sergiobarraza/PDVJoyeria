@@ -136,7 +136,7 @@
       <div class="modal-footer">
         <button type="button" data-id="" class="btn btn-danger cancel-order" style="float: left;">Cancelar Orden</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" id="purchaseButton">Registrar</button>
+        <button type="button" class="btn btn-primary" disabled id="purchaseButton">Registrar</button>
       </div>
     </div>
   </div>
@@ -156,6 +156,7 @@
         });
       }
   });
+
 </script>
 
 <style type="text/css">

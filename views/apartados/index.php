@@ -173,6 +173,7 @@ include("../../header-pdv.php"); ?>
       $("#clientInfo_tel").text(folio.persona.tel);
 
       $(".cancel-order").data("id", folio.idFolio);
+      $("#purchaseButton").prop('disabled', true);
 
       //informacion de la venta
       let uniqueInvs = [];
@@ -297,6 +298,16 @@ include("../../header-pdv.php"); ?>
       let card_received = parseFloat($("#card_received").val() || 0);
       let change = $("#change");
       change.val((cash_received + card_received) - cash_payment);
+
+      if($('input.venta-body__chkbx:checked').length && cash_payment >= "5" && change.val() >= 0) {
+        if($("#purchaseButton").is(':disabled')){
+          $("#purchaseButton").prop('disabled', false);
+        }
+      } else {
+        if(!$("#purchaseButton").is(':disabled')){
+          $("#purchaseButton").prop('disabled', true);
+        }
+      }
     });
 
     $("#purchaseButton").click(function(e){
@@ -348,7 +359,7 @@ include("../../header-pdv.php"); ?>
            str += "<td>$"+precio+"</td>"
            str += "<td style='text-align: center;'>"+qty+"</td>"
            str += "<td style='padding-right:0px;'>"+(debt === "none" ? "<input type='button' id='give_product-"+obj.inventario.idProducto+"' onclick='giveAwayProduct("+obj.idFolio+", "+obj.inventario.idProducto+")' data-id='"+obj.inventario.idProducto+"' value='Entregar'/>" : "$ "+(debt).toFixed(2))+"</td>"
-           str += "<td><input "+ (debt === "none" ? "disabled" : "") +" data-id='"+obj.inventario.idProducto+"' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
+           str += "<td><input "+ (debt === "none" ? "disabled" : "") +" data-id='"+obj.inventario.idProducto+"' onclick='selectProduct()' type='radio' name='payment_selected' class='form-control venta-body__chkbx' id='prod-"+obj.inventario.idProducto+"'></td>"
          str += "</tr>";
       }
       $("#venta-tbody").append(str)
@@ -393,6 +404,17 @@ include("../../header-pdv.php"); ?>
     }
 
   });
+
+  function selectProduct() {
+    let cash_payment = $("#cash_payment").val();
+    if($('input.venta-body__chkbx:checked').length && cash_payment >= 5) {
+      if($("#purchaseButton").is(':disabled')){
+        $("#purchaseButton").prop('disabled', false);
+      }
+    }
+  }
+
+
 </script>
 
 <!-- Optional theme -->
