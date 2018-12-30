@@ -267,8 +267,8 @@ include("../../header-pdv.php"); ?>
         last_id_inventario++;
         selectedProductInfo = products.find(obj => obj.idProducto == productClicked.id);
         addFolioProductElement(last_id_inventario, selectedProductInfo.idProducto, true);
-        var precio = parseInt(selectedProductInfo.precio);
-        var tot_precio = parseInt($("#changed_products_value").val()) || 0;
+        var precio = parseFloat(selectedProductInfo.precio);
+        var tot_precio = parseFloat($("#changed_products_value").val()) || 0;
         $("#changed_products_value").val(precio + tot_precio);
         calculateMissingPayment();
       }
@@ -378,6 +378,10 @@ include("../../header-pdv.php"); ?>
 
     $("#removeProductBtn").click(function(e){
       if(elementClicked && folio_selected){
+        let prices =  $("#folio_products_list input:checked.isReplacement").map(function(obj) {return $(this).parent().parent().find(".folioProd-precio").text()})
+        let pricesToRemove = prices.toArray().reduce((a, b) => a + parseFloat(b), 0);
+        let prods_val = $("#changed_products_value");
+        prods_val.val(prods_val.val() - pricesToRemove);
         $("#folio_products_list input:checked.isReplacement").map(function(obj) {$(this).parent().parent().remove()});
       }
     });
