@@ -481,14 +481,14 @@
         var cash = parseFloat($("#cash_received").val());
         var card = parseFloat($("#card_received").val());
         var change = $("#change").val().replace(/[^0-9.]/g,'');
-        var deposit = parseFloat($("#cash_payment").val()).toFixed(2);
+        var deposit = parseFloat($("#cash_payment").val() + $("#card_payment").val() ).toFixed(2);
 
         var data = {
           register_purchase: {
             idPersona: $("#clientNumber").val(),
             monto_total: parseFloat(prod_total).toFixed(3),
             monto_tarjeta: card,
-            monto_efectivo: (cash - change),
+            monto_efectivo: (cash > 0 ? cash - change : 0),
             fecha: new Date().toJSON().slice(0,10),
             payment_type: {
             },
@@ -508,6 +508,7 @@
         if($("#defaultCheck2").is(":checked")){
           data['register_purchase']['abono'] = deposit;
         }
+
         $.ajax({
           type: "POST",
           url: "pdv2/register_purchase.php",
