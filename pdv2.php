@@ -393,7 +393,7 @@
         if(!$("#checkCash").is(':checked')){
           $(".full_card_payment").show();
           $("#cash_received").val(0);
-          $("#card_payment").val(prod_total).attr("readonly", true);
+          $("#card_payment").val(prod_total);
           togglePurchaseButton();
         }
       }
@@ -421,9 +421,9 @@
     }
 
     $("#cash_received, #cash_payment, #card_received, input[name='payment_type']").change(()=>{
-      var cash = parseFloat($("#cash_payment").val());
-      var received = parseFloat($("#cash_received").val());
-      var card_received = parseFloat($("#card_received").val());
+      var cash = parseFloat($("#cash_payment").val() || 0);
+      var received = parseFloat($("#cash_received").val() || 0);
+      var card_received = parseFloat($("#card_received").val() || 0);
       togglePurchaseButton();
 
       $("#change").val("$ " + (received + card_received - cash).toFixed(3));
