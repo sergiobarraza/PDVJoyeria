@@ -199,9 +199,13 @@
         data: {search: searchstr, search_select: $("#search_select").val()},
         cache: false,
         success: function(result) {
-          appendNewProduct(result);
-          changeGeneralSubotalPrice();
-          changeGeneralTotalPrice();
+          if(!!result) {
+            appendNewProduct(result);
+            changeGeneralSubotalPrice();
+            changeGeneralTotalPrice();
+          } else {
+            alert("No se ha encontrado el articulo seleccionado.");
+          }
         }
       })
       return false;
