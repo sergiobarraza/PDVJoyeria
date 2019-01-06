@@ -196,8 +196,8 @@
         $prodQty = count($data['productos']);
 
         foreach($data['productos'] as $producto){
-          //$amountToPay = $producto['importe'];
-          $amountToPay = $data['abono'] / $prodQty;
+          $prodPrice = $producto['importe'];
+          $amountToPay = ($data['abono'] / $saleTotal) * $prodPrice;
           // variables para cobranza
           $transactionId = null;
           $transactionId2 = null;
