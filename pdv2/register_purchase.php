@@ -194,6 +194,7 @@
         }
 
         $prodQty = count($data['productos']);
+        $saleTotal = $data['monto_total'];
 
         foreach($data['productos'] as $producto){
           $prodPrice = $producto['importe'];
