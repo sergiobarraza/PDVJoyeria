@@ -285,7 +285,8 @@ include("../../header-pdv.php"); ?>
 
         uniqueInvs.map((obj) => {
           if(obj.inventario.idAlmacen === "200" ){
-            addProductToVentaInfo(obj, (prodPaid[obj.inventario.idProducto] || "none"), obj.inventario.entregado);
+            let prodPaidQty = prodPaid[obj.inventario.idProducto]
+            addProductToVentaInfo(obj, ((prodPaidQty > 0.01 ? prodPaidQty : false) || "none"), obj.inventario.entregado);
           }
         })
       }
